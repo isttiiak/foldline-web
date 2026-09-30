@@ -1,23 +1,35 @@
 # Weekly encrypted pg_dump of the remote database (free tier has no daily backups).
 # Repo secrets: SUPABASE_DB_URL (session pooler connection string), BACKUP_PASSPHRASE
+# Restore: gpg -d backup.dump.gpg > backup.dump && pg_restore --no-owner -d "<db url>" backup.dump
 name: supabase-backup
 on:
   schedule:
     - cron: "0 2 * * 0"
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   backup:
     runs-on: ubuntu-latest
     steps:
-      - name: Install Postgres client
+      - name: Install Postgres 17 client
+        # Ubuntu ships an older pg_dump; it refuses to dump a newer server.
         run: |
           sudo apt-get update
-          sudo apt-get install -y postgresql-client
+          sudo apt-get install -y postgresql-common
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y postgresql-client-17
       - name: Dump and encrypt
         run: |
-          pg_dump "${{ secrets.SUPABASE_DB_URL }}" --no-owner --no-privileges -Fc -f backup.dump
-          gpg --batch --yes --pinentry-mode loopback \
-            --passphrase "${{ secrets.BACKUP_PASSPHRASE }}" -c backup.dump
+          /usr/lib/postgresql/17/bin/pg_dump "$SUPABASE_DB_URL" \
+            --no-owner --no-privileges --schema=public --schema=auth -Fc -f backup.dump
+          gpg --batch --yes --pinentry-mode loopback --symmetric --cipher-algo AES256 \
+            --passphrase "$BACKUP_PASSPHRASE" -o backup.dump.gpg backup.dump
+          rm backup.dump
+          ls -lh backup.dump.gpg
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
       - uses: actions/upload-artifact@v7
         with:
           name: db-backup-${{ github.run_id }}

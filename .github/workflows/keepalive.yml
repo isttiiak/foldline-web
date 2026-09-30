@@ -1,15 +1,22 @@
 # Free Supabase projects pause after 7 days of inactivity. Delete this file when on Pro.
-# Repo secrets: SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY
+# Repo secrets: SUPABASE_URL (base URL, no /rest/v1/), SUPABASE_PUBLISHABLE_KEY
 name: supabase-keepalive
 on:
   schedule:
     - cron: "0 3 */3 * *"
   workflow_dispatch:
+permissions: {}
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase REST
+      - name: Query the database through the Data API
+        # A real table query reaches Postgres (RLS returns [] for the anonymous key),
+        # which counts as project activity.
         run: |
-          curl -fsS "${{ secrets.SUPABASE_URL }}/rest/v1/" \
-            -H "apikey: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}" -o /dev/null
+          curl -fsS "${SUPABASE_URL%/}/rest/v1/profiles?select=id&limit=1" \
+            -H "apikey: ${SUPABASE_PUBLISHABLE_KEY}" -o /dev/null
+          echo "Supabase answered."
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
