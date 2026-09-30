@@ -1,0 +1,15 @@
+# Free Supabase projects pause after 7 days of inactivity. Delete this file when on Pro.
+# Repo secrets: SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY
+name: supabase-keepalive
+on:
+  schedule:
+    - cron: "0 3 */3 * *"
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST
+        run: |
+          curl -fsS "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}" -o /dev/null

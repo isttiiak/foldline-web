@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(pnpm install)",
+      "Bash(pnpm add *)",
+      "Bash(pnpm remove *)",
+      "Bash(pnpm run *)",
+      "Bash(pnpm typecheck)",
+      "Bash(pnpm lint)",
+      "Bash(pnpm test)",
+      "Bash(pnpm build)",
+      "Bash(pnpm db:types)",
+      "Bash(pnpm dlx shadcn@latest *)",
+      "Bash(pnpm supabase start)",
+      "Bash(pnpm supabase stop)",
+      "Bash(pnpm supabase status)",
+      "Bash(pnpm supabase migration new *)",
+      "Bash(pnpm supabase db reset)",
+      "Bash(pnpm supabase test db)",
+      "Bash(pnpm supabase gen types *)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Bash(pnpm supabase link *)",
+      "Bash(pnpm supabase db push *)",
+      "Bash(pnpm supabase db reset --linked *)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)"
+    ],
+    "defaultMode": "plan"
+  }
+}

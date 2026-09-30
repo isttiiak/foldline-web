@@ -1,0 +1,25 @@
+# Weekly encrypted pg_dump of the remote database (free tier has no daily backups).
+# Repo secrets: SUPABASE_DB_URL (session pooler connection string), BACKUP_PASSPHRASE
+name: supabase-backup
+on:
+  schedule:
+    - cron: "0 2 * * 0"
+  workflow_dispatch:
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Postgres client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+      - name: Dump and encrypt
+        run: |
+          pg_dump "${{ secrets.SUPABASE_DB_URL }}" --no-owner --no-privileges -Fc -f backup.dump
+          gpg --batch --yes --pinentry-mode loopback \
+            --passphrase "${{ secrets.BACKUP_PASSPHRASE }}" -c backup.dump
+      - uses: actions/upload-artifact@v4
+        with:
+          name: db-backup-${{ github.run_id }}
+          path: backup.dump.gpg
+          retention-days: 90
