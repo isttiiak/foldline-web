@@ -11,7 +11,7 @@ Tick items as they are completed. One item per Claude Code session.
 - [x] CI: GitHub Actions for typecheck, lint, test, build (+ e2e and pgTAP jobs)
 - [ ] Keep-alive and weekly backup workflows configured with repo secrets
 
-## Phase 1: Launch readiness (before public sign-up opens)
+## Phase 1: Launch readiness
 
 - [ ] Open sign-up now (owner decision): welcoming login copy; signups on in Supabase
 - [ ] Privacy policy + terms pages in plain language, linked from the footer and login page
