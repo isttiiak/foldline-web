@@ -20,7 +20,7 @@ For **each** project:
    - dev: Site URL `http://localhost:3000`
    - prod: Site URL `https://<your-vercel-domain>`
 4. **Authentication → Sign In / Providers → User Signups**: turn **off** "Allow new users to
-   sign up" and click **Save** (invite-only until Phase 6).
+   sign up" and click **Save** (until the Phase 1 "Launch readiness" items are done; the last one turns it on).
 5. **Authentication → Emails → Templates**: point the links at the app's callback so they
    work in any browser (the default links drop the user on the home page, signed out).
    - **Invite user**, replace the link with:
@@ -59,15 +59,18 @@ built-in mailer (a few per hour on the free tier; fine for a handful of people).
 
 ## 4. Google sign-in
 
-1. console.cloud.google.com → **APIs & Services → OAuth consent screen**: set it up
-   (External, add yourself as a test user).
+1. console.cloud.google.com → **Google Auth Platform** (formerly OAuth consent screen): set it
+   up as **External**. Under **Audience**, click **Publish app** so it is **In production**;
+   Foldline only asks for email and profile, so Google does not require a review. (In
+   "Testing" mode only listed test users can sign in.) Add an app logo, home page, privacy
+   policy and terms links once those pages exist (Phase 1).
 2. **Credentials → Create credentials → OAuth client ID** → Web application.
    Authorized redirect URIs: `https://<dev-project-ref>.supabase.co/auth/v1/callback` and
    `https://<prod-project-ref>.supabase.co/auth/v1/callback`.
 3. In each Supabase project: **Authentication → Sign In / Providers → Google** → paste the
    Client ID and Secret, enable.
 
-## 5. Metadata providers (Phase 1)
+## 5. Metadata providers (Phase 2)
 
 Add these to `.env.local` and to Vercel when that roadmap item lands:
 

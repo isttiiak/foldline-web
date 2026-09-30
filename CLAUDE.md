@@ -1,10 +1,12 @@
 # Foldline: Claude Code context
 
-Foldline is a calm, private, open-source reading tracker. It is NOT a social network and must never
-become one. Users track books across paper, ebook and audiobook with as much automation
-and as little friction as possible.
+Foldline is a free, public, private-by-default reading tracker for anyone in the world. Users track
+books across paper, ebook and audiobook with advanced features, as much automation and as little
+friction as possible, in a charming, animated UI that motivates without guilt. It is NOT a social
+network. AI features come later and are opt-in.
 
-Audience right now: the owner (Istiak) and a few invited friends. Later: open signups.
+Audience: public. Sign-in is Google only for now (email later). Until the Phase 1 "Launch
+readiness" items ship, Supabase signups stay off and the owner adds early users by hand.
 Product name: **Foldline** (named after the crease of a folded page corner, marking your place
 quietly). Tagline: "Foldline: mark your place, quietly." Bangla tagline (for later): "Foldline: নিঃশব্দে মনে রাখুন আপনার পড়া".
 Use "Foldline" exactly (capital F, one word) in UI, code identifiers (`foldline`) and metadata.
@@ -49,8 +51,10 @@ move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist A
 5. Only `src/lib/auth.ts` may call `supabase.auth.*`. Everything else uses its helpers.
 6. Business logic lives in TypeScript (`src/features/*`), not in Postgres functions,
    except pg_cron jobs and small SQL helpers.
-7. No social features, public profiles, feeds, streaks, badges, leaderboards, push
-   notifications or engagement nudges. If a request seems to need one, stop and ask.
+7. Follow `docs/CALM_CHARTER.md`: opt-in goals and warm celebrations are fine; no feeds,
+   followers, public profiles, leaderboards, comparisons, guilt/broken-streak mechanics,
+   unscheduled notifications, product analytics or third-party trackers. Sharing is
+   opt-in only (Phase 8). If a request seems to need something banned, stop and ask.
 8. All UI strings go through next-intl and live in `messages/en.json`. English only for now;
    Bangla (`bn`) is deferred. When it is added, Bangla is written in Bangla script, never romanized.
 9. Book metadata providers (Open Library, Google Books, Hardcover) are called only from

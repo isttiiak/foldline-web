@@ -11,14 +11,14 @@ vi.mock("@/features/auth/server/actions", () => ({
 }));
 
 describe("LoginForm", () => {
-  test("shows only Google sign-in by default, with an invite-only note", () => {
+  test("shows only Google sign-in by default, with an early access note", () => {
     renderWithIntl(<LoginForm />);
 
     expect(
       screen.getByRole("button", { name: "Continue with Google" }),
     ).toBeInTheDocument();
     expect(screen.queryByLabelText("Email")).not.toBeInTheDocument();
-    expect(screen.getByText(/invite-only/i)).toBeInTheDocument();
+    expect(screen.getByText(/early access/i)).toBeInTheDocument();
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
@@ -33,7 +33,7 @@ describe("LoginForm", () => {
 
   test.each([
     ["link", /expired/],
-    ["notInvited", /not on the guest list/],
+    ["notInvited", /does not have early access/],
     ["google", /Google sign-in did not work/],
   ] as const)("explains the %s error gently", (error, text) => {
     renderWithIntl(<LoginForm linkError={error} />);

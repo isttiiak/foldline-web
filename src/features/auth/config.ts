@@ -1,5 +1,5 @@
 /**
- * Sign-in methods shown on the login page.
+ * Sign-in methods shown on the login page. Google only for now; email comes later.
  *
  * Magic links are off until custom SMTP is set up (see docs/ROADMAP.md): Supabase's
  * built-in mailer sends only a couple of emails per hour and only to project team

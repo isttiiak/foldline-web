@@ -62,9 +62,9 @@
       "generic": "Something went sideways sending your link. Please try again in a moment.",
       "expiredLink": "That sign-in link has expired or was already used. Ask for a fresh one below.",
       "google": "Google sign-in did not work this time. Try again, or use a magic link.",
-      "notInvited": "That Google account is not on the guest list yet. Try the one your invite was sent to, or ask for an invite."
+      "notInvited": "That Google account does not have early access yet. Public sign-up opens very soon, see you then!"
     },
-    "inviteOnly": "Foldline is invite-only for now. Use the Google account your invite was sent to."
+    "inviteOnly": "Foldline is in early access. Public sign-up opens soon."
   },
   "Header": {
     "signIn": "Sign in"

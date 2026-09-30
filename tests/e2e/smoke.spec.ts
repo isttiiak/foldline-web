@@ -32,7 +32,7 @@ test("login offers Google only and explains uninvited accounts", async ({
   ).toBeVisible();
   await expect(page.getByLabel("Email")).toHaveCount(0);
   await expect(
-    page.getByRole("alert").filter({ hasText: /not on the guest list/ }),
+    page.getByRole("alert").filter({ hasText: /does not have early access/ }),
   ).toBeVisible();
 });
 
