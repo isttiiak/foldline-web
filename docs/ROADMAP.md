@@ -25,7 +25,7 @@ Tick items as they are completed. One item per Claude Code session.
 
 ## Phase 2: Core library
 
-- [ ] Migration: works, authors, work_authors, editions, reads, progress_events, provider_cache (+ pgTAP RLS tests)
+- [x] Migration: works, authors, work_authors, editions, reads, progress_events, provider_cache (+ pgTAP RLS tests)
 - [ ] Metadata providers (Open Library, Google Books) + cache + field locks
 - [ ] Add book: search, paste ISBN/URL, manual entry (no-ISBN books, cover photo upload)
 - [ ] ISBN barcode scan (`barcode-detector` polyfill)

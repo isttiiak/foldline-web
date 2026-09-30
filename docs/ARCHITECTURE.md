@@ -44,7 +44,7 @@ Common columns: `id uuid pk default gen_random_uuid()`, `created_at timestamptz 
 `updated_at timestamptz` (trigger). User-owned tables also have
 `user_id uuid not null default auth.uid() references auth.users on delete cascade`.
 
-### Phase 1 tables
+### Core tables
 
 - `profiles` (id = auth.users.id): display_name, locale ('en'|'bn'), timezone,
   settings jsonb (rating_scale, hide_stats, …). Created by a trigger on signup.
@@ -52,12 +52,15 @@ Common columns: `id uuid pk default gen_random_uuid()`, `created_at timestamptz 
   series_name, series_position numeric, field_locks text[] default '{}'.
 - `authors`: name, sort_name, provider_ids jsonb.
 - `work_authors`: work_id, author_id, role ('author'|'translator'|'editor'|'illustrator'|'narrator'), position.
-- `editions`: work_id, format enum ('paperback','hardcover','ebook','audiobook','other'),
-  isbn_10, isbn_13, publisher, published_date text, page_count int, duration_minutes int,
-  language, cover_url, cover_storage_path, provider_ids jsonb, field_locks text[].
+- `editions`: work_id, title/subtitle (nullable overrides of the work's, e.g. translations),
+  format enum ('paperback','hardcover','ebook','audiobook','other'), isbn_10, isbn_13
+  (normalised digits, unique per user), publisher, published_date text (free text),
+  page_count int, duration_minutes int, language, cover_url (https only),
+  cover_storage_path, provider_ids jsonb, field_locks text[].
 - `reads` (one reading attempt; rereads = more rows): work_id, edition_id null,
   state enum ('planned','reading','resting','finished','dnf'), started_on, finished_on,
-  stopped_on, rating smallint null, reflection text.
+  stopped_on (dates ordered after started_on), rating smallint null (1-10, half stars on a
+  5-star display), reflection text. State/date rules live in TypeScript.
 - `progress_events`: read_id, occurred_at, unit enum ('pages','percent','location','minutes','chapter'),
   value numeric, fraction numeric check (0..1), source enum
   ('manual','koreader','kindle','import','audiobookshelf'), device text.
@@ -65,8 +68,15 @@ Common columns: `id uuid pk default gen_random_uuid()`, `created_at timestamptz 
   where IPs and emails are HMAC-hashed), window_start, hits. `rate_limit_hit(bucket, limit,
 window_seconds)` counts atomically and cleans up; only `service_role` may call it. Policies
   live in `src/features/rate-limit/policies.ts`; the helper fails open.
-- `provider_cache` (global): provider, cache_key, payload jsonb, fetched_at, expires_at;
-  unique(provider, cache_key). RLS enabled with NO policies (server-only access).
+- `provider_cache` (global): provider ('openlibrary'|'googlebooks'|'hardcover'), cache_key,
+  payload jsonb, fetched_at, expires_at; primary key (provider, cache_key). RLS enabled with
+  NO policies and no anon/authenticated grants (server-only access).
+
+Same-owner references: every parent has `unique (id, user_id)` and children point at it with
+a composite foreign key (`(work_id, user_id) -> works (id, user_id)`), so no row can reference
+another user's row, whoever writes it. A read's edition must belong to its work
+(`(edition_id, work_id, user_id) -> editions`); deleting the edition clears it from the read.
+Library tables grant only select/insert/update/delete to `authenticated`, nothing to `anon`.
 
 ### Later phases
 
@@ -80,8 +90,8 @@ window_seconds)` counts atomically and cleans up; only `service_role` may call i
 
 ### Indexes
 
-`user_id` on every user table; `editions(user_id, isbn_13)`; `pg_trgm` GIN index on
-`works.title` and `authors.name`; `progress_events(read_id, occurred_at desc)`.
+`user_id` on every user table; unique `editions(user_id, isbn_13)` where not null; `pg_trgm` GIN index on
+`works.title` and `authors.name`; `progress_events(read_id, occurred_at desc)` and `(user_id, occurred_at desc)`.
 
 ### RLS pattern
 

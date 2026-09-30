@@ -37,6 +37,17 @@ test("download my data returns the user's rows as JSON", async ({ page }) => {
   expect(file.account.email).toMatch(/@foldline\.test$/);
   expect(file.tables.profiles).toHaveLength(1);
   expect(file.tables.profiles[0].id).toBe(file.account.id);
+  for (const table of [
+    "works",
+    "authors",
+    "work_authors",
+    "editions",
+    "reads",
+    "progress_events",
+  ]) {
+    expect(Array.isArray(file.tables[table]), table).toBe(true);
+  }
+  expect(file.tables.provider_cache).toBeUndefined();
 });
 
 test.describe("deleting the account", () => {

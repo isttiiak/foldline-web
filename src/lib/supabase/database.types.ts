@@ -17,6 +17,110 @@ export type Database = {
   };
   public: {
     Tables: {
+      authors: {
+        Row: {
+          created_at: string;
+          id: string;
+          name: string;
+          provider_ids: Json;
+          sort_name: string | null;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          name: string;
+          provider_ids?: Json;
+          sort_name?: string | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          name?: string;
+          provider_ids?: Json;
+          sort_name?: string | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      editions: {
+        Row: {
+          cover_storage_path: string | null;
+          cover_url: string | null;
+          created_at: string;
+          duration_minutes: number | null;
+          field_locks: string[];
+          format: Database["public"]["Enums"]["edition_format"];
+          id: string;
+          isbn_10: string | null;
+          isbn_13: string | null;
+          language: string | null;
+          page_count: number | null;
+          provider_ids: Json;
+          published_date: string | null;
+          publisher: string | null;
+          subtitle: string | null;
+          title: string | null;
+          updated_at: string;
+          user_id: string;
+          work_id: string;
+        };
+        Insert: {
+          cover_storage_path?: string | null;
+          cover_url?: string | null;
+          created_at?: string;
+          duration_minutes?: number | null;
+          field_locks?: string[];
+          format?: Database["public"]["Enums"]["edition_format"];
+          id?: string;
+          isbn_10?: string | null;
+          isbn_13?: string | null;
+          language?: string | null;
+          page_count?: number | null;
+          provider_ids?: Json;
+          published_date?: string | null;
+          publisher?: string | null;
+          subtitle?: string | null;
+          title?: string | null;
+          updated_at?: string;
+          user_id?: string;
+          work_id: string;
+        };
+        Update: {
+          cover_storage_path?: string | null;
+          cover_url?: string | null;
+          created_at?: string;
+          duration_minutes?: number | null;
+          field_locks?: string[];
+          format?: Database["public"]["Enums"]["edition_format"];
+          id?: string;
+          isbn_10?: string | null;
+          isbn_13?: string | null;
+          language?: string | null;
+          page_count?: number | null;
+          provider_ids?: Json;
+          published_date?: string | null;
+          publisher?: string | null;
+          subtitle?: string | null;
+          title?: string | null;
+          updated_at?: string;
+          user_id?: string;
+          work_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "editions_work_id_user_id_fkey";
+            columns: ["work_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "works";
+            referencedColumns: ["id", "user_id"];
+          },
+        ];
+      };
       profiles: {
         Row: {
           created_at: string;
@@ -47,6 +151,140 @@ export type Database = {
         };
         Relationships: [];
       };
+      progress_events: {
+        Row: {
+          created_at: string;
+          device: string | null;
+          fraction: number | null;
+          id: string;
+          occurred_at: string;
+          read_id: string;
+          source: Database["public"]["Enums"]["progress_source"];
+          unit: Database["public"]["Enums"]["progress_unit"];
+          updated_at: string;
+          user_id: string;
+          value: number;
+        };
+        Insert: {
+          created_at?: string;
+          device?: string | null;
+          fraction?: number | null;
+          id?: string;
+          occurred_at?: string;
+          read_id: string;
+          source?: Database["public"]["Enums"]["progress_source"];
+          unit: Database["public"]["Enums"]["progress_unit"];
+          updated_at?: string;
+          user_id?: string;
+          value: number;
+        };
+        Update: {
+          created_at?: string;
+          device?: string | null;
+          fraction?: number | null;
+          id?: string;
+          occurred_at?: string;
+          read_id?: string;
+          source?: Database["public"]["Enums"]["progress_source"];
+          unit?: Database["public"]["Enums"]["progress_unit"];
+          updated_at?: string;
+          user_id?: string;
+          value?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "progress_events_read_id_user_id_fkey";
+            columns: ["read_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "reads";
+            referencedColumns: ["id", "user_id"];
+          },
+        ];
+      };
+      provider_cache: {
+        Row: {
+          cache_key: string;
+          expires_at: string;
+          fetched_at: string;
+          payload: Json;
+          provider: string;
+        };
+        Insert: {
+          cache_key: string;
+          expires_at: string;
+          fetched_at?: string;
+          payload: Json;
+          provider: string;
+        };
+        Update: {
+          cache_key?: string;
+          expires_at?: string;
+          fetched_at?: string;
+          payload?: Json;
+          provider?: string;
+        };
+        Relationships: [];
+      };
+      reads: {
+        Row: {
+          created_at: string;
+          edition_id: string | null;
+          finished_on: string | null;
+          id: string;
+          rating: number | null;
+          reflection: string | null;
+          started_on: string | null;
+          state: Database["public"]["Enums"]["read_state"];
+          stopped_on: string | null;
+          updated_at: string;
+          user_id: string;
+          work_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          edition_id?: string | null;
+          finished_on?: string | null;
+          id?: string;
+          rating?: number | null;
+          reflection?: string | null;
+          started_on?: string | null;
+          state?: Database["public"]["Enums"]["read_state"];
+          stopped_on?: string | null;
+          updated_at?: string;
+          user_id?: string;
+          work_id: string;
+        };
+        Update: {
+          created_at?: string;
+          edition_id?: string | null;
+          finished_on?: string | null;
+          id?: string;
+          rating?: number | null;
+          reflection?: string | null;
+          started_on?: string | null;
+          state?: Database["public"]["Enums"]["read_state"];
+          stopped_on?: string | null;
+          updated_at?: string;
+          user_id?: string;
+          work_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "reads_edition_id_work_id_user_id_fkey";
+            columns: ["edition_id", "work_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "editions";
+            referencedColumns: ["id", "work_id", "user_id"];
+          },
+          {
+            foreignKeyName: "reads_work_id_user_id_fkey";
+            columns: ["work_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "works";
+            referencedColumns: ["id", "user_id"];
+          },
+        ];
+      };
       rate_limits: {
         Row: {
           bucket: string;
@@ -65,6 +303,99 @@ export type Database = {
         };
         Relationships: [];
       };
+      work_authors: {
+        Row: {
+          author_id: string;
+          created_at: string;
+          id: string;
+          position: number;
+          role: Database["public"]["Enums"]["work_author_role"];
+          updated_at: string;
+          user_id: string;
+          work_id: string;
+        };
+        Insert: {
+          author_id: string;
+          created_at?: string;
+          id?: string;
+          position?: number;
+          role?: Database["public"]["Enums"]["work_author_role"];
+          updated_at?: string;
+          user_id?: string;
+          work_id: string;
+        };
+        Update: {
+          author_id?: string;
+          created_at?: string;
+          id?: string;
+          position?: number;
+          role?: Database["public"]["Enums"]["work_author_role"];
+          updated_at?: string;
+          user_id?: string;
+          work_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "work_authors_author_id_user_id_fkey";
+            columns: ["author_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "authors";
+            referencedColumns: ["id", "user_id"];
+          },
+          {
+            foreignKeyName: "work_authors_work_id_user_id_fkey";
+            columns: ["work_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "works";
+            referencedColumns: ["id", "user_id"];
+          },
+        ];
+      };
+      works: {
+        Row: {
+          created_at: string;
+          description: string | null;
+          field_locks: string[];
+          id: string;
+          original_language: string | null;
+          original_title: string | null;
+          series_name: string | null;
+          series_position: number | null;
+          subtitle: string | null;
+          title: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          description?: string | null;
+          field_locks?: string[];
+          id?: string;
+          original_language?: string | null;
+          original_title?: string | null;
+          series_name?: string | null;
+          series_position?: number | null;
+          subtitle?: string | null;
+          title: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string | null;
+          field_locks?: string[];
+          id?: string;
+          original_language?: string | null;
+          original_title?: string | null;
+          series_name?: string | null;
+          series_position?: number | null;
+          subtitle?: string | null;
+          title?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -80,7 +411,36 @@ export type Database = {
       };
     };
     Enums: {
-      [_ in never]: never;
+      edition_format:
+        | "paperback"
+        | "hardcover"
+        | "ebook"
+        | "audiobook"
+        | "other";
+      progress_source:
+        | "manual"
+        | "koreader"
+        | "kindle"
+        | "import"
+        | "audiobookshelf";
+      progress_unit:
+        | "pages"
+        | "percent"
+        | "location"
+        | "minutes"
+        | "chapter";
+      read_state:
+        | "planned"
+        | "reading"
+        | "resting"
+        | "finished"
+        | "dnf";
+      work_author_role:
+        | "author"
+        | "translator"
+        | "editor"
+        | "illustrator"
+        | "narrator";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -101,3 +461,15 @@ export type TablesUpdate<T extends keyof DefaultSchema["Tables"]> =
 
 export type Enums<T extends keyof DefaultSchema["Enums"]> =
   DefaultSchema["Enums"][T];
+
+export const Constants = {
+  public: {
+    Enums: {
+      edition_format: ["paperback", "hardcover", "ebook", "audiobook", "other"],
+      progress_source: ["manual", "koreader", "kindle", "import", "audiobookshelf"],
+      progress_unit: ["pages", "percent", "location", "minutes", "chapter"],
+      read_state: ["planned", "reading", "resting", "finished", "dnf"],
+      work_author_role: ["author", "translator", "editor", "illustrator", "narrator"],
+    },
+  },
+} as const;

@@ -19,6 +19,9 @@ session: tick what is done, add what is next.
       `<project>.vercel.app`) and publish
 - [x] Supabase: "Allow new users to sign up" is **on** (sign-up opens now, per owner)
 - [x] `.env.local` has `DEV_LOGIN_SECRET`; `.env.example` lists it
+- [ ] Once CI is green: paste `supabase/migrations/0003_create_library.sql` into the dev
+      SQL Editor, tick it in `docs/MIGRATIONS.md`, then re-run `pnpm test:e2e` (the
+      "download my data" test fails on dev until 0003 is applied)
 
 ## Claude
 
@@ -42,7 +45,12 @@ When a migration adds a user-owned table, add it to `EXPORTED_TABLES` in
 Also done: rate limits (migration 0002 applied to dev), SEO basics (metadata, OG image,
 `sitemap.xml`, `robots.txt`, JSON-LD, `llms.txt`). Migrations are now numbered `NNNN_name.sql`.
 
-Next: Phase 2 (core library), starting with its migration (`0003_...`). The Vercel deploy is
+Done on 2026-10-01: Phase 2 migration `0003_create_library.sql` (works, authors,
+work_authors, editions, reads, progress_events, provider_cache) with pgTAP tests, hand-written
+types and the new tables in the export (typecheck fails if a `user_id` table is missing).
+
+Next: Phase 2 "Metadata providers (Open Library, Google Books) + cache + field locks". It also
+needs a pg_cron (or on-write) cleanup of expired `provider_cache` rows. The Vercel deploy is
 postponed by the owner; Phase 1's last item stays open until then. Landing copy describes
 Phase 2-3 features (search, ISBN, goals, stats) that are not built yet.
 
