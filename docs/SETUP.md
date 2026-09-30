@@ -30,7 +30,11 @@ For **each** project:
      (`RedirectTo` is the app's callback URL, which already carries `?next=`.)
 6. **Authentication → URL Configuration → Redirect URLs**: add `http://localhost:3000/**`
    (dev) or `https://<your-vercel-domain>/**` (prod).
-7. **Authentication → Users → Invite user** for yourself and friends.
+7. Add yourself and friends **without sending email** (the free mailer only reaches team
+   members and sends ~2 emails/hour): **Authentication → Users → Add user → Create new user**,
+   enter their Gmail address, any long random password (never used), tick **Auto Confirm
+   User**, create. They then sign in with **Continue with Google** using that address; Google
+   is linked to the account automatically because the emails match.
 
 ## 2. Local development
 
