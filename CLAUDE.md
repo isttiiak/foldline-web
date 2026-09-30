@@ -66,6 +66,7 @@ move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist A
 
 ## Workflow
 
+- Start every session by reading `docs/TODO.md` (handoff list), and update it before ending.
 - Work on ONE roadmap item per session (see `docs/ROADMAP.md`). Start in plan mode,
   present the plan, wait for approval, then implement.
 - When touching the database or data flow, read `docs/ARCHITECTURE.md` first.
