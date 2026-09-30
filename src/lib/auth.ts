@@ -11,6 +11,7 @@ import {
   PROTECTED_PREFIX,
 } from "@/features/auth/paths";
 import { publicEnv } from "@/lib/env";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 /*
@@ -108,6 +109,41 @@ export async function setSessionFromTokens(
     refresh_token: refreshToken,
   });
   return error ? { ok: false, error: error.message } : { ok: true };
+}
+
+/**
+ * Dev-only (see `/auth/dev-login`): sign in as a throwaway test user without
+ * email or password. A magic link generated with the secret key creates the
+ * user if needed; verifying its token here writes the session cookies.
+ */
+export async function createDevSession(email: string): Promise<AuthResult> {
+  const { data, error } = await createAdminClient().auth.admin.generateLink({
+    type: "magiclink",
+    email,
+  });
+  if (error) return { ok: false, error: error.message };
+  return verifyEmailToken(data.properties.hashed_token, "magiclink");
+}
+
+/** Dev-only: delete every user whose email ends in `@<domain>`. */
+export async function deleteDevUsers(
+  domain: string,
+): Promise<{ ok: true; deleted: number } | { ok: false; error: string }> {
+  const admin = createAdminClient().auth.admin;
+  const suffix = `@${domain}`;
+  let deleted = 0;
+
+  for (let page = 1; ; page++) {
+    const { data, error } = await admin.listUsers({ page, perPage: 1000 });
+    if (error) return { ok: false, error: error.message };
+    for (const user of data.users) {
+      if (!user.email?.endsWith(suffix)) continue;
+      const result = await admin.deleteUser(user.id);
+      if (result.error) return { ok: false, error: result.error.message };
+      deleted++;
+    }
+    if (data.users.length < 1000) return { ok: true, deleted };
+  }
 }
 
 export async function signOut(): Promise<void> {

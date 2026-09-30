@@ -1,6 +1,8 @@
 import { loadEnvConfig } from "@next/env";
 import { defineConfig, devices } from "@playwright/test";
 
+import { AUTH_FILE } from "./tests/e2e/auth-file";
+
 const PORT = 3000;
 const baseURL = `http://localhost:${PORT}`;
 
@@ -8,6 +10,12 @@ const baseURL = `http://localhost:${PORT}`;
 // back to the local Supabase URL and a placeholder key: enough for signed-out
 // flows, which never call Supabase over the network.
 loadEnvConfig(process.cwd());
+
+// Signed-in tests need the dev project's secret key and DEV_LOGIN_SECRET in
+// .env.local (see docs/SETUP.md). Without them only signed-out tests run.
+const signedIn = Boolean(
+  process.env.DEV_LOGIN_SECRET && process.env.SUPABASE_SECRET_KEY,
+);
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -19,7 +27,29 @@ export default defineConfig({
     baseURL,
     trace: "on-first-retry",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+      testIgnore: [/\.authed\.spec\.ts$/, /auth\.(setup|teardown)\.ts$/],
+    },
+    ...(signedIn
+      ? [
+          {
+            name: "setup",
+            testMatch: /auth\.setup\.ts$/,
+            teardown: "cleanup",
+          },
+          { name: "cleanup", testMatch: /auth\.teardown\.ts$/ },
+          {
+            name: "signed-in",
+            testMatch: /\.authed\.spec\.ts$/,
+            dependencies: ["setup"],
+            use: { ...devices["Desktop Chrome"], storageState: AUTH_FILE },
+          },
+        ]
+      : []),
+  ],
   webServer: {
     command: "pnpm dev",
     url: baseURL,

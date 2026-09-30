@@ -41,6 +41,15 @@ export function publicEnv() {
   return parsed.success ? parsed.data : fail(parsed.error);
 }
 
+/**
+ * Secret that unlocks the dev-only test sign-in route, or null when unset or
+ * too short (the route then stays a 404). Never set it on Vercel.
+ */
+export function devLoginSecret(): string | null {
+  const parsed = z.string().min(32).safeParse(process.env.DEV_LOGIN_SECRET);
+  return parsed.success ? parsed.data : null;
+}
+
 /** Server-only config including the secret key. Only `src/lib/supabase/admin.ts` may use it. */
 export function serverEnv() {
   const parsed = serverSchema.safeParse({
