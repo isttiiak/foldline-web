@@ -14,9 +14,31 @@ export default function MarketingLayout({ children }: LayoutProps<"/">) {
     <div className="relative isolate flex min-h-full flex-1 flex-col">
       <SkipLink />
       <AmbientGlow />
-      <header className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-6">
+      <header className="mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-6 py-6">
         <Wordmark />
-        <HeaderSignIn label={h("signIn")} />
+        <div className="flex items-center gap-2 sm:gap-6">
+          <nav aria-label={h("navLabel")} className="hidden sm:block">
+            <ul className="flex items-center gap-1">
+              {(
+                [
+                  ["features", "/#features"],
+                  ["how", "/#how-it-works"],
+                  ["faq", "/#faq"],
+                ] as const
+              ).map(([key, href]) => (
+                <li key={key}>
+                  <Link
+                    href={href}
+                    className="press rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground hover:bg-muted/60 hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
+                  >
+                    {h(key)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <HeaderSignIn label={h("signIn")} />
+        </div>
       </header>
       <main
         id="main"
@@ -25,7 +47,7 @@ export default function MarketingLayout({ children }: LayoutProps<"/">) {
       >
         {children}
       </main>
-      <footer className="mx-auto flex w-full max-w-5xl flex-col gap-3 px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+      <footer className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
         <p>{t("note")}</p>
         <nav aria-label={t("legalLabel")}>
           <ul className="flex gap-5">

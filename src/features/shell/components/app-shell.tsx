@@ -53,7 +53,7 @@ function NavLinks({
                 onClick={onNavigate}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "group relative flex press items-center gap-3 rounded-xl px-3 py-2.5 font-medium transition-colors focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none",
+                  "group relative flex press items-center gap-3 rounded-xl px-3 py-2.5 font-medium focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none",
                   active
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground",
@@ -99,7 +99,7 @@ function SignOutButton({ email }: { email?: string | null }) {
       )}
       <button
         type="submit"
-        className="group flex w-full press items-center gap-3 rounded-xl px-3 py-2.5 font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
+        className="group flex w-full press items-center gap-3 rounded-xl px-3 py-2.5 font-medium text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
       >
         <LogOut
           aria-hidden

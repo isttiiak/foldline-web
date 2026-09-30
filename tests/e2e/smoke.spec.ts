@@ -6,8 +6,8 @@ test("home page shows the headline and leads to sign in", async ({ page }) => {
     page.getByRole("heading", { level: 1, name: "Mark your place, quietly." }),
   ).toBeVisible();
 
-  await page.getByRole("link", { name: "Open my library" }).click();
-  await expect(page).toHaveURL(/\/login\?next=%2Fapp$/);
+  await page.getByRole("banner").getByRole("link", { name: "Sign in" }).click();
+  await expect(page).toHaveURL(/\/login$/);
   await expect(
     page.getByRole("heading", { level: 1, name: "Welcome to Foldline" }),
   ).toBeVisible();

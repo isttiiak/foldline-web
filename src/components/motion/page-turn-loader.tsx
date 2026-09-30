@@ -1,12 +1,14 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 
 /**
  * A little book whose right page keeps turning while something loads.
  * Under reduced motion it rests open and still.
  */
 export function PageTurnLoader({ label }: { label: string }) {
+  const still = useReducedMotion();
+
   return (
     <div
       role="status"
@@ -18,7 +20,7 @@ export function PageTurnLoader({ label }: { label: string }) {
         <motion.div
           className="absolute top-0 right-0 h-full w-1/2 rounded-r-lg bg-[#f4ece0] shadow-md"
           style={{ originX: 0, transformStyle: "preserve-3d" }}
-          animate={{ rotateY: [0, -180] }}
+          animate={still ? undefined : { rotateY: [0, -180] }}
           transition={{
             duration: 1.4,
             ease: [0.65, 0, 0.35, 1],

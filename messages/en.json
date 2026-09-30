@@ -14,23 +14,112 @@
     "loading": "Opening your library"
   },
   "Home": {
-    "eyebrow": "Your private reading nook",
+    "metaTitle": "Foldline: a calm, private reading tracker",
+    "eyebrow": "A free reading tracker for everyone",
     "title": "Mark your place, quietly.",
-    "lead": "Keep track of every book you read on paper, on a screen or by ear. No feeds, no streaks, no pressure. Just you and your books.",
-    "cta": "Open my library",
-    "promises": {
-      "formats": {
-        "title": "Paper, ebook, audio",
-        "body": "Every format on one gentle shelf."
-      },
-      "private": {
-        "title": "Yours alone",
-        "body": "Private by default. Nothing to perform."
-      },
-      "rest": {
-        "title": "Rest or let go",
-        "body": "Pause a book or drop it. Both are perfectly fine."
+    "lead": "Track every book you read on paper, on a screen or by ear. Log progress your way, set goals only if you want them, and keep it all to yourself. No feeds, no streaks, no pressure.",
+    "ctaGoogle": "Get started with Google",
+    "ctaSignIn": "I already have an account",
+    "ctaNote": "Free. Private by default. No ads, ever.",
+    "illustrationLabel": "An open book with a ribbon bookmark and a folded page corner, its page gently turning",
+    "features": {
+      "title": "Everything a reader needs, nothing that nags",
+      "lead": "Advanced tracking with as little friction as possible, wrapped in a shelf that feels like yours.",
+      "soon": "Coming later",
+      "items": {
+        "formats": {
+          "title": "Paper, ebook, audio",
+          "body": "Every format on one shelf. Switch mid-book from print to audiobook and your place comes with you."
+        },
+        "units": {
+          "title": "Progress in any unit",
+          "body": "Pages, percent, chapters, minutes or locations. Log it however your book counts."
+        },
+        "goals": {
+          "title": "Goals, only if you want them",
+          "body": "Opt-in goals by year, month or your own range, with a warm little celebration when you get there. Falling behind is never a failure."
+        },
+        "stats": {
+          "title": "Personal stats",
+          "body": "Pages, time, formats and pace, about you alone. Never compared with anyone, and hideable in one tap."
+        },
+        "private": {
+          "title": "Private by default",
+          "body": "Your library is visible only to you. No public profile, no followers, nothing to perform."
+        },
+        "ai": {
+          "title": "Thoughtful AI, later",
+          "body": "Helpful extras like summaries of your own notes, arriving later. Always opt-in, always explaining what they use."
+        }
       }
+    },
+    "how": {
+      "title": "How it works",
+      "lead": "Three small steps, then it quietly keeps your place.",
+      "steps": {
+        "signIn": {
+          "title": "Sign in with Google",
+          "body": "One tap and your shelf is ready. No forms, no passwords to remember."
+        },
+        "add": {
+          "title": "Add a book",
+          "body": "Search by title, paste an ISBN, or add it by hand, even books with no ISBN at all."
+        },
+        "log": {
+          "title": "Log progress your way",
+          "body": "Note where you are whenever you like. Pause a book or let it go, both are perfectly fine."
+        }
+      }
+    },
+    "promises": {
+      "title": "Our promises",
+      "items": {
+        "ads": {
+          "title": "No ads",
+          "body": "Not now, not later. Your attention is yours."
+        },
+        "trackers": {
+          "title": "No trackers",
+          "body": "No analytics, no telemetry, no third-party scripts watching you read."
+        },
+        "control": {
+          "title": "Your data, your call",
+          "body": "Export everything or delete your account whenever you like."
+        }
+      }
+    },
+    "faq": {
+      "title": "Questions, answered",
+      "items": {
+        "free": {
+          "q": "Is Foldline really free?",
+          "a": "Yes. Foldline is free for everyone, with no ads and no premium tier holding features back."
+        },
+        "data": {
+          "q": "Who can see my reading?",
+          "a": "Only you. Your library is private by default and locked to your account. There are no public profiles or feeds."
+        },
+        "formats": {
+          "q": "Does it work for audiobooks and ebooks?",
+          "a": "Yes. Track paper, ebook and audiobook, log progress in pages, percent, minutes or chapters, and switch formats mid-book."
+        },
+        "stop": {
+          "q": "What if I stop reading a book?",
+          "a": "Pause it (we call it resting) or drop it. Both are normal, shame-free states, and nothing nags you about them."
+        },
+        "google": {
+          "q": "Why only Google sign-in?",
+          "a": "It keeps sign-up to one tap and means we never store a password. Email sign-in is planned for later."
+        },
+        "leave": {
+          "q": "Can I take my data with me?",
+          "a": "Always. One-click export and account deletion are arriving on the Settings page soon; until then, email us and we will do it for you."
+        }
+      }
+    },
+    "final": {
+      "title": "Your next chapter deserves a quiet place.",
+      "body": "Start your shelf in a few seconds. It is free and stays private."
     }
   },
   "Footer": {
@@ -71,7 +160,11 @@
     "consent": "By continuing you agree to our <terms>Terms</terms> and <privacy>Privacy policy</privacy>. No ads, no trackers, ever."
   },
   "Header": {
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "navLabel": "Site",
+    "features": "Features",
+    "how": "How it works",
+    "faq": "FAQ"
   },
   "Legal": {
     "updated": "Last updated {date}",
