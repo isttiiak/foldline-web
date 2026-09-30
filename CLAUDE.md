@@ -33,7 +33,8 @@ move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist A
 
 - `pnpm dev`: dev server
 - `pnpm typecheck` / `pnpm lint` / `pnpm test` / `pnpm test:e2e` / `pnpm build`
-- `pnpm supabase migration new <name>`: new migration file (no Docker needed)
+- New migration: create `supabase/migrations/<NNNN>_<name>.sql` by hand with the next serial
+  number (`0003`, `0004`, ...), not `supabase migration new` (it names files by timestamp)
 - Optional, only if Docker is installed: `pnpm supabase start`, `pnpm supabase db reset`,
   `pnpm supabase test db`, `pnpm db:types`. Without Docker, CI runs the pgTAP tests.
 
@@ -78,7 +79,7 @@ move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist A
 
 ### Migration handoff (no Docker, owner applies SQL by hand)
 
-1. Write `supabase/migrations/<timestamp>_<name>.sql` as a self-contained script that runs
+1. Write `supabase/migrations/<NNNN>_<name>.sql` (next serial number) as a self-contained script that runs
    cleanly when pasted into the Supabase SQL Editor (plain SQL, no psql meta-commands),
    plus a pgTAP test in `supabase/tests/database/`.
 2. Update `src/lib/supabase/database.types.ts` by hand to match (same shape `db:types` emits).

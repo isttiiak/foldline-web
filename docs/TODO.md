@@ -39,12 +39,12 @@ Also done on 2026-10-01: `/app/settings` with "Download my data" (JSON via
 When a migration adds a user-owned table, add it to `EXPORTED_TABLES` in
 `src/features/export/server/collect-user-data.ts` and give it `on delete cascade`.
 
-Also done: rate limits (migration 2 pending in `docs/MIGRATIONS.md`), SEO basics (metadata, OG
-image, `sitemap.xml`, `robots.txt`, JSON-LD).
+Also done: rate limits (migration 0002 applied to dev), SEO basics (metadata, OG image,
+`sitemap.xml`, `robots.txt`, JSON-LD, `llms.txt`). Migrations are now numbered `NNNN_name.sql`.
 
-Next: `docs/ROADMAP.md` Phase 1 (Vercel deploy, owner), then Phase 2
-(core library). Landing copy describes Phase 2-3 features (search, ISBN, goals, stats) that
-are not built yet.
+Next: Phase 2 (core library), starting with its migration (`0003_...`). The Vercel deploy is
+postponed by the owner; Phase 1's last item stays open until then. Landing copy describes
+Phase 2-3 features (search, ISBN, goals, stats) that are not built yet.
 
 ## Known context
 

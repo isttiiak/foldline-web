@@ -78,3 +78,12 @@ test.describe("without JavaScript", () => {
     await expect.poll(seen).toBe(1);
   });
 });
+
+test("llms.txt summarises Foldline in Markdown", async ({ request }) => {
+  const response = await request.get("/llms.txt");
+  expect(response.ok()).toBe(true);
+  expect(response.headers()["content-type"]).toContain("text/markdown");
+  const body = await response.text();
+  expect(body.startsWith("# Foldline\n")).toBe(true);
+  expect(body).toContain("/privacy)");
+});

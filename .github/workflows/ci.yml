@@ -62,5 +62,13 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       # Local, throwaway Postgres in Docker. Never touches the remote project.
-      - run: pnpm supabase db start
+      # Retry once: hosted runners occasionally report port 54322 as busy.
+      - name: Start local Postgres
+        run: |
+          pnpm supabase db start || {
+            echo "db start failed, retrying once"
+            pnpm supabase stop --no-backup || true
+            sleep 10
+            pnpm supabase db start
+          }
       - run: pnpm supabase test db
