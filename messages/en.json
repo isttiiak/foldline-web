@@ -1,7 +1,11 @@
 {
   "Metadata": {
     "title": "Foldline",
-    "description": "Foldline: mark your place, quietly."
+    "description": "Foldline is a free, private reading tracker for paper books, ebooks and audiobooks. Log progress your way, set goals only if you want them. No ads, no trackers, no streaks.",
+    "tagline": "Mark your place, quietly.",
+    "ogAlt": "Foldline: a free, private reading tracker. Mark your place, quietly.",
+    "ogBadge": "Free · Private · No ads",
+    "ogFormats": "Paper · Ebook · Audio"
   },
   "Brand": {
     "name": "Foldline",
@@ -11,7 +15,7 @@
     "skipToContent": "Skip to content",
     "close": "Close",
     "openMenu": "Open menu",
-    "loading": "Opening your library"
+    "loading": "Turning the page"
   },
   "Home": {
     "metaTitle": "Foldline: a calm, private reading tracker",

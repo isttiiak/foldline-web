@@ -78,7 +78,9 @@ Do this after the prod Supabase project is set up (section 1) and CI is green on
    - `SUPABASE_SECRET_KEY`: `sb_secret_...` (Vercel keeps it server-side; never prefix it
      with `NEXT_PUBLIC_`)
 
-   Do **not** add `DEV_LOGIN_SECRET`.
+   Do **not** add `DEV_LOGIN_SECRET`. Optional: `NEXT_PUBLIC_SITE_URL` once you have a custom
+   domain (canonical links, sitemap and link previews use it; until then the Vercel
+   production domain is used automatically).
 
 3. **Deploy**. Note the domain Vercel gives you, e.g. `foldline.vercel.app` (Project →
    **Settings → Domains** shows it; you can rename the project there first to get a nicer one).

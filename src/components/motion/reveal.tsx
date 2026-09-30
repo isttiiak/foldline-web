@@ -13,6 +13,7 @@ type RevealProps = {
 export function Reveal({ children, className }: RevealProps) {
   return (
     <motion.div
+      data-reveal
       className={className}
       variants={fadeUp}
       initial="hidden"
@@ -33,6 +34,7 @@ export function RevealList({
   const List = ordered ? motion.ol : motion.ul;
   return (
     <List
+      data-reveal
       className={className}
       variants={stagger()}
       initial="hidden"
@@ -46,7 +48,7 @@ export function RevealList({
 
 export function RevealItem({ children, className }: RevealProps) {
   return (
-    <motion.li className={className} variants={fadeUp}>
+    <motion.li data-reveal className={className} variants={fadeUp}>
       {children}
     </motion.li>
   );

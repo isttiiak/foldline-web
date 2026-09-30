@@ -5,6 +5,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { MotionProvider } from "@/components/motion-provider";
 import { HashSessionHandler } from "@/features/auth/components/hash-session-handler";
+import { siteUrl } from "@/lib/site";
 
 import "./globals.css";
 
@@ -22,8 +23,22 @@ const fraunces = Fraunces({
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Metadata");
   return {
+    metadataBase: siteUrl(),
+    applicationName: t("title"),
     title: { default: t("title"), template: `%s · ${t("title")}` },
     description: t("description"),
+    openGraph: {
+      type: "website",
+      siteName: t("title"),
+      locale: "en_US",
+      title: t("title"),
+      description: t("description"),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("title"),
+      description: t("description"),
+    },
   };
 }
 
@@ -42,6 +57,12 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       className={`dark ${figtree.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        {/* Scroll reveals start hidden until JS runs; without JS, show everything. */}
+        <noscript>
+          <style>
+            {"[data-reveal]{opacity:1!important;transform:none!important}"}
+          </style>
+        </noscript>
         <NextIntlClientProvider>
           <HashSessionHandler />
           <MotionProvider>{children}</MotionProvider>

@@ -20,7 +20,7 @@ Tick items as they are completed. One item per Claude Code session.
 - [x] Signed-in test harness (dev-only login route + Playwright authenticated project)
 - [x] Settings page: delete my account (removes all data) + download my data (JSON)
 - [x] Rate limits on server actions and route handlers (per user and per IP)
-- [ ] SEO basics: metadata, Open Graph image, `sitemap.xml`, `robots.txt`, landing page copy
+- [x] SEO basics: metadata, Open Graph image, `sitemap.xml`, `robots.txt`, landing page copy
 - [ ] Deploy to Vercel with the prod Supabase project; Google consent screen "In production"
 
 ## Phase 2: Core library

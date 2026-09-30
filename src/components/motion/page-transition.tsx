@@ -1,19 +1,8 @@
-"use client";
-
-import { motion } from "motion/react";
-
-import { springs } from "@/lib/motion";
-
-/** Soft entrance for a page. Used from `template.tsx`, which re-mounts per navigation. */
+/**
+ * Soft entrance for a page. Used from `template.tsx`, which re-mounts per
+ * navigation, so the CSS animation replays. Pure CSS: the page is visible
+ * before JavaScript loads.
+ */
 export function PageTransition({ children }: { children: React.ReactNode }) {
-  return (
-    <motion.div
-      className="flex flex-1 flex-col"
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={springs.soft}
-    >
-      {children}
-    </motion.div>
-  );
+  return <div className="flex flex-1 enter flex-col">{children}</div>;
 }

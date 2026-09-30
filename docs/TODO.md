@@ -31,15 +31,18 @@ system (`src/lib/motion.ts`, `src/components/motion/*`), signed-in test harness
       mobile menu with email and sign out verified (2026-10-01)
 - [x] Run the signed-in e2e suite (passed 2026-10-01 with a one-off secret; set
       `DEV_LOGIN_SECRET` in `.env.local` to run it routinely)
-- [ ] Hero and page transitions start at opacity 0 until hydration; revisit with the SEO item
-      (render the hero visible on the server, animate only transforms)
+- [x] Hero and page transitions no longer hide content before hydration (CSS entrances that
+      start dimmed; `data-reveal` fallback under `<noscript>`)
 
 Also done on 2026-10-01: `/app/settings` with "Download my data" (JSON via
 `/app/settings/export`) and "Delete account" (typed-email confirmation, then `/goodbye`).
 When a migration adds a user-owned table, add it to `EXPORTED_TABLES` in
 `src/features/export/server/collect-user-data.ts` and give it `on delete cascade`.
 
-Next: `docs/ROADMAP.md` Phase 1 (rate limits, SEO), then Phase 2
+Also done: rate limits (migration 2 pending in `docs/MIGRATIONS.md`), SEO basics (metadata, OG
+image, `sitemap.xml`, `robots.txt`, JSON-LD).
+
+Next: `docs/ROADMAP.md` Phase 1 (Vercel deploy, owner), then Phase 2
 (core library). Landing copy describes Phase 2-3 features (search, ISBN, goals, stats) that
 are not built yet.
 

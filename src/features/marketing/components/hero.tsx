@@ -1,9 +1,3 @@
-"use client";
-
-import { motion } from "motion/react";
-
-import { fadeUp, stagger } from "@/lib/motion";
-
 import { BookIllustration } from "./book-illustration";
 
 type HeroProps = {
@@ -16,6 +10,11 @@ type HeroProps = {
   children: React.ReactNode;
 };
 
+/** Staggered CSS entrance: rendered on the server, visible before hydration. */
+function delay(step: number): React.CSSProperties {
+  return { "--enter-delay": `${100 + step * 110}ms` } as React.CSSProperties;
+}
+
 export function Hero({
   eyebrow,
   title,
@@ -25,46 +24,41 @@ export function Hero({
   children,
 }: HeroProps) {
   return (
-    <motion.section
-      variants={stagger(0.12, 0.1)}
-      initial="hidden"
-      animate="show"
-      className="mx-auto grid w-full max-w-6xl items-center gap-12 px-6 pt-8 pb-20 lg:grid-cols-[1.1fr_1fr] lg:pt-16"
-    >
+    <section className="mx-auto grid w-full max-w-6xl items-center gap-12 px-6 pt-8 pb-20 lg:grid-cols-[1.1fr_1fr] lg:pt-16">
       <div className="flex flex-col items-start gap-6">
-        <motion.p
-          variants={fadeUp}
-          className="rounded-full border border-amber/25 bg-amber/10 px-3 py-1 text-sm font-medium text-amber"
+        <p
+          style={delay(0)}
+          className="enter rounded-full border border-amber/25 bg-amber/10 px-3 py-1 text-sm font-medium text-amber"
         >
           {eyebrow}
-        </motion.p>
-        <motion.h1
-          variants={fadeUp}
-          className="max-w-3xl text-5xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-7xl"
+        </p>
+        <h1
+          style={delay(1)}
+          className="max-w-3xl enter text-5xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-7xl"
         >
           <span className="text-sunrise motion-safe:animate-shimmer">
             {title}
           </span>
-        </motion.h1>
-        <motion.p
-          variants={fadeUp}
-          className="max-w-xl text-lg leading-relaxed text-muted-foreground"
+        </h1>
+        <p
+          style={delay(2)}
+          className="max-w-xl enter text-lg leading-relaxed text-muted-foreground"
         >
           {lead}
-        </motion.p>
-        <motion.div
-          variants={fadeUp}
-          className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center"
+        </p>
+        <div
+          style={delay(3)}
+          className="flex w-full enter flex-col gap-3 sm:w-auto sm:flex-row sm:items-center"
         >
           {children}
-        </motion.div>
-        <motion.p variants={fadeUp} className="text-sm text-muted-foreground">
+        </div>
+        <p style={delay(4)} className="enter text-sm text-muted-foreground">
           {note}
-        </motion.p>
+        </p>
       </div>
-      <motion.div variants={fadeUp}>
+      <div style={delay(2)} className="enter">
         <BookIllustration label={illustrationLabel} />
-      </motion.div>
-    </motion.section>
+      </div>
+    </section>
   );
 }

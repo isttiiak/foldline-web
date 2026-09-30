@@ -11,17 +11,40 @@ import { FinalCta } from "@/features/marketing/components/final-cta";
 import { Hero } from "@/features/marketing/components/hero";
 import { HowItWorks } from "@/features/marketing/components/how-it-works";
 import { Promises } from "@/features/marketing/components/promises";
+import { siteUrl } from "@/lib/site";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Home");
-  return { title: { absolute: t("metaTitle") }, description: t("lead") };
+  const m = await getTranslations("Metadata");
+  return {
+    title: { absolute: t("metaTitle") },
+    description: m("description"),
+  };
 }
 
 export default function HomePage() {
   const t = useTranslations("Home");
+  const m = useTranslations("Metadata");
+  // Structured data so search engines understand what Foldline is.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: m("title"),
+    description: m("description"),
+    url: siteUrl().toString(),
+    applicationCategory: "LifestyleApplication",
+    operatingSystem: "Any",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <Hero
         eyebrow={t("eyebrow")}
         title={t("title")}
