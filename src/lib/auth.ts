@@ -93,6 +93,23 @@ export async function verifyEmailToken(
   return error ? { ok: false, error: error.message } : { ok: true };
 }
 
+/**
+ * Adopt tokens that Supabase put in the URL fragment (dashboard invites and
+ * links that fell back to the Site URL). setSession verifies the access token
+ * with the Auth server before trusting it, then writes the session cookies.
+ */
+export async function setSessionFromTokens(
+  accessToken: string,
+  refreshToken: string,
+): Promise<AuthResult> {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.setSession({
+    access_token: accessToken,
+    refresh_token: refreshToken,
+  });
+  return error ? { ok: false, error: error.message } : { ok: true };
+}
+
 export async function signOut(): Promise<void> {
   const supabase = await createClient();
   await supabase.auth.signOut();

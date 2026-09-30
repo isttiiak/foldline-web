@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { MotionProvider } from "@/components/motion-provider";
+import { HashSessionHandler } from "@/features/auth/components/hash-session-handler";
 
 import "./globals.css";
 
@@ -41,6 +42,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider>
+          <HashSessionHandler />
           <MotionProvider>{children}</MotionProvider>
         </NextIntlClientProvider>
       </body>

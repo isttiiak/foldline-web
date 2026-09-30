@@ -38,7 +38,8 @@
   "AppNav": {
     "label": "Main",
     "library": "Library",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "signedInAs": "Signed in as"
   },
   "Library": {
     "title": "Your library",
@@ -62,5 +63,8 @@
       "expiredLink": "That sign-in link has expired or was already used. Ask for a fresh one below.",
       "google": "Google sign-in did not work this time. Try again, or use a magic link."
     }
+  },
+  "Header": {
+    "signIn": "Sign in"
   }
 }

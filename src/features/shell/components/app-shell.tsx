@@ -82,11 +82,20 @@ function NavLinks({
   );
 }
 
-function SignOutButton() {
+function SignOutButton({ email }: { email?: string | null }) {
   const t = useTranslations("AppNav");
 
   return (
-    <form action={signOutAction}>
+    <form action={signOutAction} className="flex flex-col gap-2">
+      {email && (
+        <p
+          className="truncate px-3 text-xs text-muted-foreground"
+          title={email}
+        >
+          {t("signedInAs")}{" "}
+          <span className="font-medium text-foreground">{email}</span>
+        </p>
+      )}
       <button
         type="submit"
         className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
@@ -101,7 +110,13 @@ function SignOutButton() {
   );
 }
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell({
+  children,
+  email,
+}: {
+  children: React.ReactNode;
+  email?: string | null;
+}) {
   const t = useTranslations("Common");
   const [open, setOpen] = useState(false);
 
@@ -114,7 +129,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <Wordmark href="/app" className="px-2" />
         <NavLinks pillId="nav-pill-desktop" />
         <div className="mt-auto">
-          <SignOutButton />
+          <SignOutButton email={email} />
         </div>
       </aside>
 
@@ -145,7 +160,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 onNavigate={() => setOpen(false)}
               />
               <div className="mt-auto">
-                <SignOutButton />
+                <SignOutButton email={email} />
               </div>
             </SheetContent>
           </Sheet>
