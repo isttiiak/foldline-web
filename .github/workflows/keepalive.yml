@@ -14,7 +14,9 @@ jobs:
         # A real table query reaches Postgres (RLS returns [] for the anonymous key),
         # which counts as project activity.
         run: |
-          curl -fsS "${SUPABASE_URL%/}/rest/v1/profiles?select=id&limit=1" \
+          # Tolerate a pasted Data API URL: keep only scheme + host.
+          BASE=$(printf "%s" "$SUPABASE_URL" | sed -E "s#^(https?://[^/]+).*#\1#")
+          curl -fsS "$BASE/rest/v1/profiles?select=id&limit=1" \
             -H "apikey: ${SUPABASE_PUBLISHABLE_KEY}" -o /dev/null
           echo "Supabase answered."
         env:

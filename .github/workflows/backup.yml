@@ -21,6 +21,11 @@ jobs:
           sudo apt-get install -y postgresql-client-17
       - name: Dump and encrypt
         run: |
+          # GitHub runners have no IPv6; the direct db.<ref>.supabase.co host is IPv6-only.
+          if printf "%s" "$SUPABASE_DB_URL" | grep -qE "@db\.[a-z0-9]+\.supabase\.co"; then
+            echo "::error::SUPABASE_DB_URL is the Direct connection string. Use Connect > Session pooler instead."
+            exit 1
+          fi
           /usr/lib/postgresql/17/bin/pg_dump "$SUPABASE_DB_URL" \
             --no-owner --no-privileges --schema=public --schema=auth -Fc -f backup.dump
           gpg --batch --yes --pinentry-mode loopback --symmetric --cipher-algo AES256 \
