@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 
 import { FoldMark } from "@/components/brand/fold-mark";
 import { LoginForm } from "@/features/auth/components/login-form";
+import { isLoginError } from "@/features/auth/errors";
 import { safeNextPath } from "@/features/auth/paths";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -16,10 +17,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   const b = await getTranslations("Brand");
   const next =
     typeof params.next === "string" ? safeNextPath(params.next) : undefined;
-  const error =
-    params.error === "link" || params.error === "google"
-      ? params.error
-      : undefined;
+  const error = isLoginError(params.error) ? params.error : undefined;
 
   return (
     <section className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-6 py-12">

@@ -61,8 +61,10 @@
       "invalidEmail": "That email does not look quite right. Mind checking it?",
       "generic": "Something went sideways sending your link. Please try again in a moment.",
       "expiredLink": "That sign-in link has expired or was already used. Ask for a fresh one below.",
-      "google": "Google sign-in did not work this time. Try again, or use a magic link."
-    }
+      "google": "Google sign-in did not work this time. Try again, or use a magic link.",
+      "notInvited": "That Google account is not on the guest list yet. Try the one your invite was sent to, or ask for an invite."
+    },
+    "inviteOnly": "Foldline is invite-only for now. Use the Google account your invite was sent to."
   },
   "Header": {
     "signIn": "Sign in"

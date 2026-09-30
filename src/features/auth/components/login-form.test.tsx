@@ -11,28 +11,39 @@ vi.mock("@/features/auth/server/actions", () => ({
 }));
 
 describe("LoginForm", () => {
-  test("offers a labelled email field, a magic link button and Google", () => {
+  test("shows only Google sign-in by default, with an invite-only note", () => {
     renderWithIntl(<LoginForm />);
+
+    expect(
+      screen.getByRole("button", { name: "Continue with Google" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByLabelText("Email")).not.toBeInTheDocument();
+    expect(screen.getByText(/invite-only/i)).toBeInTheDocument();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  test("can show the magic link form again when enabled", () => {
+    renderWithIntl(<LoginForm methods={{ google: true, magicLink: true }} />);
 
     expect(screen.getByLabelText("Email")).toHaveAttribute("type", "email");
     expect(
       screen.getByRole("button", { name: "Send me a magic link" }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Continue with Google" }),
-    ).toBeInTheDocument();
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
-  test("explains an expired link gently", () => {
-    renderWithIntl(<LoginForm linkError="link" />);
-    expect(screen.getByRole("alert")).toHaveTextContent(/expired/);
+  test.each([
+    ["link", /expired/],
+    ["notInvited", /not on the guest list/],
+    ["google", /Google sign-in did not work/],
+  ] as const)("explains the %s error gently", (error, text) => {
+    renderWithIntl(<LoginForm linkError={error} />);
+    expect(screen.getByRole("alert")).toHaveTextContent(text);
   });
 
-  test("carries the next path through both forms", () => {
+  test("carries the next path into the Google form", () => {
     const { container } = renderWithIntl(<LoginForm next="/app/shelves" />);
-    const hidden = container.querySelectorAll('input[name="next"]');
-    expect(hidden).toHaveLength(2);
-    hidden.forEach((input) => expect(input).toHaveValue("/app/shelves"));
+    expect(container.querySelector('input[name="next"]')).toHaveValue(
+      "/app/shelves",
+    );
   });
 });

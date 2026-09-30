@@ -18,16 +18,21 @@ test("signed-out visitors are sent from /app to the login page", async ({
 }) => {
   await page.goto("/app/anything?x=1");
   await expect(page).toHaveURL(/\/login\?next=%2Fapp%2Fanything%3Fx%3D1$/);
-  await expect(page.getByLabel("Email")).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Continue with Google" }),
+  ).toBeVisible();
 });
 
-test("the login form validates the email before sending", async ({ page }) => {
-  await page.goto("/login");
-  await page.getByLabel("Email").fill("not-an-email");
-  await page.getByRole("button", { name: "Send me a magic link" }).click();
-  // Filter out Next.js's own (empty) route-announcer alert.
+test("login offers Google only and explains uninvited accounts", async ({
+  page,
+}) => {
+  await page.goto("/login?error=notInvited");
   await expect(
-    page.getByRole("alert").filter({ hasText: /does not look quite right/ }),
+    page.getByRole("button", { name: "Continue with Google" }),
+  ).toBeVisible();
+  await expect(page.getByLabel("Email")).toHaveCount(0);
+  await expect(
+    page.getByRole("alert").filter({ hasText: /not on the guest list/ }),
   ).toBeVisible();
 });
 

@@ -29,7 +29,7 @@ export function HashSessionHandler() {
     );
 
     if (auth.kind === "error") {
-      router.replace(`${LOGIN_PATH}?error=link`);
+      router.replace(`${LOGIN_PATH}?error=${auth.error}`);
       return;
     }
 

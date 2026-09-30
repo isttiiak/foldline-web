@@ -20,7 +20,7 @@ describe("parseAuthFragment", () => {
       parseAuthFragment(
         "#error=access_denied&error_code=otp_expired&error_description=Email+link+is+invalid",
       ),
-    ).toEqual({ kind: "error" });
+    ).toEqual({ kind: "error", error: "link" });
   });
 
   test.each(["", "#", "#main", "#access_token=only"])(

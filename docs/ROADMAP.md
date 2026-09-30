@@ -10,6 +10,7 @@ Tick items as they are completed. One item per Claude Code session.
 - [ ] Auth: magic link + Google via `src/lib/auth.ts`, protected `/app`, profiles table + trigger (code done; tick once CI pgTAP is green and the migration is applied to the dev project)
 - [x] CI: GitHub Actions for typecheck, lint, test, build (+ e2e and pgTAP jobs)
 - [ ] Keep-alive and weekly backup workflows configured with repo secrets
+- [ ] Custom SMTP (e.g. Resend) + editable email templates, then re-enable magic link sign-in (`AUTH_METHODS.magicLink` in `src/features/auth/config.ts`)
 - [ ] (Deferred) Bangla translation: `messages/bn.json`, locale switcher, Bangla-capable font stack
 
 ## Phase 1: Core library

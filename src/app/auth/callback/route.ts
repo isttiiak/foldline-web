@@ -1,6 +1,7 @@
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
 
+import { loginErrorFromParams } from "@/features/auth/errors";
 import { LOGIN_PATH, safeNextPath } from "@/features/auth/paths";
 import { exchangeCodeForSession, verifyEmailToken } from "@/lib/auth";
 
@@ -31,6 +32,9 @@ export async function GET(request: NextRequest) {
   if (result.ok) return NextResponse.redirect(new URL(next, origin));
 
   const failed = new URL(LOGIN_PATH, origin);
-  failed.searchParams.set("error", "link");
+  failed.searchParams.set(
+    "error",
+    loginErrorFromParams(searchParams) ?? (code ? "google" : "link"),
+  );
   return NextResponse.redirect(failed);
 }

@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { AmbientGlow } from "@/components/ambient-glow";
+import { HeaderSignIn } from "@/components/header-sign-in";
 import { SkipLink } from "@/components/skip-link";
 import { Wordmark } from "@/components/brand/wordmark";
 
@@ -15,12 +15,7 @@ export default function MarketingLayout({ children }: LayoutProps<"/">) {
       <AmbientGlow />
       <header className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-6">
         <Wordmark />
-        <Link
-          href="/login"
-          className="rounded-full border border-amber/25 px-4 py-1.5 text-sm font-medium text-amber transition-colors hover:bg-amber/10 focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
-        >
-          {h("signIn")}
-        </Link>
+        <HeaderSignIn label={h("signIn")} />
       </header>
       <main
         id="main"
