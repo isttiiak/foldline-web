@@ -1,4 +1,5 @@
-Run, in order: `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm supabase test db`, `pnpm build`.
+Run, in order: `pnpm typecheck`, `pnpm lint`, `pnpm format:check`, `pnpm test`, `pnpm test:e2e`,
+`pnpm supabase test db` (needs Docker; CI runs it too), `pnpm build`.
 Fix every failure (never disable rules or skip tests to make them pass).
-Check that every new UI string exists in both messages/en.json and messages/bn.json
-(Bangla in Bangla script, never romanized). Report a short summary.
+Check that every new UI string exists in messages/en.json (Bangla is deferred) and that no
+em dash appears anywhere. Report a short summary.

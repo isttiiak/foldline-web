@@ -8,7 +8,7 @@ Tick items as they are completed. One item per Claude Code session.
 - [x] shadcn/ui init + dark theme + motion, app shell layout, (marketing) and (app) route groups, next-intl (English only)
 - [x] Supabase local setup (`supabase init`), `src/lib/supabase/{client,server,admin}.ts`
 - [ ] Auth: magic link + Google via `src/lib/auth.ts`, protected `/app`, profiles table + trigger (code done; tick once `supabase test db` passes with Docker or in CI)
-- [ ] CI: GitHub Actions for typecheck, lint, test, build
+- [x] CI: GitHub Actions for typecheck, lint, test, build (+ e2e and pgTAP jobs)
 - [ ] Keep-alive and weekly backup workflows configured with repo secrets
 - [ ] (Deferred) Bangla translation: `messages/bn.json`, locale switcher, Bangla-capable font stack
 

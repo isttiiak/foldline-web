@@ -18,7 +18,7 @@ jobs:
           pg_dump "${{ secrets.SUPABASE_DB_URL }}" --no-owner --no-privileges -Fc -f backup.dump
           gpg --batch --yes --pinentry-mode loopback \
             --passphrase "${{ secrets.BACKUP_PASSPHRASE }}" -c backup.dump
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: db-backup-${{ github.run_id }}
           path: backup.dump.gpg
