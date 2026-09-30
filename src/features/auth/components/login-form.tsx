@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { Loader2, MailCheck, Sparkles } from "lucide-react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
@@ -49,12 +50,30 @@ export function LoginForm({
 
       {methods.magicLink && <MagicLinkForm next={next} />}
 
-      {methods.google && !methods.magicLink && (
-        <p className="text-center text-sm text-muted-foreground">
-          {t("inviteOnly")}
-        </p>
-      )}
+      <p className="text-center text-sm text-balance text-muted-foreground">
+        {t.rich("consent", {
+          terms: (chunks) => <LegalLink href="/terms">{chunks}</LegalLink>,
+          privacy: (chunks) => <LegalLink href="/privacy">{chunks}</LegalLink>,
+        })}
+      </p>
     </div>
+  );
+}
+
+function LegalLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className="font-medium text-amber underline-offset-4 hover:underline focus-visible:rounded-sm focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
+    >
+      {children}
+    </Link>
   );
 }
 

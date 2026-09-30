@@ -11,14 +11,21 @@ vi.mock("@/features/auth/server/actions", () => ({
 }));
 
 describe("LoginForm", () => {
-  test("shows only Google sign-in by default, with an early access note", () => {
+  test("shows only Google sign-in by default, with links to the terms and privacy policy", () => {
     renderWithIntl(<LoginForm />);
 
     expect(
       screen.getByRole("button", { name: "Continue with Google" }),
     ).toBeInTheDocument();
     expect(screen.queryByLabelText("Email")).not.toBeInTheDocument();
-    expect(screen.getByText(/early access/i)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Terms" })).toHaveAttribute(
+      "href",
+      "/terms",
+    );
+    expect(
+      screen.getByRole("link", { name: "Privacy policy" }),
+    ).toHaveAttribute("href", "/privacy");
+    expect(screen.queryByText(/early access/i)).not.toBeInTheDocument();
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
@@ -33,7 +40,7 @@ describe("LoginForm", () => {
 
   test.each([
     ["link", /expired/],
-    ["notInvited", /does not have early access/],
+    ["notInvited", /sign-ups are paused/],
     ["google", /Google sign-in did not work/],
   ] as const)("explains the %s error gently", (error, text) => {
     renderWithIntl(<LoginForm linkError={error} />);

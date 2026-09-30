@@ -31,8 +31,8 @@ export async function requestMagicLink(
     callbackUrl(await requestOrigin(), parsed.data.next),
   );
 
-  // Unknown emails fail because signups are invite-only. Report "sent" either way
-  // so the form never reveals who has an account; log the rest for the owner.
+  // Unknown emails only fail if signups are switched off. Report "sent" either
+  // way so the form never reveals who has an account; log the rest for the owner.
   if (!result.ok && !/signups? not allowed/i.test(result.error)) {
     console.error("[auth] magic link failed:", result.error);
     return { status: "error", reason: "generic" };

@@ -42,8 +42,8 @@ export async function requireUser(): Promise<SessionUser> {
 }
 
 /**
- * Email a magic link. Accounts are invite-only for now (open signups are a
- * Phase 6 roadmap item), so unknown emails do not create users.
+ * Email a magic link. Sign-up is open, so a new email creates an account
+ * (unless signups are switched off in Supabase).
  */
 export async function sendMagicLink(
   email: string,
@@ -52,7 +52,7 @@ export async function sendMagicLink(
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: redirectTo, shouldCreateUser: false },
+    options: { emailRedirectTo: redirectTo, shouldCreateUser: true },
   });
   return error ? { ok: false, error: error.message } : { ok: true };
 }

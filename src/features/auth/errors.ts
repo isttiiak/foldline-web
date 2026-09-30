@@ -10,7 +10,8 @@ export function isLoginError(value: unknown): value is LoginError {
 
 /**
  * Map the error Supabase sends back (as query or fragment params) to a message
- * key. Invite-only: a Google account nobody invited gets "Signups not allowed".
+ * key. Sign-up is open, but if it is ever switched off in Supabase, a new
+ * Google account gets "Signups not allowed", mapped to a gentle "paused" note.
  */
 export function loginErrorFromParams(
   params: URLSearchParams,

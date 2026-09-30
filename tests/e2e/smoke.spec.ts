@@ -9,7 +9,7 @@ test("home page shows the headline and leads to sign in", async ({ page }) => {
   await page.getByRole("link", { name: "Open my library" }).click();
   await expect(page).toHaveURL(/\/login\?next=%2Fapp$/);
   await expect(
-    page.getByRole("heading", { level: 1, name: "Welcome back, reader" }),
+    page.getByRole("heading", { level: 1, name: "Welcome to Foldline" }),
   ).toBeVisible();
 });
 
@@ -23,7 +23,7 @@ test("signed-out visitors are sent from /app to the login page", async ({
   ).toBeVisible();
 });
 
-test("login offers Google only and explains uninvited accounts", async ({
+test("login offers Google only and explains paused sign-ups", async ({
   page,
 }) => {
   await page.goto("/login?error=notInvited");
@@ -32,7 +32,7 @@ test("login offers Google only and explains uninvited accounts", async ({
   ).toBeVisible();
   await expect(page.getByLabel("Email")).toHaveCount(0);
   await expect(
-    page.getByRole("alert").filter({ hasText: /does not have early access/ }),
+    page.getByRole("alert").filter({ hasText: /sign-ups are paused/ }),
   ).toBeVisible();
 });
 

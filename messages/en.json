@@ -48,8 +48,8 @@
   },
   "Login": {
     "metaTitle": "Sign in",
-    "title": "Welcome back, reader",
-    "lead": "Your books missed you. Sign in to pick up where you left off.",
+    "title": "Welcome to Foldline",
+    "lead": "New here or coming back, one tap with Google and your shelf is ready.",
     "emailLabel": "Email",
     "emailPlaceholder": "you@example.com",
     "submit": "Send me a magic link",
@@ -61,10 +61,10 @@
       "invalidEmail": "That email does not look quite right. Mind checking it?",
       "generic": "Something went sideways sending your link. Please try again in a moment.",
       "expiredLink": "That sign-in link has expired or was already used. Ask for a fresh one below.",
-      "google": "Google sign-in did not work this time. Try again, or use a magic link.",
-      "notInvited": "That Google account does not have early access yet. Public sign-up opens very soon, see you then!"
+      "google": "Google sign-in did not work this time. Please try again in a moment.",
+      "notInvited": "New sign-ups are paused for a little while. Please try again soon, your shelf will wait."
     },
-    "inviteOnly": "Foldline is in early access. Public sign-up opens soon."
+    "consent": "By continuing you agree to our <terms>Terms</terms> and <privacy>Privacy policy</privacy>. No ads, no trackers, ever."
   },
   "Header": {
     "signIn": "Sign in"
