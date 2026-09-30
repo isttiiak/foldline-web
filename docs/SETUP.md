@@ -17,12 +17,20 @@ For **each** project:
    secret key (`sb_secret_...`). The project URL is under the **Connect** button.
 2. **SQL Editor**: run every file listed in [MIGRATIONS.md](MIGRATIONS.md), in order.
 3. **Authentication → URL Configuration**:
-   - dev: Site URL `http://localhost:3000`, Redirect URL `http://localhost:3000/auth/callback`
-   - prod: Site URL `https://<your-vercel-domain>`, Redirect URL
-     `https://<your-vercel-domain>/auth/callback`
-4. **Authentication → Sign In / Providers → Email**: turn **off** "Allow new users to sign
-   up" (invite-only until Phase 6).
-5. **Authentication → Users → Invite user** (or **Add user**) for yourself and friends.
+   - dev: Site URL `http://localhost:3000`
+   - prod: Site URL `https://<your-vercel-domain>`
+4. **Authentication → Sign In / Providers → User Signups**: turn **off** "Allow new users to
+   sign up" and click **Save** (invite-only until Phase 6).
+5. **Authentication → Emails → Templates**: point the links at the app's callback so they
+   work in any browser (the default links drop the user on the home page, signed out).
+   - **Invite user**, replace the link with:
+     `<a href="{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=invite&next=/app">Accept your invite</a>`
+   - **Magic link**, replace the link with:
+     `<a href="{{ .RedirectTo }}&token_hash={{ .TokenHash }}&type=email">Sign in to Foldline</a>`
+     (`RedirectTo` is the app's callback URL, which already carries `?next=`.)
+6. **Authentication → URL Configuration → Redirect URLs**: add `http://localhost:3000/**`
+   (dev) or `https://<your-vercel-domain>/**` (prod).
+7. **Authentication → Users → Invite user** for yourself and friends.
 
 ## 2. Local development
 
