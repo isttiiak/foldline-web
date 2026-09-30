@@ -17,7 +17,7 @@ session: tick what is done, add what is next.
 - [ ] After the Claude build below: deploy to Vercel (steps in `docs/SETUP.md`), then set
       Google Branding app domain fields (home, `/privacy`, `/terms`, authorized domain
       `<project>.vercel.app`) and publish
-- [ ] Supabase: "Allow new users to sign up" is **on** (sign-up opens now, per owner)
+- [x] Supabase: "Allow new users to sign up" is **on** (sign-up opens now, per owner)
 - [ ] `.env.local`: add `DEV_LOGIN_SECRET=<32+ random chars>` (see `docs/SETUP.md` section 2),
       and add a `DEV_LOGIN_SECRET=` line to `.env.example` (Claude cannot touch `.env*` files)
 
@@ -30,7 +30,8 @@ system (`src/lib/motion.ts`, `src/components/motion/*`), signed-in test harness
 
 - [ ] Live check in the browser pane: owner signs in once with Google, then Claude verifies
       `/app` visually
-- [ ] Run the signed-in e2e suite once the owner has set `DEV_LOGIN_SECRET`
+- [x] Run the signed-in e2e suite (passed 2026-10-01 with a one-off secret; set
+      `DEV_LOGIN_SECRET` in `.env.local` to run it routinely)
 - [ ] Hero and page transitions start at opacity 0 until hydration; revisit with the SEO item
       (render the hero visible on the server, animate only transforms)
 

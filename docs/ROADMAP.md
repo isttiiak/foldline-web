@@ -13,7 +13,7 @@ Tick items as they are completed. One item per Claude Code session.
 
 ## Phase 1: Launch readiness
 
-- [ ] Open sign-up now (owner decision): welcoming login copy (done); signups on in Supabase (owner)
+- [x] Open sign-up now (owner decision): welcoming login copy; signups on in Supabase
 - [x] Privacy policy + terms pages in plain language, linked from the footer and login page
 - [x] Public landing page (hero with animated book illustration, features, how it works, FAQ, CTAs)
 - [x] Motion system: press feedback, page transitions, scroll reveals, hover lifts, book touches
