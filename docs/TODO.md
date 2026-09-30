@@ -18,8 +18,7 @@ session: tick what is done, add what is next.
       Google Branding app domain fields (home, `/privacy`, `/terms`, authorized domain
       `<project>.vercel.app`) and publish
 - [x] Supabase: "Allow new users to sign up" is **on** (sign-up opens now, per owner)
-- [ ] `.env.local`: add `DEV_LOGIN_SECRET=<32+ random chars>` (see `docs/SETUP.md` section 2),
-      and add a `DEV_LOGIN_SECRET=` line to `.env.example` (Claude cannot touch `.env*` files)
+- [x] `.env.local` has `DEV_LOGIN_SECRET`; `.env.example` lists it
 
 ## Claude
 
@@ -28,8 +27,8 @@ system (`src/lib/motion.ts`, `src/components/motion/*`), signed-in test harness
 (`/auth/dev-login` + Playwright `setup`/`signed-in`/`cleanup` projects), Vercel guide in
 `docs/SETUP.md`.
 
-- [ ] Live check in the browser pane: owner signs in once with Google, then Claude verifies
-      `/app` visually
+- [x] Live check in the browser pane: owner signed in with Google; `/app`, empty shelf,
+      mobile menu with email and sign out verified (2026-10-01)
 - [x] Run the signed-in e2e suite (passed 2026-10-01 with a one-off secret; set
       `DEV_LOGIN_SECRET` in `.env.local` to run it routinely)
 - [ ] Hero and page transitions start at opacity 0 until hydration; revisit with the SEO item
