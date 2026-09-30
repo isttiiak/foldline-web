@@ -1,6 +1,6 @@
-# Foldline — Calm Charter
+# Foldline: Calm Charter
 
-The product exists to help people read and remember — never to keep them in the app.
+The product exists to help people read and remember, never to keep them in the app.
 Every feature is checked against this charter. When in doubt, leave it out.
 
 ## Never ship
@@ -8,7 +8,7 @@ Every feature is checked against this charter. When in doubt, leave it out.
 - Public profiles, followers, likes, comments, feeds, "friends' activity"
 - Streaks, "don't break the chain", daily-goal pressure
 - Numeric yearly book-count goals as a default feature
-- Badges, levels, confetti, points, any reward animation
+- Badges, levels, points, or rewards tied to how much or how often you read
 - Leaderboards, percentiles, or any comparison with other users
 - Push/email notifications the user did not explicitly schedule themselves
 - Infinite scroll feeds, "trending", engagement-optimised recommendations
@@ -21,7 +21,7 @@ Every feature is checked against this charter. When in doubt, leave it out.
 | --------------------- | ------------------------------------------------------------------------------ |
 | Streaks               | A reading rhythm view (calendar density) with no counter and no "broken" state |
 | Book-count goals      | Optional free-text intentions ("read slowly", "finish the classics I own")     |
-| Rewards on finishing  | A quiet finished state + optional reflection prompt                            |
+| Rewards on finishing  | A warm, gentle finished moment + optional reflection prompt                    |
 | Notifications         | Reminders only if the user creates them                                        |
 | Social proof          | Private notes, highlights and reflections                                      |
 | Year-in-books graphic | A private year-end letter, exportable as Markdown                              |
@@ -33,3 +33,5 @@ Every feature is checked against this charter. When in doubt, leave it out.
 - Automation happens silently and is always reversible.
 - Stats are descriptive, never competitive, and can be hidden entirely.
 - Full data export is always one click away.
+- Charming, not compulsive: colour and motion exist to delight, never to pull you back.
+  Every animation respects `prefers-reduced-motion`.

@@ -1,6 +1,6 @@
 # Foldline
 
-Foldline — mark your place, quietly.
+Foldline: mark your place, quietly.
 
 A calm, private, open-source reading tracker for paper, ebooks and audiobooks.
 No social features, no streaks, no nudges. See [docs/CALM_CHARTER.md](docs/CALM_CHARTER.md).

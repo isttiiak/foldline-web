@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Foldline",
-  description: "Foldline — mark your place, quietly.",
+  description: "Foldline: mark your place, quietly.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -1,4 +1,4 @@
-# Foldline — Architecture
+# Foldline: Architecture
 
 ## Overview
 
@@ -98,7 +98,7 @@ create policy "works_delete_own" on public.works
 Order: Open Library → Google Books → Hardcover (optional token). Flow: normalise ISBN or
 query → check `provider_cache` → call provider (rate-limited) → store → merge into the
 edition respecting `field_locks`. Enrichment never blocks saving a book; it can run after.
-Many Bangla/local editions will have no provider data — manual entry + cover photo is a
+Many Bangla/local editions will have no provider data. Manual entry + cover photo is a
 first-class path, not an error state.
 
 ## Environment variables (`.env.example`)

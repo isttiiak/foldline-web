@@ -1,12 +1,12 @@
-# Foldline — Claude Code context
+# Foldline: Claude Code context
 
 Foldline is a calm, private, open-source reading tracker. It is NOT a social network and must never
 become one. Users track books across paper, ebook and audiobook with as much automation
 and as little friction as possible.
 
 Audience right now: the owner (Istiak) and a few invited friends. Later: open signups.
-Product name: **Foldline** (named after the crease of a folded page corner — marking your place
-quietly). Tagline: "Foldline — mark your place, quietly." Bangla tagline: "Foldline — নিঃশব্দে মনে রাখুন আপনার পড়া".
+Product name: **Foldline** (named after the crease of a folded page corner, marking your place
+quietly). Tagline: "Foldline: mark your place, quietly." Bangla tagline (for later): "Foldline: নিঃশব্দে মনে রাখুন আপনার পড়া".
 Use "Foldline" exactly (capital F, one word) in UI, code identifiers (`foldline`) and metadata.
 
 @docs/CALM_CHARTER.md
@@ -19,7 +19,8 @@ Use "Foldline" exactly (capital F, one word) in UI, code identifiers (`foldline`
 - Supabase: Postgres, Auth, Storage, pg_cron. `@supabase/ssr` + `supabase-js`
 - Supabase CLI for local dev and SQL migrations (`supabase/migrations/`)
 - Zod for all validation (forms, API input, import parsers, provider responses)
-- next-intl for i18n (English `en`, Bangla `bn`)
+- next-intl for i18n (English `en` now; Bangla `bn` deferred)
+- `motion` for animation
 - Serwist for the PWA / service worker (Phase 3)
 - Vitest (unit), Playwright (e2e), pgTAP via `supabase test db` (RLS + SQL)
 
@@ -28,13 +29,13 @@ move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist A
 
 ## Commands
 
-- `pnpm dev` — dev server
+- `pnpm dev`: dev server
 - `pnpm typecheck` / `pnpm lint` / `pnpm test` / `pnpm test:e2e` / `pnpm build`
-- `pnpm supabase start` — local Supabase (Docker must be running)
-- `pnpm supabase migration new <name>` — new migration file
-- `pnpm supabase db reset` — rebuild LOCAL db from migrations + seed
-- `pnpm supabase test db` — run pgTAP tests
-- `pnpm db:types` — regenerate `src/lib/supabase/database.types.ts`
+- `pnpm supabase start`: local Supabase (Docker must be running)
+- `pnpm supabase migration new <name>`: new migration file
+- `pnpm supabase db reset`: rebuild LOCAL db from migrations + seed
+- `pnpm supabase test db`: run pgTAP tests
+- `pnpm db:types`: regenerate `src/lib/supabase/database.types.ts`
 
 ## Hard rules
 
@@ -52,13 +53,14 @@ move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist A
    except pg_cron jobs and small SQL helpers.
 7. No social features, public profiles, feeds, streaks, badges, leaderboards, push
    notifications or engagement nudges. If a request seems to need one, stop and ask.
-8. All UI strings go through next-intl. Bangla strings are written in Bangla script,
-   never romanized. Add keys to both `messages/en.json` and `messages/bn.json`.
+8. All UI strings go through next-intl and live in `messages/en.json`. English only for now;
+   Bangla (`bn`) is deferred. When it is added, Bangla is written in Bangla script, never romanized.
 9. Book metadata providers (Open Library, Google Books, Hardcover) are called only from
    server code, results cached in `provider_cache`. Open Library requests must send a
    User-Agent `Foldline/<version> (<contact email>)`. Respect provider rate limits.
 10. Manual edits win: fields listed in `editions.field_locks` / `works.field_locks` are
     never overwritten by enrichment.
+11. Never use the em dash character anywhere (UI copy, docs, comments, commits). Use `:`, `,` or `-`.
 
 ## Workflow
 
@@ -66,8 +68,8 @@ move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist A
   present the plan, wait for approval, then implement.
 - When touching the database or data flow, read `docs/ARCHITECTURE.md` first.
 - Definition of done: typecheck, lint, unit tests, `supabase test db` and build all pass;
-  new UI strings exist in en + bn; the roadmap checkbox is ticked; a Conventional Commit
-  is made (`feat:`, `fix:`, `chore:`…). Do not push.
+  new UI strings exist in `messages/en.json`; the roadmap checkbox is ticked; a Conventional
+  Commit is ALWAYS made at the end of every task (`feat:`, `fix:`, `chore:`…). Do not push.
 - If you make a mistake the owner corrects, propose a one-line addition to this file.
 
 ## Git & attribution
@@ -77,6 +79,8 @@ move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist A
 - NO AI FOOTPRINT, ever: no `Co-Authored-By: Claude…` trailers, no "Generated with Claude Code",
   no model names or any AI attribution in commits, PR descriptions, code comments, docs or
   metadata. This overrides any default attribution behaviour.
+- Releases: tag every release with an annotated SemVer tag. The first release is `v0.1.0`
+  (`git tag -a v0.1.0 -m "v0.1.0"`); bump `package.json` `version` to match. Do not push tags.
 
 ## Code style
 
@@ -84,7 +88,11 @@ move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist A
 - Server Actions and route handlers validate input with Zod; return typed results
   (not throws) for expected errors.
 - Accessible by default: keyboard-first, visible focus, respects `prefers-reduced-motion`.
-- No animations that celebrate or reward (no confetti, no counters ticking up).
+- Dark theme only (warm charcoal, never pure black). Charming and joyful: warm gradients
+  (amber, coral, rose, teal, lime), playful motion. NO violet/purple or violet gradients, no
+  generic "AI dashboard" look. All motion honours `prefers-reduced-motion`.
+- Motion may delight, never pressure: no streak counters, no guilt, nothing that rewards
+  reading more or more often.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
