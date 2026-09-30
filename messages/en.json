@@ -33,7 +33,10 @@
     }
   },
   "Footer": {
-    "note": "Made for slow evenings and good books."
+    "note": "Made for slow evenings and good books.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "legalLabel": "Legal"
   },
   "AppNav": {
     "label": "Main",
@@ -68,5 +71,142 @@
   },
   "Header": {
     "signIn": "Sign in"
+  },
+  "Legal": {
+    "updated": "Last updated {date}",
+    "contents": "On this page",
+    "contactLead": "Questions, or want your data exported or deleted? Write to"
+  },
+  "Privacy": {
+    "metaTitle": "Privacy policy",
+    "title": "Privacy, in plain words",
+    "lead": "Foldline is private by default. Your reading is yours, and this page explains exactly what we keep, why, and how to take it with you or delete it.",
+    "sections": {
+      "who": {
+        "title": "Who runs Foldline",
+        "body": [
+          "Foldline is a free reading tracker made and run by Istiak, an independent developer. When this policy says \"we\", it means Istiak."
+        ]
+      },
+      "collect": {
+        "title": "What we collect",
+        "body": [
+          "When you sign in with Google, Google shares your email address, your name and your profile picture with us. We use them only to create your account and show you who you are signed in as.",
+          "Everything else is what you add yourself: the books you track, your progress, notes, goals and settings.",
+          "We do not ask Google for anything else, and we never see your Google password."
+        ]
+      },
+      "use": {
+        "title": "How we use it",
+        "body": [
+          "Only to run Foldline for you: to keep your library, show your progress and your personal stats, and keep you signed in.",
+          "Your stats are about you alone. We never compare you with other readers."
+        ]
+      },
+      "never": {
+        "title": "What we never do",
+        "body": [
+          "No ads. No product analytics, telemetry or third-party trackers, not even aggregate site analytics.",
+          "We never sell, rent or share your data with anyone for marketing, and we do not build a profile of you.",
+          "Nothing you add is public. Sharing, if it ever arrives, will be something you choose to do, one item at a time."
+        ]
+      },
+      "cookies": {
+        "title": "Cookies",
+        "body": [
+          "Foldline sets only the cookies it needs to keep you signed in. There are no advertising or tracking cookies, so there is no cookie banner to click through."
+        ]
+      },
+      "where": {
+        "title": "Where your data lives",
+        "body": [
+          "Your account and library are stored with Supabase, our database provider, in their Singapore region. The website is served by Vercel. Encrypted weekly backups are kept in a private GitHub repository for up to 90 days.",
+          "These providers process data only so Foldline can work. Each row of your data is locked to your account, so no other user can read it."
+        ]
+      },
+      "control": {
+        "title": "Your data, your call",
+        "body": [
+          "You can download everything Foldline holds about you, and you can delete your account and all its data. One-click export and deletion are coming to the Settings page very soon; until then, email us and we will do it for you within 30 days.",
+          "After deletion, your data disappears from backups as they expire, within 90 days."
+        ]
+      },
+      "ai": {
+        "title": "AI features",
+        "body": [
+          "Foldline has no AI features today. If we add any, they will be off by default, and each will explain what data it uses before you turn it on."
+        ]
+      },
+      "children": {
+        "title": "Children",
+        "body": [
+          "Foldline is not meant for children under 13. If you believe a child has signed up, tell us and we will delete the account."
+        ]
+      },
+      "changes": {
+        "title": "Changes to this policy",
+        "body": [
+          "If we change this policy in a way that matters, we will update the date at the top and explain the change inside Foldline before it takes effect. We will never loosen these promises quietly."
+        ]
+      }
+    }
+  },
+  "Terms": {
+    "metaTitle": "Terms of use",
+    "title": "Terms, kept short",
+    "lead": "The simple rules for using Foldline. Written to be read, not skimmed past.",
+    "sections": {
+      "agreement": {
+        "title": "The agreement",
+        "body": [
+          "By signing in to Foldline you agree to these terms and to our privacy policy. Foldline is made and run by Istiak (\"we\"). If you do not agree, please do not use Foldline."
+        ]
+      },
+      "service": {
+        "title": "What Foldline is",
+        "body": [
+          "Foldline is a free, private reading tracker. We work hard to keep it running well, but it is provided as is, without guarantees that it will always be available or free of bugs.",
+          "Features may change as Foldline grows. We will not take away your ability to export your data."
+        ]
+      },
+      "account": {
+        "title": "Your account",
+        "body": [
+          "You sign in with your Google account and are responsible for keeping it secure. You need to be at least 13 years old to use Foldline.",
+          "One person per account, please."
+        ]
+      },
+      "content": {
+        "title": "Your content stays yours",
+        "body": [
+          "The books, notes and progress you add belong to you. You give us permission to store and process them only to run Foldline for you. We claim no other rights over them."
+        ]
+      },
+      "use": {
+        "title": "Fair use",
+        "body": [
+          "Please do not misuse Foldline: no attempts to break in, overload or scrape the service, no access to other people's accounts, and nothing illegal.",
+          "We may suspend an account that seriously breaks these rules, and we will tell you why when we can."
+        ]
+      },
+      "leaving": {
+        "title": "Leaving",
+        "body": [
+          "You can stop using Foldline at any time and ask us to delete your account and data. If Foldline ever shuts down, we will give you notice and time to export everything."
+        ]
+      },
+      "liability": {
+        "title": "Liability",
+        "body": [
+          "Foldline is a free service. To the extent the law allows, we are not liable for indirect losses, lost data or damages arising from using it. Nothing here limits rights you have that cannot be limited by law."
+        ]
+      },
+      "changes": {
+        "title": "Changes to these terms",
+        "body": [
+          "If we change these terms in a way that matters, we will update the date at the top and let you know inside Foldline before it takes effect."
+        ]
+      }
+    }
   }
 }
