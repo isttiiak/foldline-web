@@ -20,6 +20,10 @@ const signedIn = Boolean(
 
 export default defineConfig({
   testDir: "./tests/e2e",
+  // A cold `next dev` compiles each route on first visit, which can take a
+  // while on Windows; give tests room so that is not mistaken for a failure.
+  timeout: 60_000,
+  expect: { timeout: 15_000 },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,

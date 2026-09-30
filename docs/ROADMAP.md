@@ -18,7 +18,7 @@ Tick items as they are completed. One item per Claude Code session.
 - [x] Public landing page (hero with animated book illustration, features, how it works, FAQ, CTAs)
 - [x] Motion system: press feedback, page transitions, scroll reveals, hover lifts, book touches
 - [x] Signed-in test harness (dev-only login route + Playwright authenticated project)
-- [ ] Settings page: delete my account (removes all data) + download my data (JSON)
+- [x] Settings page: delete my account (removes all data) + download my data (JSON)
 - [ ] Rate limits on server actions and route handlers (per user and per IP)
 - [ ] SEO basics: metadata, Open Graph image, `sitemap.xml`, `robots.txt`, landing page copy
 - [ ] Deploy to Vercel with the prod Supabase project; Google consent screen "In production"

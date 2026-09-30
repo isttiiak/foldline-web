@@ -148,6 +148,18 @@ export async function deleteDevUsers(
   }
 }
 
+/**
+ * Delete the user and, through `on delete cascade`, every row they own. Then
+ * drop the session cookies locally (the user no longer exists server-side).
+ */
+export async function deleteAccount(userId: string): Promise<AuthResult> {
+  const { error } = await createAdminClient().auth.admin.deleteUser(userId);
+  if (error) return { ok: false, error: error.message };
+  const supabase = await createClient();
+  await supabase.auth.signOut({ scope: "local" });
+  return { ok: true };
+}
+
 export async function signOut(): Promise<void> {
   const supabase = await createClient();
   await supabase.auth.signOut();

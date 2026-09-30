@@ -1,6 +1,6 @@
 "use client";
 
-import { Library, LogOut, Menu, type LucideIcon } from "lucide-react";
+import { Library, LogOut, Menu, Settings, type LucideIcon } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -21,11 +21,14 @@ import { signOutAction } from "@/features/auth/server/actions";
 import { springs } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
-type NavKey = "library";
+type NavKey = "library" | "settings";
 type NavItem = { key: NavKey; href: string; icon: LucideIcon };
 
-// Add items here as their routes land (shelves, highlights, settings, import).
-const NAV_ITEMS: NavItem[] = [{ key: "library", href: "/app", icon: Library }];
+// Add items here as their routes land (shelves, highlights, import).
+const NAV_ITEMS: NavItem[] = [
+  { key: "library", href: "/app", icon: Library },
+  { key: "settings", href: "/app/settings", icon: Settings },
+];
 
 function isActive(pathname: string, href: string) {
   return href === "/app" ? pathname === "/app" : pathname.startsWith(href);

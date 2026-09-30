@@ -34,7 +34,12 @@ system (`src/lib/motion.ts`, `src/components/motion/*`), signed-in test harness
 - [ ] Hero and page transitions start at opacity 0 until hydration; revisit with the SEO item
       (render the hero visible on the server, animate only transforms)
 
-Next: `docs/ROADMAP.md` Phase 1 (account deletion + export, rate limits, SEO), then Phase 2
+Also done on 2026-10-01: `/app/settings` with "Download my data" (JSON via
+`/app/settings/export`) and "Delete account" (typed-email confirmation, then `/goodbye`).
+When a migration adds a user-owned table, add it to `EXPORTED_TABLES` in
+`src/features/export/server/collect-user-data.ts` and give it `on delete cascade`.
+
+Next: `docs/ROADMAP.md` Phase 1 (rate limits, SEO), then Phase 2
 (core library). Landing copy describes Phase 2-3 features (search, ISBN, goals, stats) that
 are not built yet.
 

@@ -113,7 +113,7 @@
         },
         "leave": {
           "q": "Can I take my data with me?",
-          "a": "Always. One-click export and account deletion are arriving on the Settings page soon; until then, email us and we will do it for you."
+          "a": "Always. Download all your data as a JSON file or delete your account from the Settings page, any time, in one click."
         }
       }
     },
@@ -132,7 +132,8 @@
     "label": "Main",
     "library": "Library",
     "signOut": "Sign out",
-    "signedInAs": "Signed in as"
+    "signedInAs": "Signed in as",
+    "settings": "Settings"
   },
   "Library": {
     "title": "Your library",
@@ -221,7 +222,7 @@
       "control": {
         "title": "Your data, your call",
         "body": [
-          "You can download everything Foldline holds about you, and you can delete your account and all its data. One-click export and deletion are coming to the Settings page very soon; until then, email us and we will do it for you within 30 days.",
+          "You can download everything Foldline holds about you as a JSON file, and you can delete your account and all its data, both from the Settings page at any time. If anything goes wrong, email us and we will do it for you within 30 days.",
           "After deletion, your data disappears from backups as they expire, within 90 days."
         ]
       },
@@ -302,5 +303,38 @@
         ]
       }
     }
+  },
+  "Settings": {
+    "metaTitle": "Settings",
+    "title": "Settings",
+    "account": {
+      "title": "Account",
+      "signedInAs": "Signed in as",
+      "provider": "You sign in with Google. Foldline never sees your password."
+    },
+    "data": {
+      "title": "Your data",
+      "body": "Download everything Foldline keeps about you as one JSON file. Take it anywhere, anytime.",
+      "download": "Download my data"
+    },
+    "delete": {
+      "title": "Delete account",
+      "body": "This removes your account and everything in it: your library, progress, notes and settings. It cannot be undone, so download your data first if you want a copy.",
+      "open": "Delete my account",
+      "confirmLabel": "Type your email to confirm",
+      "confirmHint": "Type {email} exactly.",
+      "submit": "Delete everything, forever",
+      "cancel": "Keep my account",
+      "errors": {
+        "mismatch": "That does not match your email. Nothing was deleted.",
+        "generic": "Something went wrong and nothing was deleted. Please try again in a moment."
+      }
+    }
+  },
+  "Goodbye": {
+    "metaTitle": "Goodbye",
+    "title": "Your shelf is cleared",
+    "body": "Your account and all its data are gone. Backups age out within 90 days. Thank you for reading with Foldline, and happy reading, wherever your next book takes you.",
+    "home": "Back to the home page"
   }
 }
