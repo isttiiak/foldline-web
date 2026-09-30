@@ -7,6 +7,7 @@ import { AppShell } from "./app-shell";
 
 const pathname = vi.hoisted(() => ({ current: "/app" }));
 vi.mock("next/navigation", () => ({ usePathname: () => pathname.current }));
+vi.mock("@/features/auth/server/actions", () => ({ signOutAction: vi.fn() }));
 
 describe("AppShell", () => {
   beforeEach(() => {
@@ -29,6 +30,13 @@ describe("AppShell", () => {
     expect(
       screen.getByRole("link", { name: "Skip to content" }),
     ).toHaveAttribute("href", "#main");
+  });
+
+  test("offers a sign out button", () => {
+    renderWithIntl(<AppShell>x</AppShell>);
+    expect(
+      screen.getByRole("button", { name: "Sign out" }),
+    ).toBeInTheDocument();
   });
 
   test("does not mark Library current on other routes", () => {

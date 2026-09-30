@@ -1,6 +1,6 @@
 "use client";
 
-import { Library, Menu, type LucideIcon } from "lucide-react";
+import { Library, LogOut, Menu, type LucideIcon } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,6 +17,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { signOutAction } from "@/features/auth/server/actions";
 import { cn } from "@/lib/utils";
 
 type NavKey = "library";
@@ -81,6 +82,25 @@ function NavLinks({
   );
 }
 
+function SignOutButton() {
+  const t = useTranslations("AppNav");
+
+  return (
+    <form action={signOutAction}>
+      <button
+        type="submit"
+        className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
+      >
+        <LogOut
+          aria-hidden
+          className="size-5 transition-transform duration-300 group-hover:translate-x-0.5"
+        />
+        {t("signOut")}
+      </button>
+    </form>
+  );
+}
+
 export function AppShell({ children }: { children: React.ReactNode }) {
   const t = useTranslations("Common");
   const [open, setOpen] = useState(false);
@@ -93,6 +113,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col gap-8 border-r border-sidebar-border bg-sidebar/70 px-4 py-6 backdrop-blur-md md:flex">
         <Wordmark href="/app" className="px-2" />
         <NavLinks pillId="nav-pill-desktop" />
+        <div className="mt-auto">
+          <SignOutButton />
+        </div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -121,6 +144,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 pillId="nav-pill-mobile"
                 onNavigate={() => setOpen(false)}
               />
+              <div className="mt-auto">
+                <SignOutButton />
+              </div>
             </SheetContent>
           </Sheet>
         </header>

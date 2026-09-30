@@ -37,11 +37,30 @@
   },
   "AppNav": {
     "label": "Main",
-    "library": "Library"
+    "library": "Library",
+    "signOut": "Sign out"
   },
   "Library": {
     "title": "Your library",
     "emptyTitle": "A fresh, empty shelf",
     "emptyBody": "Soon you will add books here. For now, enjoy the quiet before the first page."
+  },
+  "Login": {
+    "metaTitle": "Sign in",
+    "title": "Welcome back, reader",
+    "lead": "Your books missed you. Sign in to pick up where you left off.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "submit": "Send me a magic link",
+    "sentTitle": "Check your inbox",
+    "sentBody": "If this email has a Foldline account, a sign-in link is on its way. It works once and expires soon.",
+    "or": "or",
+    "google": "Continue with Google",
+    "errors": {
+      "invalidEmail": "That email does not look quite right. Mind checking it?",
+      "generic": "Something went sideways sending your link. Please try again in a moment.",
+      "expiredLink": "That sign-in link has expired or was already used. Ask for a fresh one below.",
+      "google": "Google sign-in did not work this time. Try again, or use a magic link."
+    }
   }
 }

@@ -1,28 +1,34 @@
 import { expect, test } from "@playwright/test";
 
-test("home page shows the headline and leads into the library", async ({
-  page,
-}) => {
+test("home page shows the headline and leads to sign in", async ({ page }) => {
   await page.goto("/");
   await expect(
     page.getByRole("heading", { level: 1, name: "Mark your place, quietly." }),
   ).toBeVisible();
 
   await page.getByRole("link", { name: "Open my library" }).click();
-  await expect(page).toHaveURL(/\/app$/);
+  await expect(page).toHaveURL(/\/login\?next=%2Fapp$/);
   await expect(
-    page.getByRole("heading", { level: 1, name: "Your library" }),
+    page.getByRole("heading", { level: 1, name: "Welcome back, reader" }),
   ).toBeVisible();
 });
 
-test("app shell has a labelled nav and a main landmark", async ({ page }) => {
-  await page.goto("/app");
-  const nav = page.getByRole("navigation", { name: "Main" });
-  await expect(nav.getByRole("link", { name: "Library" })).toHaveAttribute(
-    "aria-current",
-    "page",
-  );
-  await expect(page.getByRole("main")).toBeVisible();
+test("signed-out visitors are sent from /app to the login page", async ({
+  page,
+}) => {
+  await page.goto("/app/anything?x=1");
+  await expect(page).toHaveURL(/\/login\?next=%2Fapp%2Fanything%3Fx%3D1$/);
+  await expect(page.getByLabel("Email")).toBeVisible();
+});
+
+test("the login form validates the email before sending", async ({ page }) => {
+  await page.goto("/login");
+  await page.getByLabel("Email").fill("not-an-email");
+  await page.getByRole("button", { name: "Send me a magic link" }).click();
+  // Filter out Next.js's own (empty) route-announcer alert.
+  await expect(
+    page.getByRole("alert").filter({ hasText: /does not look quite right/ }),
+  ).toBeVisible();
 });
 
 test("the page is dark and uses no pure black background", async ({ page }) => {
