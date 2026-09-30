@@ -7,7 +7,7 @@ No social features, no streaks, no nudges. See [docs/CALM_CHARTER.md](docs/CALM_
 
 ## Development
 
-Requirements: Node 22+, pnpm 10, Docker (for local Supabase).
+Requirements: Node 22+, pnpm 10, a free Supabase project. Docker is optional.
 
 ```bash
 pnpm install

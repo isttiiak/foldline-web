@@ -1,64 +1,85 @@
 # Setup: keys and one-time steps
 
-Everything here needs the owner's hands (accounts, secrets, installs). Keys go in
-`.env.local` (never committed) or in GitHub repo secrets. Variable names are listed in
-`.env.example`.
+Everything here needs the owner's hands (accounts, secrets). Keys go in `.env.local`
+(never committed), in Vercel, or in GitHub repo secrets. Variable names are listed in
+`.env.example`. No Docker needed.
 
-## 1. Local development
+## 1. Two Supabase projects (free tier allows two)
 
-1. Install **Docker Desktop** and start it.
-2. `pnpm supabase start` (first run downloads images, takes a few minutes).
-3. `pnpm supabase status` prints the local values. Copy them into `.env.local`:
-   - `NEXT_PUBLIC_SUPABASE_URL` = API URL (usually `http://127.0.0.1:54321`)
-   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` = Publishable key (`sb_publishable_...`)
-   - `SUPABASE_SECRET_KEY` = Secret key (`sb_secret_...`)
-4. `pnpm supabase db reset`, then `pnpm supabase test db` and `pnpm db:types`.
-5. Accounts are invite-only. Create yourself in Studio: http://127.0.0.1:54323 →
-   **Authentication → Users → Add user**. Magic link emails arrive in Mailpit:
-   http://127.0.0.1:54324.
-6. `pnpm dev` → http://localhost:3000/login.
+Create both at supabase.com → **New project**, region **Singapore**:
 
-## 2. Hosted Supabase project
+- `foldline-dev`: what `pnpm dev` on your PC talks to. Safe to break.
+- `foldline-prod`: the real one, used by Vercel.
 
-1. supabase.com → **New project**, region **Singapore**.
-2. **Project Settings → API Keys**: copy the publishable (`sb_publishable_...`) and secret
-   (`sb_secret_...`) keys. The URL is under the **Connect** button.
-3. **Authentication → URL Configuration**: Site URL = your deployed URL; add
-   `https://<your-domain>/auth/callback` and `http://localhost:3000/auth/callback` to
-   Redirect URLs.
+For **each** project:
+
+1. **Project Settings → API Keys**: note the publishable key (`sb_publishable_...`) and the
+   secret key (`sb_secret_...`). The project URL is under the **Connect** button.
+2. **SQL Editor**: run every file listed in [MIGRATIONS.md](MIGRATIONS.md), in order.
+3. **Authentication → URL Configuration**:
+   - dev: Site URL `http://localhost:3000`, Redirect URL `http://localhost:3000/auth/callback`
+   - prod: Site URL `https://<your-vercel-domain>`, Redirect URL
+     `https://<your-vercel-domain>/auth/callback`
 4. **Authentication → Sign In / Providers → Email**: turn **off** "Allow new users to sign
-   up" (invite-only until Phase 6). Invite friends from **Authentication → Users → Invite**.
-5. Apply migrations yourself (Claude never touches the remote project).
+   up" (invite-only until Phase 6).
+5. **Authentication → Users → Invite user** (or **Add user**) for yourself and friends.
 
-## 3. Google sign-in
+## 2. Local development
+
+Create `.env.local` in the project root with the **dev** project's values:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://<dev-project-ref>.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+SUPABASE_SECRET_KEY=sb_secret_...
+```
+
+Then `pnpm dev` → http://localhost:3000/login. Magic link emails come from Supabase's
+built-in mailer (a few per hour on the free tier; fine for a handful of people).
+
+## 3. Vercel hosting
+
+1. vercel.com → **Add New → Project** → import `isttiiak/foldline-web`. Framework is
+   detected as Next.js; leave build settings as they are.
+2. **Environment Variables** (Production): the three variables above with the **prod**
+   project's values.
+3. Deploy. Put the resulting domain into the prod Supabase URL Configuration (step 1.3).
+
+## 4. Google sign-in
 
 1. console.cloud.google.com → **APIs & Services → OAuth consent screen**: set it up
    (External, add yourself as a test user).
 2. **Credentials → Create credentials → OAuth client ID** → Web application.
-   Authorized redirect URI: `https://<project-ref>.supabase.co/auth/v1/callback`
-   (and `http://127.0.0.1:54321/auth/v1/callback` for local).
-3. Hosted: paste Client ID + Secret in **Supabase → Authentication → Sign In / Providers →
-   Google**.
-4. Local (optional): create `supabase/.env` with `SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID`
-   and `SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET`, set `enabled = true` under
-   `[auth.external.google]` in `supabase/config.toml`, restart Supabase.
+   Authorized redirect URIs: `https://<dev-project-ref>.supabase.co/auth/v1/callback` and
+   `https://<prod-project-ref>.supabase.co/auth/v1/callback`.
+3. In each Supabase project: **Authentication → Sign In / Providers → Google** → paste the
+   Client ID and Secret, enable.
 
-## 4. Metadata providers (Phase 1)
+## 5. Metadata providers (Phase 1)
+
+Add these to `.env.local` and to Vercel when that roadmap item lands:
 
 - `OPEN_LIBRARY_CONTACT_EMAIL`: any email of yours (sent in the User-Agent). No signup.
 - `GOOGLE_BOOKS_API_KEY`: Google Cloud Console → **APIs & Services → Library → Books API
   → Enable**, then **Credentials → Create credentials → API key**, restrict it to Books API.
 - `HARDCOVER_API_TOKEN` (optional): hardcover.app account settings, API section.
 
-## 5. GitHub repo secrets (keep-alive and backup workflows)
+## 6. GitHub repo secrets (keep-alive and backup workflows, prod project)
 
 github.com/isttiiak/foldline-web → **Settings → Secrets and variables → Actions → New
 repository secret**:
 
-- `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`: same values as the hosted project.
-- `SUPABASE_DB_URL`: Supabase → **Connect → Session pooler** connection string, with the
-  database password filled in.
+- `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`: prod values.
+- `SUPABASE_DB_URL`: prod Supabase → **Connect → Session pooler** connection string, with
+  the database password filled in.
 - `BACKUP_PASSPHRASE`: a long random passphrase you invent. Keep it in your password
   manager; backups cannot be decrypted without it.
 
-Then run both workflows once from the **Actions** tab to confirm they pass.
+Then run both workflows once from the **Actions** tab to confirm they pass. (Keep-alive
+only covers prod; the dev project may pause after a week idle. Resume it from the
+dashboard when needed.)
+
+## Optional: Docker
+
+With Docker Desktop you can run Supabase on your PC (`pnpm supabase start`) and run the
+pgTAP tests locally. Not required: CI runs them on every push.

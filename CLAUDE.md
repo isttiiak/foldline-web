@@ -31,21 +31,19 @@ move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist A
 
 - `pnpm dev`: dev server
 - `pnpm typecheck` / `pnpm lint` / `pnpm test` / `pnpm test:e2e` / `pnpm build`
-- `pnpm supabase start`: local Supabase (Docker must be running)
-- `pnpm supabase migration new <name>`: new migration file
-- `pnpm supabase db reset`: rebuild LOCAL db from migrations + seed
-- `pnpm supabase test db`: run pgTAP tests
-- `pnpm db:types`: regenerate `src/lib/supabase/database.types.ts`
+- `pnpm supabase migration new <name>`: new migration file (no Docker needed)
+- Optional, only if Docker is installed: `pnpm supabase start`, `pnpm supabase db reset`,
+  `pnpm supabase test db`, `pnpm db:types`. Without Docker, CI runs the pgTAP tests.
 
 ## Hard rules
 
 1. Every user-owned table has `user_id uuid not null default auth.uid()` and RLS enabled
    with select/insert/update/delete policies scoped to `auth.uid()`. Every migration that
    adds a table also adds a pgTAP test proving user A cannot see or change user B's rows.
-2. Schema changes happen ONLY through new migration files. Never edit an applied migration.
-   After a migration: `db reset` → `db:types` → `typecheck`.
-3. NEVER run anything against the remote Supabase project (`db push`, `link`, `--linked`).
-   The owner does remote operations manually.
+2. Schema changes happen ONLY through new migration files. Never edit an applied migration
+   (see `docs/MIGRATIONS.md`); fixes go in a new file. Follow "Migration handoff" below.
+3. NEVER run anything against a remote Supabase project (`db push`, `link`, `--linked`).
+   The owner applies every migration by hand in the Supabase SQL Editor.
 4. The secret (service-role) key is used only in server code under `src/lib/supabase/admin.ts`.
    Never import it into client components. Never read `.env*` files; use `.env.example`.
 5. Only `src/lib/auth.ts` may call `supabase.auth.*`. Everything else uses its helpers.
@@ -67,10 +65,22 @@ move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist A
 - Work on ONE roadmap item per session (see `docs/ROADMAP.md`). Start in plan mode,
   present the plan, wait for approval, then implement.
 - When touching the database or data flow, read `docs/ARCHITECTURE.md` first.
-- Definition of done: typecheck, lint, unit tests, `supabase test db` and build all pass;
+- Definition of done: typecheck, lint, unit tests, e2e and build pass locally (pgTAP passes in
+  CI, or locally with Docker);
   new UI strings exist in `messages/en.json`; the roadmap checkbox is ticked; a Conventional
   Commit is ALWAYS made at the end of every task (`feat:`, `fix:`, `chore:`…). Do not push.
 - If you make a mistake the owner corrects, propose a one-line addition to this file.
+
+### Migration handoff (no Docker, owner applies SQL by hand)
+
+1. Write `supabase/migrations/<timestamp>_<name>.sql` as a self-contained script that runs
+   cleanly when pasted into the Supabase SQL Editor (plain SQL, no psql meta-commands),
+   plus a pgTAP test in `supabase/tests/database/`.
+2. Update `src/lib/supabase/database.types.ts` by hand to match (same shape `db:types` emits).
+3. Add a row to `docs/MIGRATIONS.md` (status: pending) and commit.
+4. In the final reply, name the exact file(s) to run, in order, and remind the owner that CI
+   must be green first. The owner pastes each file into Dashboard → SQL Editor → Run, on
+   the dev project first, then prod, and marks it applied in `docs/MIGRATIONS.md`.
 
 ## Git & attribution
 
