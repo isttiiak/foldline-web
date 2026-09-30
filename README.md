@@ -25,6 +25,6 @@ pnpm dev
 | `pnpm build`                        | Production build                                  |
 | `pnpm db:types`                     | Regenerate Supabase types from the local database |
 
-Copy `.env.example` to `.env.local` and fill in the values.
+Copy `.env.example` to `.env.local` and fill in the values. See [docs/SETUP.md](docs/SETUP.md) for where each key comes from.
 
 Docs: [architecture](docs/ARCHITECTURE.md) · [roadmap](docs/ROADMAP.md)
