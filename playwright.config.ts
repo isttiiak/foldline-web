@@ -3,7 +3,8 @@ import { defineConfig, devices } from "@playwright/test";
 
 import { AUTH_FILE } from "./tests/e2e/auth-file";
 
-const PORT = 3000;
+// E2E_PORT lets a run use its own server when 3000 is taken by another one.
+const PORT = Number(process.env.E2E_PORT ?? 3000);
 const baseURL = `http://localhost:${PORT}`;
 
 // Use the same .env files as `next dev`. Without them (CI, fresh clones) fall
@@ -51,7 +52,7 @@ export default defineConfig({
       : []),
   ],
   webServer: {
-    command: "pnpm dev",
+    command: `pnpm dev --port ${PORT}`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     env: {

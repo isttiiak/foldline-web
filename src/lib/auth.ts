@@ -122,7 +122,9 @@ export async function createDevSession(email: string): Promise<AuthResult> {
     email,
   });
   if (error) return { ok: false, error: error.message };
-  return verifyEmailToken(data.properties.hashed_token, "magiclink");
+  // A brand-new user gets a "signup" link rather than a "magiclink" one.
+  const { hashed_token, verification_type } = data.properties;
+  return verifyEmailToken(hashed_token, verification_type);
 }
 
 /** Dev-only: delete every user whose email ends in `@<domain>`. */
