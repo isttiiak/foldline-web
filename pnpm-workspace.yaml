@@ -1,6 +1,12 @@
 ignoredBuiltDependencies:
+  - "@parcel/watcher"
   - sharp
   - unrs-resolver
 
 onlyBuiltDependencies:
+  - "@swc/core"
   - supabase
+
+overrides:
+  # 1.16.12 added a native-cache ACL check that fails on this Windows setup; revisit later.
+  "@swc/core": 1.16.2

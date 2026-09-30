@@ -5,7 +5,7 @@ Tick items as they are completed. One item per Claude Code session.
 ## Phase 0: Foundation
 
 - [x] Tooling: scripts (typecheck, lint, test, test:e2e, db:types), Prettier, Vitest, Playwright
-- [ ] shadcn/ui init + dark theme + motion, app shell layout, (marketing) and (app) route groups, next-intl (English only)
+- [x] shadcn/ui init + dark theme + motion, app shell layout, (marketing) and (app) route groups, next-intl (English only)
 - [ ] Supabase local setup (`supabase init`), `src/lib/supabase/{client,server,admin}.ts`
 - [ ] Auth: magic link + Google via `src/lib/auth.ts`, protected `/app`, profiles table + trigger
 - [ ] CI: GitHub Actions for typecheck, lint, test, build

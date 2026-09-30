@@ -1,0 +1,47 @@
+{
+  "Metadata": {
+    "title": "Foldline",
+    "description": "Foldline: mark your place, quietly."
+  },
+  "Brand": {
+    "name": "Foldline",
+    "markLabel": "Foldline logo, a folded page corner"
+  },
+  "Common": {
+    "skipToContent": "Skip to content",
+    "close": "Close",
+    "openMenu": "Open menu"
+  },
+  "Home": {
+    "eyebrow": "Your private reading nook",
+    "title": "Mark your place, quietly.",
+    "lead": "Keep track of every book you read on paper, on a screen or by ear. No feeds, no streaks, no pressure. Just you and your books.",
+    "cta": "Open my library",
+    "promises": {
+      "formats": {
+        "title": "Paper, ebook, audio",
+        "body": "Every format on one gentle shelf."
+      },
+      "private": {
+        "title": "Yours alone",
+        "body": "Private by default. Nothing to perform."
+      },
+      "rest": {
+        "title": "Rest or let go",
+        "body": "Pause a book or drop it. Both are perfectly fine."
+      }
+    }
+  },
+  "Footer": {
+    "note": "Made for slow evenings and good books."
+  },
+  "AppNav": {
+    "label": "Main",
+    "library": "Library"
+  },
+  "Library": {
+    "title": "Your library",
+    "emptyTitle": "A fresh, empty shelf",
+    "emptyBody": "Soon you will add books here. For now, enjoy the quiet before the first page."
+  }
+}
