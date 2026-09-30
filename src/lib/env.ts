@@ -1,7 +1,16 @@
 import { z } from "zod";
 
 const publicSchema = z.object({
-  NEXT_PUBLIC_SUPABASE_URL: z.url(),
+  // The project base URL only, e.g. https://abc.supabase.co (not the /rest/v1/ Data API URL).
+  NEXT_PUBLIC_SUPABASE_URL: z
+    .url()
+    .refine(
+      (value) => !URL.canParse(value) || new URL(value).pathname === "/",
+      {
+        message:
+          "must be the base project URL without a path such as /rest/v1/",
+      },
+    ),
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z.string().min(1),
 });
 
@@ -10,7 +19,9 @@ const serverSchema = publicSchema.extend({
 });
 
 function fail(error: z.ZodError): never {
-  const keys = error.issues.map((issue) => issue.path.join(".")).join(", ");
+  const keys = error.issues
+    .map((issue) => `${issue.path.join(".")} (${issue.message})`)
+    .join(", ");
   throw new Error(
     `Missing or invalid environment variables: ${keys}. Copy .env.example to .env.local and fill them in.`,
   );
