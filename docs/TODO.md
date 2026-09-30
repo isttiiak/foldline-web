@@ -18,32 +18,25 @@ session: tick what is done, add what is next.
       Google Branding app domain fields (home, `/privacy`, `/terms`, authorized domain
       `<project>.vercel.app`) and publish
 - [ ] Supabase: "Allow new users to sign up" is **on** (sign-up opens now, per owner)
+- [ ] `.env.local`: add `DEV_LOGIN_SECRET=<32+ random chars>` (see `docs/SETUP.md` section 2),
+      and add a `DEV_LOGIN_SECRET=` line to `.env.example` (Claude cannot touch `.env*` files)
 
-## Claude (next build, approved direction, confirm the plan at session start)
+## Claude
 
-1. [ ] **Open sign-up copy**: replace the "early access" note and the `notInvited` error with
-       welcoming new-user wording (keep the error mapping in case signups are closed again)
-2. [ ] **Privacy policy + terms pages** (`/privacy`, `/terms`) in plain language matching
-       `docs/CALM_CHARTER.md` (no trackers, no ads, data export and deletion, Google sign-in
-       data used: email, name, avatar); linked from footer and login page
-3. [ ] **Public landing page** at `/` (before login): hero with an animated book
-       illustration (page turn, folded corner), feature highlights (any format, progress in
-       any unit, opt-in goals with celebrations, personal stats, privacy promises, AI "coming
-       later"), "how it works", FAQ, "Get started with Google" CTAs, header nav
-4. [ ] **Motion system**, adequate not busy, all off under `prefers-reduced-motion`: shared
-       spring presets, press feedback on every button/link, page transitions, scroll-reveal
-       sections, hover lifts, small book touches (page-turn loader, books settling)
-5. [ ] **Signed-in test harness**: dev-only `/auth/dev-login` route (404 in production,
-       localhost only, guarded by a secret in `.env.local`), Playwright global setup that
-       creates a throwaway test user on the dev project with the secret key and a random
-       password, authenticated e2e project for `/app`
-6. [ ] **Vercel deploy guide** in `docs/SETUP.md` (import repo, env vars, Supabase Site URL +
-       Redirect URLs for the Vercel domain, Google redirect URI unchanged)
-7. [ ] Live check in the Claude browser pane: owner signs in once there with Google, then
-       Claude verifies `/app` flows visually
+Done on 2026-10-01: welcoming login copy, `/privacy` + `/terms`, public landing page, motion
+system (`src/lib/motion.ts`, `src/components/motion/*`), signed-in test harness
+(`/auth/dev-login` + Playwright `setup`/`signed-in`/`cleanup` projects), Vercel guide in
+`docs/SETUP.md`.
 
-Then continue with `docs/ROADMAP.md` Phase 1 (account deletion + export, rate limits, SEO)
-and Phase 2 (core library).
+- [ ] Live check in the browser pane: owner signs in once with Google, then Claude verifies
+      `/app` visually
+- [ ] Run the signed-in e2e suite once the owner has set `DEV_LOGIN_SECRET`
+- [ ] Hero and page transitions start at opacity 0 until hydration; revisit with the SEO item
+      (render the hero visible on the server, animate only transforms)
+
+Next: `docs/ROADMAP.md` Phase 1 (account deletion + export, rate limits, SEO), then Phase 2
+(core library). Landing copy describes Phase 2-3 features (search, ISBN, goals, stats) that
+are not built yet.
 
 ## Known context
 

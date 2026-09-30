@@ -13,11 +13,11 @@ Tick items as they are completed. One item per Claude Code session.
 
 ## Phase 1: Launch readiness
 
-- [ ] Open sign-up now (owner decision): welcoming login copy; signups on in Supabase
-- [ ] Privacy policy + terms pages in plain language, linked from the footer and login page
-- [ ] Public landing page (hero with animated book illustration, features, how it works, FAQ, CTAs)
-- [ ] Motion system: press feedback, page transitions, scroll reveals, hover lifts, book touches
-- [ ] Signed-in test harness (dev-only login route + Playwright authenticated project)
+- [ ] Open sign-up now (owner decision): welcoming login copy (done); signups on in Supabase (owner)
+- [x] Privacy policy + terms pages in plain language, linked from the footer and login page
+- [x] Public landing page (hero with animated book illustration, features, how it works, FAQ, CTAs)
+- [x] Motion system: press feedback, page transitions, scroll reveals, hover lifts, book touches
+- [x] Signed-in test harness (dev-only login route + Playwright authenticated project)
 - [ ] Settings page: delete my account (removes all data) + download my data (JSON)
 - [ ] Rate limits on server actions and route handlers (per user and per IP)
 - [ ] SEO basics: metadata, Open Graph image, `sitemap.xml`, `robots.txt`, landing page copy
