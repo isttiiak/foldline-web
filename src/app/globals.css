@@ -148,6 +148,31 @@
   color: transparent;
 }
 
+/* Press feedback for links and custom buttons (Button has it built in). */
+@utility press {
+  transition-property: transform, color, background-color, border-color;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  @media (prefers-reduced-motion: no-preference) {
+    &:active {
+      transform: scale(0.96);
+    }
+  }
+}
+
+/* Cards float up a touch on hover. Never on a motion element (inline transforms win). */
+@utility hover-lift {
+  transition-property: transform, box-shadow, border-color;
+  transition-duration: 250ms;
+  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 48px -28px rgb(240 122 90 / 0.5);
+    }
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

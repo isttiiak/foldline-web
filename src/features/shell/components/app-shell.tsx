@@ -18,6 +18,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { signOutAction } from "@/features/auth/server/actions";
+import { springs } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 type NavKey = "library";
@@ -52,7 +53,7 @@ function NavLinks({
                 onClick={onNavigate}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 font-medium transition-colors focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none",
+                  "group relative flex press items-center gap-3 rounded-xl px-3 py-2.5 font-medium transition-colors focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none",
                   active
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground",
@@ -62,7 +63,7 @@ function NavLinks({
                   <motion.span
                     layoutId={pillId}
                     className="absolute inset-0 -z-10 rounded-xl border border-amber/20 bg-gradient-to-r from-amber/15 via-coral/10 to-transparent"
-                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                    transition={springs.snappy}
                   />
                 )}
                 <Icon
@@ -98,7 +99,7 @@ function SignOutButton({ email }: { email?: string | null }) {
       )}
       <button
         type="submit"
-        className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
+        className="group flex w-full press items-center gap-3 rounded-xl px-3 py-2.5 font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
       >
         <LogOut
           aria-hidden

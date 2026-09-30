@@ -10,7 +10,8 @@
   "Common": {
     "skipToContent": "Skip to content",
     "close": "Close",
-    "openMenu": "Open menu"
+    "openMenu": "Open menu",
+    "loading": "Opening your library"
   },
   "Home": {
     "eyebrow": "Your private reading nook",

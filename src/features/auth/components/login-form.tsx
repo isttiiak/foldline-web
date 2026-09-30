@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { AUTH_METHODS } from "@/features/auth/config";
 import type { LoginError } from "@/features/auth/errors";
 import type { MagicLinkState } from "@/features/auth/schemas";
+import { springs } from "@/lib/motion";
 import {
   requestMagicLink,
   signInWithGoogle,
@@ -109,23 +110,21 @@ function GoogleSubmit() {
   const { pending } = useFormStatus();
 
   return (
-    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-      <Button
-        type="submit"
-        size="lg"
-        disabled={pending}
-        className="h-12 w-full rounded-xl text-base"
-      >
-        {pending ? (
-          <Loader2 className="size-5 animate-spin" aria-hidden />
-        ) : (
-          <span className="inline-flex size-6 items-center justify-center rounded-full bg-white">
-            <GoogleIcon />
-          </span>
-        )}
-        {t("google")}
-      </Button>
-    </motion.div>
+    <Button
+      type="submit"
+      size="lg"
+      disabled={pending}
+      className="h-12 w-full rounded-xl text-base"
+    >
+      {pending ? (
+        <Loader2 className="size-5 animate-spin" aria-hidden />
+      ) : (
+        <span className="inline-flex size-6 items-center justify-center rounded-full bg-white">
+          <GoogleIcon />
+        </span>
+      )}
+      {t("google")}
+    </Button>
   );
 }
 
@@ -148,7 +147,7 @@ function MagicLinkForm({ next }: { next?: string }) {
           initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ type: "spring", stiffness: 220, damping: 18 }}
+          transition={springs.gentle}
           className="flex flex-col items-center gap-3 rounded-2xl border border-teal/25 bg-teal/10 p-6 text-center"
         >
           <motion.span

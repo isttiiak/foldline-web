@@ -2,6 +2,8 @@
 
 import { motion } from "motion/react";
 
+import { springs } from "@/lib/motion";
+
 const BOOKS = [
   { h: 88, w: 22, from: "var(--amber)", to: "var(--coral)", tilt: 0 },
   { h: 104, w: 26, from: "var(--teal)", to: "var(--lime)", tilt: 0 },
@@ -9,7 +11,7 @@ const BOOKS = [
   { h: 96, w: 24, from: "var(--coral)", to: "var(--amber)", tilt: -12 },
 ];
 
-/** A tiny shelf of wobbling books for the empty library. */
+/** A tiny shelf of books that drop in, settle with a bounce, and lean when hovered. */
 export function EmptyShelf({ title, body }: { title: string; body: string }) {
   return (
     <section className="flex flex-col items-center gap-6 rounded-3xl border bg-card/60 px-6 py-14 text-center backdrop-blur-sm">
@@ -28,12 +30,7 @@ export function EmptyShelf({ title, body }: { title: string; body: string }) {
               }}
               initial={{ y: -40, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{
-                type: "spring",
-                stiffness: 200,
-                damping: 12,
-                delay: 0.15 + i * 0.1,
-              }}
+              transition={{ ...springs.bouncy, delay: 0.15 + i * 0.1 }}
               whileHover={{ y: -10, rotate: book.tilt + (i % 2 ? 4 : -4) }}
             />
           ))}

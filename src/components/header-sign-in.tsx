@@ -12,7 +12,7 @@ export function HeaderSignIn({ label }: { label: string }) {
   return (
     <Link
       href={LOGIN_PATH}
-      className="rounded-full border border-amber/25 px-4 py-1.5 text-sm font-medium text-amber transition-colors hover:bg-amber/10 focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
+      className="press rounded-full border border-amber/25 px-4 py-1.5 text-sm font-medium text-amber transition-colors hover:bg-amber/10 focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
     >
       {label}
     </Link>
