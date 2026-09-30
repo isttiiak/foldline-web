@@ -5,6 +5,11 @@ import { redirect } from "next/navigation";
 
 import { callbackUrl, LOGIN_PATH } from "@/features/auth/paths";
 import { magicLinkSchema, type MagicLinkState } from "@/features/auth/schemas";
+import {
+  RATE_LIMITS,
+  rateLimit,
+  rateLimitByIp,
+} from "@/features/rate-limit/server/rate-limit";
 import { getGoogleSignInUrl, sendMagicLink, signOut } from "@/lib/auth";
 
 async function requestOrigin(): Promise<string> {
@@ -26,6 +31,14 @@ export async function requestMagicLink(
   });
   if (!parsed.success) return { status: "error", reason: "invalidEmail" };
 
+  const limits = await Promise.all([
+    rateLimitByIp(RATE_LIMITS.magicLinkIp),
+    rateLimit(RATE_LIMITS.magicLinkEmail, parsed.data.email),
+  ]);
+  if (limits.some((limit) => !limit.ok)) {
+    return { status: "error", reason: "rateLimited" };
+  }
+
   const result = await sendMagicLink(
     parsed.data.email,
     callbackUrl(await requestOrigin(), parsed.data.next),
@@ -41,6 +54,9 @@ export async function requestMagicLink(
 }
 
 export async function signInWithGoogle(formData: FormData): Promise<void> {
+  const limit = await rateLimitByIp(RATE_LIMITS.googleSignIn);
+  if (!limit.ok) redirect(`${LOGIN_PATH}?error=rateLimited`);
+
   const next = formData.get("next");
   const result = await getGoogleSignInUrl(
     callbackUrl(await requestOrigin(), typeof next === "string" ? next : null),

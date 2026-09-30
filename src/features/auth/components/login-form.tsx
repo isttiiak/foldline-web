@@ -30,6 +30,7 @@ export function LoginForm({
     link: t("errors.expiredLink"),
     google: t("errors.google"),
     notInvited: t("errors.notInvited"),
+    rateLimited: t("errors.rateLimited"),
   } satisfies Record<LoginError, string>;
 
   return (

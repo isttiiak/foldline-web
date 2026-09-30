@@ -14,4 +14,5 @@ export function confirmMatches(
 }
 
 export type DeleteAccountState =
-  { status: "idle" } | { status: "error"; reason: "mismatch" | "generic" };
+  | { status: "idle" }
+  | { status: "error"; reason: "mismatch" | "generic" | "rateLimited" };

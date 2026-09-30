@@ -61,6 +61,10 @@ Common columns: `id uuid pk default gen_random_uuid()`, `created_at timestamptz 
 - `progress_events`: read_id, occurred_at, unit enum ('pages','percent','location','minutes','chapter'),
   value numeric, fraction numeric check (0..1), source enum
   ('manual','koreader','kindle','import','audiobookshelf'), device text.
+- `rate_limits` (global, server-only like `provider_cache`): bucket (`policy:kind:subject`,
+  where IPs and emails are HMAC-hashed), window_start, hits. `rate_limit_hit(bucket, limit,
+window_seconds)` counts atomically and cleans up; only `service_role` may call it. Policies
+  live in `src/features/rate-limit/policies.ts`; the helper fails open.
 - `provider_cache` (global): provider, cache_key, payload jsonb, fetched_at, expires_at;
   unique(provider, cache_key). RLS enabled with NO policies (server-only access).
 

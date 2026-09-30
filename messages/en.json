@@ -156,7 +156,8 @@
       "generic": "Something went sideways sending your link. Please try again in a moment.",
       "expiredLink": "That sign-in link has expired or was already used. Ask for a fresh one below.",
       "google": "Google sign-in did not work this time. Please try again in a moment.",
-      "notInvited": "New sign-ups are paused for a little while. Please try again soon, your shelf will wait."
+      "notInvited": "New sign-ups are paused for a little while. Please try again soon, your shelf will wait.",
+      "rateLimited": "Lots of sign-in attempts from here just now. Please take a short break and try again in a few minutes."
     },
     "consent": "By continuing you agree to our <terms>Terms</terms> and <privacy>Privacy policy</privacy>. No ads, no trackers, ever."
   },
@@ -188,7 +189,8 @@
         "body": [
           "When you sign in with Google, Google shares your email address, your name and your profile picture with us. We use them only to create your account and show you who you are signed in as.",
           "Everything else is what you add yourself: the books you track, your progress, notes, goals and settings.",
-          "We do not ask Google for anything else, and we never see your Google password."
+          "We do not ask Google for anything else, and we never see your Google password.",
+          "To keep Foldline safe from abuse, we briefly count requests per account and per network address. Addresses are stored only as a one-way keyed hash, never as the address itself, and are cleared within a day."
         ]
       },
       "use": {
@@ -327,7 +329,8 @@
       "cancel": "Keep my account",
       "errors": {
         "mismatch": "That does not match your email. Nothing was deleted.",
-        "generic": "Something went wrong and nothing was deleted. Please try again in a moment."
+        "generic": "Something went wrong and nothing was deleted. Please try again in a moment.",
+        "rateLimited": "Too many tries for now. Please wait a little while, then try again."
       }
     }
   },

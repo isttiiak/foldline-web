@@ -12,6 +12,7 @@ Rules: run files **in order**, **once** per project. Never edit a file after it 
 anywhere; fixes go in a new file. Do not mix in `supabase db push` later: the CLI's
 migration history does not know about SQL Editor runs.
 
-| #   | File                                 | What it does                                                     | Dev | Prod |
-| --- | ------------------------------------ | ---------------------------------------------------------------- | --- | ---- |
-| 1   | `20260930032412_create_profiles.sql` | `profiles` table, RLS, signup trigger, `set_updated_at()` helper | [ ] | [ ]  |
+| #   | File                                    | What it does                                                               | Dev | Prod |
+| --- | --------------------------------------- | -------------------------------------------------------------------------- | --- | ---- |
+| 1   | `20260930032412_create_profiles.sql`    | `profiles` table, RLS, signup trigger, `set_updated_at()` helper           | [ ] | [ ]  |
+| 2   | `20260930212302_create_rate_limits.sql` | `rate_limits` counters (server-only, RLS, no policies), `rate_limit_hit()` | [ ] | [ ]  |

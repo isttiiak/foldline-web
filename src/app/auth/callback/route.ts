@@ -3,6 +3,10 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { loginErrorFromParams } from "@/features/auth/errors";
 import { LOGIN_PATH, safeNextPath } from "@/features/auth/paths";
+import {
+  RATE_LIMITS,
+  rateLimitByIp,
+} from "@/features/rate-limit/server/rate-limit";
 import { exchangeCodeForSession, verifyEmailToken } from "@/lib/auth";
 
 const EMAIL_OTP_TYPES = new Set<EmailOtpType>([
@@ -21,6 +25,13 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get("code");
   const tokenHash = searchParams.get("token_hash");
   const type = searchParams.get("type") as EmailOtpType | null;
+
+  const limit = await rateLimitByIp(RATE_LIMITS.authCallback, request.headers);
+  if (!limit.ok) {
+    const limited = new URL(LOGIN_PATH, origin);
+    limited.searchParams.set("error", "rateLimited");
+    return NextResponse.redirect(limited);
+  }
 
   let result: { ok: boolean } = { ok: false };
   if (code) {

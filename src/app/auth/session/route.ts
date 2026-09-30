@@ -1,6 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 
+import {
+  RATE_LIMITS,
+  rateLimitByIp,
+} from "@/features/rate-limit/server/rate-limit";
 import { setSessionFromTokens } from "@/lib/auth";
 
 const bodySchema = z.object({
@@ -15,6 +19,17 @@ const bodySchema = z.object({
 export async function POST(request: NextRequest) {
   if (request.headers.get("origin") !== request.nextUrl.origin) {
     return NextResponse.json({ ok: false }, { status: 403 });
+  }
+
+  const limit = await rateLimitByIp(RATE_LIMITS.authSession, request.headers);
+  if (!limit.ok) {
+    return NextResponse.json(
+      { ok: false },
+      {
+        status: 429,
+        headers: { "retry-after": String(limit.retryAfterSeconds) },
+      },
+    );
   }
 
   const parsed = bodySchema.safeParse(await request.json().catch(() => null));

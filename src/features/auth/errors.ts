@@ -1,4 +1,9 @@
-export const LOGIN_ERRORS = ["link", "google", "notInvited"] as const;
+export const LOGIN_ERRORS = [
+  "link",
+  "google",
+  "notInvited",
+  "rateLimited",
+] as const;
 export type LoginError = (typeof LOGIN_ERRORS)[number];
 
 export function isLoginError(value: unknown): value is LoginError {

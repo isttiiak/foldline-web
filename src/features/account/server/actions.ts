@@ -8,6 +8,10 @@ import {
   type DeleteAccountState,
 } from "@/features/account/schemas";
 import { LOGIN_PATH } from "@/features/auth/paths";
+import {
+  RATE_LIMITS,
+  rateLimit,
+} from "@/features/rate-limit/server/rate-limit";
 import { deleteAccount, getSessionUser } from "@/lib/auth";
 
 const GOODBYE_PATH = "/goodbye";
@@ -19,6 +23,9 @@ export async function deleteAccountAction(
 ): Promise<DeleteAccountState> {
   const user = await getSessionUser();
   if (!user) redirect(LOGIN_PATH);
+
+  const limit = await rateLimit(RATE_LIMITS.deleteAccount, user.id);
+  if (!limit.ok) return { status: "error", reason: "rateLimited" };
 
   const parsed = deleteAccountSchema.safeParse({
     confirm: formData.get("confirm"),

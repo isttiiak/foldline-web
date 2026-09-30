@@ -1,5 +1,7 @@
 import "server-only";
 
+import { createHmac } from "node:crypto";
+
 import { createClient } from "@supabase/supabase-js";
 
 import { serverEnv } from "@/lib/env";
@@ -18,4 +20,15 @@ export function createAdminClient() {
     env.SUPABASE_SECRET_KEY,
     { auth: { persistSession: false, autoRefreshToken: false } },
   );
+}
+
+/**
+ * One-way, keyed hash (HMAC-SHA256, keyed with the secret key) for values we
+ * must count but never store, such as IP addresses. Without the key the hash
+ * cannot be brute-forced back to an address.
+ */
+export function keyedHash(value: string): string {
+  return createHmac("sha256", serverEnv().SUPABASE_SECRET_KEY)
+    .update(value)
+    .digest("base64url");
 }

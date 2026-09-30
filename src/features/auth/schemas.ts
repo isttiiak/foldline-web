@@ -8,4 +8,4 @@ export const magicLinkSchema = z.object({
 export type MagicLinkState =
   | { status: "idle" }
   | { status: "sent" }
-  | { status: "error"; reason: "invalidEmail" | "generic" };
+  | { status: "error"; reason: "invalidEmail" | "generic" | "rateLimited" };

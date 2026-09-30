@@ -60,3 +60,10 @@ test.describe("with reduced motion", () => {
     expect(names.every((n) => n === "none")).toBe(true);
   });
 });
+
+test("login explains a rate limit gently", async ({ page }) => {
+  await page.goto("/login?error=rateLimited");
+  await expect(
+    page.getByRole("alert").filter({ hasText: /take a short break/ }),
+  ).toBeVisible();
+});
