@@ -31,10 +31,7 @@
       "Bash(pnpm supabase db push *)",
       "Bash(pnpm supabase db reset --linked *)"
     ],
-    "deny": [
-      "Read(./.env)",
-      "Read(./.env.*)"
-    ],
+    "deny": ["Read(./.env)", "Read(./.env.*)"],
     "defaultMode": "plan"
   }
 }

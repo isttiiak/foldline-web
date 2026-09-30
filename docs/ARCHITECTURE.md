@@ -1,6 +1,7 @@
 # Foldline — Architecture
 
 ## Overview
+
 - Next.js App Router. `(marketing)` route group = public, server-rendered pages.
   `(app)` route group under `/app` = authenticated, client-heavy shell (works offline later).
 - Supabase Postgres is the source of truth. Client reads/writes go through `supabase-js`
@@ -10,6 +11,7 @@
   (or Cloudflare) for Next.js.
 
 ## Folder structure
+
 ```
 src/
   app/
@@ -33,6 +35,7 @@ tests/e2e/
 ```
 
 ## Data model
+
 The catalog is PER USER in v1 (each user owns their works/editions). Only `provider_cache`
 is shared, and only the server can access it. Reason: privacy, simple RLS, no edit
 conflicts between users. A shared catalog can be introduced later if needed.
@@ -42,6 +45,7 @@ Common columns: `id uuid pk default gen_random_uuid()`, `created_at timestamptz 
 `user_id uuid not null default auth.uid() references auth.users on delete cascade`.
 
 ### Phase 1 tables
+
 - `profiles` (id = auth.users.id): display_name, locale ('en'|'bn'), timezone,
   settings jsonb (rating_scale, hide_stats, …). Created by a trigger on signup.
 - `works`: title, subtitle, original_title, original_language, description,
@@ -61,6 +65,7 @@ Common columns: `id uuid pk default gen_random_uuid()`, `created_at timestamptz 
   unique(provider, cache_key). RLS enabled with NO policies (server-only access).
 
 ### Later phases
+
 - Phase 2: `tags`, `work_tags`, `shelves` (kind 'manual'|'smart', query jsonb), `shelf_items`,
   `custom_statuses`, `copies` (ownership, location, loans), `people`, `imports`.
 - Phase 4: `kosync_credentials` (username unique, key_hash), `kosync_documents`
@@ -70,10 +75,12 @@ Common columns: `id uuid pk default gen_random_uuid()`, `created_at timestamptz 
   location, chapter, source, source_hash; unique(user_id, source_hash)).
 
 ### Indexes
+
 `user_id` on every user table; `editions(user_id, isbn_13)`; `pg_trgm` GIN index on
 `works.title` and `authors.name`; `progress_events(read_id, occurred_at desc)`.
 
 ### RLS pattern
+
 ```sql
 alter table public.works enable row level security;
 create policy "works_select_own" on public.works
@@ -87,6 +94,7 @@ create policy "works_delete_own" on public.works
 ```
 
 ## Metadata enrichment
+
 Order: Open Library → Google Books → Hardcover (optional token). Flow: normalise ISBN or
 query → check `provider_cache` → call provider (rate-limited) → store → merge into the
 edition respecting `field_locks`. Enrichment never blocks saving a book; it can run after.
@@ -94,6 +102,7 @@ Many Bangla/local editions will have no provider data — manual entry + cover p
 first-class path, not an error state.
 
 ## Environment variables (`.env.example`)
+
 ```
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
@@ -102,9 +111,11 @@ OPEN_LIBRARY_CONTACT_EMAIL=
 GOOGLE_BOOKS_API_KEY=
 HARDCOVER_API_TOKEN=
 ```
+
 Check current Supabase docs for key naming (publishable/secret keys vs legacy anon/service_role).
 
 ## Free-tier operations
+
 - Keep-alive: `.github/workflows/keepalive.yml` pings the project every 3 days (free
   projects pause after 7 days idle). Remove when moving to Pro.
 - Backups: `.github/workflows/backup.yml` weekly `pg_dump` (free tier has no daily backups).

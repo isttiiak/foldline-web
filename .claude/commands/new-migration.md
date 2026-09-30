@@ -1,6 +1,7 @@
 Create a database migration for: $ARGUMENTS
 
 Steps:
+
 1. `pnpm supabase migration new <short_snake_case_name>`
 2. Write the SQL per docs/ARCHITECTURE.md: `user_id` default auth.uid(), RLS enabled with
    four own-row policies, indexes, updated_at trigger.

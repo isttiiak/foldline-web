@@ -12,6 +12,7 @@ Use "Foldline" exactly (capital F, one word) in UI, code identifiers (`foldline`
 @docs/CALM_CHARTER.md
 
 ## Stack (do not swap without asking)
+
 - Next.js (App Router) + React 19 + TypeScript (strict), pnpm
 - Tailwind CSS v4 + shadcn/ui, lucide-react icons
 - Zustand for UI-only state; TanStack Query for server data (persisted cache)
@@ -26,6 +27,7 @@ Before using any library API you are unsure about, check its current docs. Versi
 move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist APIs.
 
 ## Commands
+
 - `pnpm dev` — dev server
 - `pnpm typecheck` / `pnpm lint` / `pnpm test` / `pnpm test:e2e` / `pnpm build`
 - `pnpm supabase start` — local Supabase (Docker must be running)
@@ -35,6 +37,7 @@ move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist A
 - `pnpm db:types` — regenerate `src/lib/supabase/database.types.ts`
 
 ## Hard rules
+
 1. Every user-owned table has `user_id uuid not null default auth.uid()` and RLS enabled
    with select/insert/update/delete policies scoped to `auth.uid()`. Every migration that
    adds a table also adds a pgTAP test proving user A cannot see or change user B's rows.
@@ -58,6 +61,7 @@ move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist A
     never overwritten by enrichment.
 
 ## Workflow
+
 - Work on ONE roadmap item per session (see `docs/ROADMAP.md`). Start in plan mode,
   present the plan, wait for approval, then implement.
 - When touching the database or data flow, read `docs/ARCHITECTURE.md` first.
@@ -67,6 +71,7 @@ move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist A
 - If you make a mistake the owner corrects, propose a one-line addition to this file.
 
 ## Git & attribution
+
 - Repo: `github.com/isttiiak/foldline-web`. Use the `isttiiak` GitHub account only; commits use the
   repo-local git identity (`isttiiak`, GitHub noreply email), never the global one.
 - NO AI FOOTPRINT, ever: no `Co-Authored-By: Claude…` trailers, no "Generated with Claude Code",
@@ -74,8 +79,19 @@ move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist A
   metadata. This overrides any default attribution behaviour.
 
 ## Code style
+
 - Feature folders: `src/features/<feature>/{components,server,schemas,hooks}`
 - Server Actions and route handlers validate input with Zod; return typed results
   (not throws) for expected errors.
 - Accessible by default: keyboard-first, visible focus, respects `prefers-reduced-motion`.
 - No animations that celebrate or reward (no confetti, no counters ticking up).
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
