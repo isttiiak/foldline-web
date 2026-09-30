@@ -50,6 +50,24 @@ export function devLoginSecret(): string | null {
   return parsed.success ? parsed.data : null;
 }
 
+const metadataSchema = z.object({
+  OPEN_LIBRARY_CONTACT_EMAIL: z.email().optional().catch(undefined),
+  GOOGLE_BOOKS_API_KEY: z.string().min(1).optional().catch(undefined),
+});
+
+/**
+ * Metadata provider config, all optional. Without a contact email Open Library is
+ * skipped (it must be sent in the User-Agent); without a key Google Books uses its
+ * smaller anonymous quota.
+ */
+export function metadataEnv() {
+  return metadataSchema.parse({
+    OPEN_LIBRARY_CONTACT_EMAIL:
+      process.env.OPEN_LIBRARY_CONTACT_EMAIL || undefined,
+    GOOGLE_BOOKS_API_KEY: process.env.GOOGLE_BOOKS_API_KEY || undefined,
+  });
+}
+
 /** Server-only config including the secret key. Only `src/lib/supabase/admin.ts` may use it. */
 export function serverEnv() {
   const parsed = serverSchema.safeParse({

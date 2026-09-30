@@ -112,8 +112,26 @@ create policy "works_delete_own" on public.works
 Order: Open Library → Google Books → Hardcover (optional token). Flow: normalise ISBN or
 query → check `provider_cache` → call provider (rate-limited) → store → merge into the
 edition respecting `field_locks`. Enrichment never blocks saving a book; it can run after.
-Many Bangla/local editions will have no provider data. Manual entry + cover photo is a
-first-class path, not an error state.
+
+Code lives in `src/features/metadata/`: pure mappers per provider (`providers/`), ISBN helpers,
+`merge.ts` (candidate merge and lock-aware patches) and `server/` (fetch, cache, lookup,
+enrich). Routes: `GET /api/metadata/search?q=` and `GET /api/metadata/isbn/<isbn>`, signed-in
+only, per-user limit `metadata-lookup`.
+
+- ISBN lookup asks both providers (each answer cached); Open Library leads and Google Books
+  fills gaps (often the description). Search uses Open Library, then Google Books.
+- Outgoing budgets are global counters in `rate_limits` (`openlibrary` 3/s, `googlebooks`
+  10/s). Over budget or down means "try the other provider", never a long wait.
+- Open Library is called only with `OPEN_LIBRARY_CONTACT_EMAIL` set (sent in the User-Agent
+  `Foldline/<version> (<email>)`); otherwise it is skipped. `GOOGLE_BOOKS_API_KEY` is optional.
+- Cache TTLs: found by ISBN 30 days, not found 1 day, searches 1 day. Keys are normalised
+  (`isbn:<13 digits>`, `search:<query>`) and never include a user. Expired rows are swept on
+  about 1% of writes.
+- Field locks: a field a person edits by hand is added to `field_locks` (`lockFields`).
+  Enrichment overwrites only unlocked fields with non-empty values; ISBNs are only filled
+  while empty; edition title/subtitle are never set by providers.
+  Many Bangla/local editions will have no provider data. Manual entry + cover photo is a
+  first-class path, not an error state.
 
 ## Environment variables (`.env.example`)
 

@@ -19,9 +19,11 @@ session: tick what is done, add what is next.
       `<project>.vercel.app`) and publish
 - [x] Supabase: "Allow new users to sign up" is **on** (sign-up opens now, per owner)
 - [x] `.env.local` has `DEV_LOGIN_SECRET`; `.env.example` lists it
-- [ ] Once CI is green: paste `supabase/migrations/0003_create_library.sql` into the dev
-      SQL Editor, tick it in `docs/MIGRATIONS.md`, then re-run `pnpm test:e2e` (the
-      "download my data" test fails on dev until 0003 is applied)
+- [x] `.env.local` has `OPEN_LIBRARY_CONTACT_EMAIL` (live lookup used Open Library,
+      2026-10-01). Set it on Vercel too; `GOOGLE_BOOKS_API_KEY` is optional (larger quota,
+      see `docs/SETUP.md`)
+- [x] `0003_create_library.sql` applied to dev (confirmed 2026-10-01: export e2e passes).
+      Prod later, with the Vercel deploy
 
 ## Claude
 
@@ -49,8 +51,13 @@ Done on 2026-10-01: Phase 2 migration `0003_create_library.sql` (works, authors,
 work_authors, editions, reads, progress_events, provider_cache) with pgTAP tests, hand-written
 types and the new tables in the export (typecheck fails if a `user_id` table is missing).
 
-Next: Phase 2 "Metadata providers (Open Library, Google Books) + cache + field locks". It also
-needs a pg_cron (or on-write) cleanup of expired `provider_cache` rows. The Vercel deploy is
+Also done on 2026-10-01: metadata providers (`src/features/metadata/`, routes under
+`/api/metadata/`), cached in `provider_cache`, lock-aware enrichment (`enrichEdition`).
+
+Next: the private profile page (added to the roadmap after the providers item, owner's
+decisions: prefilled from Google, editable any time, own photo upload to a private Storage
+bucket as WebP, fields name/photo/email/member since/timezone/bio/reading preferences).
+It needs migration 0004 (profile columns + Storage bucket and policies). Then "Add book". The Vercel deploy is
 postponed by the owner; Phase 1's last item stays open until then. Landing copy describes
 Phase 2-3 features (search, ISBN, goals, stats) that are not built yet.
 

@@ -8,7 +8,8 @@ vi.mock("@/lib/supabase/admin", () => ({
   keyedHash: (value: string) => `hash(${value})`,
 }));
 
-const { rateLimit, rateLimitByIp, RATE_LIMITS } = await import("./rate-limit");
+const { rateLimit, rateLimitByIp, rateLimitGlobal, RATE_LIMITS } =
+  await import("./rate-limit");
 
 describe("rateLimit", () => {
   beforeEach(() => {
@@ -77,5 +78,20 @@ describe("rateLimit", () => {
       "magic-link:email:hash(reader@example.com)",
     ]);
     expect(buckets.join()).not.toContain("203.0.113.7:");
+  });
+
+  test("provider budgets share one global bucket", async () => {
+    rpc.mockResolvedValue({
+      data: [{ allowed: true, remaining: 2, reset_at: "2026-10-01T09:00:00Z" }],
+      error: null,
+    });
+
+    await rateLimitGlobal(RATE_LIMITS.openLibrary);
+
+    expect(rpc).toHaveBeenCalledWith("rate_limit_hit", {
+      p_bucket: "openlibrary:global:all",
+      p_limit: 3,
+      p_window_seconds: 1,
+    });
   });
 });

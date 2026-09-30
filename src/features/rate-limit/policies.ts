@@ -7,8 +7,11 @@ export type RateLimitPolicy = {
   name: string;
   limit: number;
   windowSeconds: number;
-  /** What the subject is: a signed-in user id, or the caller's (hashed) IP. */
-  per: "user" | "ip" | "email";
+  /**
+   * What the subject is: a signed-in user id, the caller's (hashed) IP or email, or
+   * one shared counter for everyone (outgoing provider budgets).
+   */
+  per: "user" | "ip" | "email" | "global";
 };
 
 export const RATE_LIMITS = {
@@ -49,7 +52,29 @@ export const RATE_LIMITS = {
     limit: 5,
     windowSeconds: 3600,
   },
+  metadataLookup: {
+    name: "metadata-lookup",
+    per: "user",
+    limit: 120,
+    windowSeconds: 600,
+  },
+  // Open Library allows 3 requests per second from an identified app.
+  openLibrary: {
+    name: "openlibrary",
+    per: "global",
+    limit: 3,
+    windowSeconds: 1,
+  },
+  googleBooks: {
+    name: "googlebooks",
+    per: "global",
+    limit: 10,
+    windowSeconds: 1,
+  },
 } as const satisfies Record<string, RateLimitPolicy>;
+
+/** The single subject of a `per: "global"` policy. */
+export const GLOBAL_SUBJECT = "all";
 
 /** The counter key: `name:per:subject`. The subject is already hashed if sensitive. */
 export function bucketFor(policy: RateLimitPolicy, subject: string): string {

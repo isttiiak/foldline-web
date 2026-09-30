@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import {
   bucketFor,
   clientIp,
+  GLOBAL_SUBJECT,
   RATE_LIMITS,
   type RateLimitPolicy,
 } from "@/features/rate-limit/policies";
@@ -24,7 +25,10 @@ export async function rateLimit(
 ): Promise<RateLimitResult> {
   try {
     // IPs and emails are hashed before they reach the database.
-    const key = policy.per === "user" ? subject : keyedHash(subject);
+    const key =
+      policy.per === "user" || policy.per === "global"
+        ? subject
+        : keyedHash(subject);
     const { data, error } = await createAdminClient().rpc("rate_limit_hit", {
       p_bucket: bucketFor(policy, key),
       p_limit: policy.limit,
@@ -51,6 +55,13 @@ export async function rateLimitByIp(
   requestHeaders?: Headers,
 ): Promise<RateLimitResult> {
   return rateLimit(policy, clientIp(requestHeaders ?? (await headers())));
+}
+
+/** Count one hit against a budget shared by everyone (e.g. a provider's limit). */
+export async function rateLimitGlobal(
+  policy: RateLimitPolicy,
+): Promise<RateLimitResult> {
+  return rateLimit(policy, GLOBAL_SUBJECT);
 }
 
 export { RATE_LIMITS };

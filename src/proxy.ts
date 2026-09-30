@@ -9,5 +9,11 @@ export async function proxy(request: NextRequest) {
 export const config = {
   // Only routes that read or change the session. Public pages stay static and
   // keep working even when Supabase is unreachable.
-  matcher: ["/app", "/app/:path*", "/login", "/auth/:path*"],
+  matcher: [
+    "/app",
+    "/app/:path*",
+    "/login",
+    "/auth/:path*",
+    "/api/metadata/:path*",
+  ],
 };

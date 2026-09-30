@@ -21,4 +21,4 @@ migration history does not know about SQL Editor runs.
 | --- | ----------------------------- | -------------------------------------------------------------------------- | --- | ---- |
 | 1   | `0001_create_profiles.sql`    | `profiles` table, RLS, signup trigger, `set_updated_at()` helper           | [x] | [ ]  |
 | 2   | `0002_create_rate_limits.sql` | `rate_limits` counters (server-only, RLS, no policies), `rate_limit_hit()` | [x] | [ ]  |
-| 3   | `0003_create_library.sql`     | works, authors, editions, reads, progress (RLS), `provider_cache`, pg_trgm | [ ] | [ ]  |
+| 3   | `0003_create_library.sql`     | works, authors, editions, reads, progress (RLS), `provider_cache`, pg_trgm | [x] | [ ]  |
