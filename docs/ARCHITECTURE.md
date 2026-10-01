@@ -155,6 +155,12 @@ only, per-user limit `metadata-lookup`.
   limits, `revalidatePath("/app", "layout")`). Edit forms use column names as keys, so
   `changedFields` maps edits straight to locks; `nextLocks` adds edited fields and removes
   the ones the reader unlocked. Read state/date rules: `reads/transitions.ts`.
+- Library page (`/app`): the view is in the URL (`q`, `state`, `format`, `sort`, `pages`),
+  parsed by `parseLibraryParams` (`src/features/library/query.ts`, bad values fall back to
+  defaults). `getLibrary` (`library/server/queries.ts`) resolves search to work ids with
+  trigram-indexed `ilike` on `works.title` and `authors.name`, loads up to 1000 works with
+  their latest read, then filters and sorts in TypeScript (state lives on the latest read) and
+  signs covers for the visible page only (60 per page). State counts reflect search and format.
 - Progress: `fraction` = pages / `page_count`, minutes / `duration_minutes`, percent / 100,
   or location/chapter / a total typed in the log form (not stored; the next form prefills
   it from value / fraction of the last entry). Unknown totals keep `fraction` null. Logging

@@ -146,7 +146,30 @@
     "emptyTitle": "A fresh, empty shelf",
     "emptyBody": "Search by title or author, paste an ISBN or a book link, or type a book in by hand. Your first one is a few taps away.",
     "add": "Add a book",
-    "addFirst": "Add your first book"
+    "addFirst": "Add your first book",
+    "toolbar": {
+      "label": "Find and sort your books",
+      "searchLabel": "Search your library",
+      "searchPlaceholder": "Search by title or author",
+      "clearSearch": "Clear search",
+      "stateLegend": "Show books that are",
+      "all": "All",
+      "format": "Format",
+      "allFormats": "All formats",
+      "sort": "Sort by",
+      "sorts": {
+        "added": "Recently added",
+        "title": "Title, A to Z",
+        "author": "Author, A to Z",
+        "finished": "Recently finished",
+        "rating": "Highest rated"
+      },
+      "reset": "Show everything"
+    },
+    "count": "{count, plural, one {# book} other {# books}}",
+    "noMatchesTitle": "Nothing matches that",
+    "noMatchesBody": "Try a different word, or loosen a filter. Your books are all still here.",
+    "showMore": "Show more books"
   },
   "Shelf": {
     "label": "Your books",

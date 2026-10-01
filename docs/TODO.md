@@ -83,8 +83,12 @@ book (covers removed from Storage, unused authors tidied). No migration. New rat
 Fixed: reads created together (the dev seed) now order by latest activity, so the shelf and
 book page agree on the current read.
 
-Next: Phase 2 "Library views: by state, sort, filter, trigram search" (replaces the simple
-grid on `/app`).
+Done on 2026-10-01: library views on `/app` (`src/features/library/`): search by title or
+author (trigram-indexed `ilike`), state chips with counts, format filter and five sorts, all
+in the URL (`?q&state&format&sort&pages`), "Show more" in pages of 60, and a kind "nothing
+matches" state. No migration. Pure view logic and URL parsing are in `library/query.ts`.
+
+Next: Phase 2 "Command palette (⌘K): add, log progress, find".
 
 ## Known context
 
