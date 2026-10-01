@@ -52,12 +52,10 @@ export function ProfileHero(props: ProfileHeroProps) {
   const name = props.displayName ?? t("unnamed");
 
   return (
-    <motion.section
+    // CSS entrance (starts dimmed, never hidden), so the page reads before hydration.
+    <section
       aria-labelledby="profile-name"
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={springs.gentle}
-      className="relative overflow-hidden rounded-3xl border bg-card/70 backdrop-blur-sm"
+      className="relative enter overflow-hidden rounded-3xl border bg-card/70 backdrop-blur-sm"
     >
       {/* Banner: sunrise gradient, soft light, and a folded page corner. */}
       <div
@@ -161,6 +159,6 @@ export function ProfileHero(props: ProfileHeroProps) {
           </div>
         )}
       </div>
-    </motion.section>
+    </section>
   );
 }

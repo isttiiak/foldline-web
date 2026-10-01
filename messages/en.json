@@ -348,7 +348,7 @@
     "hero": {
       "unnamed": "Reader",
       "detailsLabel": "About your account",
-      "memberSince": "Reading with Foldline since {date}",
+      "memberSince": "With Foldline since {date}",
       "booksOnShelf": "{count, plural, =0 {No books on your shelf yet} one {# book on your shelf} other {# books on your shelf}}",
       "noBio": "Add a few words about yourself as a reader, just for you.",
       "formats": "Favourite ways to read",

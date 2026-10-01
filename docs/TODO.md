@@ -24,9 +24,8 @@ session: tick what is done, add what is next.
       see `docs/SETUP.md`)
 - [x] `0003_create_library.sql` applied to dev (confirmed 2026-10-01: export e2e passes).
       Prod later, with the Vercel deploy
-- [ ] Once CI is green: paste `supabase/migrations/0004_profile_details.sql` into the dev SQL
-      Editor and tick it in `docs/MIGRATIONS.md`. Then paste
-      `supabase/dev-seeds/sample_library.sql` (dev only) to fill the izhaaannn test account
+- [x] `0004_profile_details.sql` and `supabase/dev-seeds/sample_library.sql` run on dev
+      (2026-10-01): profile e2e passes, izhaaannn account has 12 sample books
 
 ## Claude
 
@@ -59,8 +58,8 @@ Also done on 2026-10-01: metadata providers (`src/features/metadata/`, routes un
 
 Also done on 2026-10-01: private profile page `/app/profile` (hero, details form, photo
 upload resized to WebP in the browser, private `avatars` bucket), sidebar shows the reader's
-photo and name, migration 0004, and the dev sample library script. The profile e2e tests
-and the browser check need 0004 applied on dev first; re-run `pnpm test:e2e` after.
+photo and name, migration 0004, and the dev sample library script. Checked in the browser
+pane at desktop and phone width after 0004 was applied.
 
 Next: Phase 2 "Add book: search, paste ISBN/URL, manual entry" (uses `/api/metadata/*` and
 `enrichEdition`; manual edits must call `lockFields`). Then "Library views", which is what
