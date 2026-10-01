@@ -4,6 +4,22 @@ All notable changes to Foldline. Versions follow [SemVer](https://semver.org); w
 version is `0.x`, anything may still change. Each release is an annotated git tag
 (`vX.Y.Z`) with `package.json` at the same version.
 
+## v0.3.0 (2026-10-01)
+
+Find your books: search, filter and sort the shelf.
+
+### Added
+
+- Search the library by title or author (Bangla too).
+- Filter by reading state (with counts) and by format; sort by recently added, title,
+  author, recently finished or rating. The view lives in the page address, so back and
+  bookmarks work.
+- "Show more books" after the first 60, and a kind message when nothing matches.
+
+### Database migrations
+
+None.
+
 ## v0.2.0 (2026-10-01)
 
 Every book now has its own page: fix its details, keep several editions, track each read
