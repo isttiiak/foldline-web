@@ -1,6 +1,13 @@
 "use client";
 
-import { Library, LogOut, Menu, Settings, type LucideIcon } from "lucide-react";
+import {
+  Library,
+  LogOut,
+  Menu,
+  Settings,
+  UserRound,
+  type LucideIcon,
+} from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -18,15 +25,17 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { signOutAction } from "@/features/auth/server/actions";
+import { UserAvatar } from "@/features/profile/components/user-avatar";
 import { springs } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
-type NavKey = "library" | "settings";
+type NavKey = "library" | "profile" | "settings";
 type NavItem = { key: NavKey; href: string; icon: LucideIcon };
 
 // Add items here as their routes land (shelves, highlights, import).
 const NAV_ITEMS: NavItem[] = [
   { key: "library", href: "/app", icon: Library },
+  { key: "profile", href: "/app/profile", icon: UserRound },
   { key: "settings", href: "/app/settings", icon: Settings },
 ];
 
@@ -86,40 +95,70 @@ function NavLinks({
   );
 }
 
-function SignOutButton({ email }: { email?: string | null }) {
+export type ShellUser = {
+  email: string | null;
+  name: string | null;
+  avatarSrc: string | null;
+};
+
+function AccountFooter({
+  user,
+  onNavigate,
+}: {
+  user: ShellUser;
+  onNavigate?: () => void;
+}) {
   const t = useTranslations("AppNav");
 
   return (
-    <form action={signOutAction} className="flex flex-col gap-2">
-      {email && (
-        <p
-          className="truncate px-3 text-xs text-muted-foreground"
-          title={email}
-        >
-          {t("signedInAs")}{" "}
-          <span className="font-medium text-foreground">{email}</span>
-        </p>
-      )}
-      <button
-        type="submit"
-        className="group flex w-full press items-center gap-3 rounded-xl px-3 py-2.5 font-medium text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
+    <div className="flex flex-col gap-2">
+      <Link
+        href="/app/profile"
+        onClick={onNavigate}
+        className="group flex press items-center gap-3 rounded-xl px-2 py-2 hover:bg-muted/50 focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
       >
-        <LogOut
-          aria-hidden
-          className="size-5 transition-transform duration-300 group-hover:translate-x-0.5"
+        <UserAvatar
+          src={user.avatarSrc}
+          name={user.name ?? user.email}
+          size={36}
+          className="ring-2 ring-amber/30 transition-transform duration-300 group-hover:scale-105"
         />
-        {t("signOut")}
-      </button>
-    </form>
+        <span className="flex min-w-0 flex-col">
+          <span className="truncate text-sm font-medium">
+            {user.name ?? t("yourProfile")}
+          </span>
+          {user.email && (
+            <span
+              className="truncate text-xs text-muted-foreground"
+              title={user.email}
+            >
+              {user.email}
+            </span>
+          )}
+        </span>
+      </Link>
+      <form action={signOutAction}>
+        <button
+          type="submit"
+          className="group flex w-full press items-center gap-3 rounded-xl px-3 py-2.5 font-medium text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
+        >
+          <LogOut
+            aria-hidden
+            className="size-5 transition-transform duration-300 group-hover:translate-x-0.5"
+          />
+          {t("signOut")}
+        </button>
+      </form>
+    </div>
   );
 }
 
 export function AppShell({
   children,
-  email,
+  user,
 }: {
   children: React.ReactNode;
-  email?: string | null;
+  user: ShellUser;
 }) {
   const t = useTranslations("Common");
   const [open, setOpen] = useState(false);
@@ -133,7 +172,7 @@ export function AppShell({
         <Wordmark href="/app" className="px-2" />
         <NavLinks pillId="nav-pill-desktop" />
         <div className="mt-auto">
-          <SignOutButton email={email} />
+          <AccountFooter user={user} />
         </div>
       </aside>
 
@@ -164,7 +203,7 @@ export function AppShell({
                 onNavigate={() => setOpen(false)}
               />
               <div className="mt-auto">
-                <SignOutButton email={email} />
+                <AccountFooter user={user} onNavigate={() => setOpen(false)} />
               </div>
             </SheetContent>
           </Sheet>

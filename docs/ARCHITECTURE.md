@@ -46,8 +46,13 @@ Common columns: `id uuid pk default gen_random_uuid()`, `created_at timestamptz 
 
 ### Core tables
 
-- `profiles` (id = auth.users.id): display_name, locale ('en'|'bn'), timezone,
-  settings jsonb (rating_scale, hide_stats, …). Created by a trigger on signup.
+- `profiles` (id = auth.users.id): display_name (1-80), locale ('en'|'bn'), timezone,
+  avatar_url (provider photo, https), avatar_path (own photo in the private `avatars`
+  Storage bucket at `<user id>/<file>`, shown via 1-hour signed URLs), bio (<= 600),
+  preferred_formats edition_format[], favourite_genres text[] (<= 12), settings jsonb
+  (rating_scale, hide_stats, …). Created by a trigger on signup (name and Google photo).
+  Private: there are no public profiles. Account deletion removes the user's Storage files
+  first (they do not cascade).
 - `works`: title, subtitle, original_title, original_language, description,
   series_name, series_position numeric, field_locks text[] default '{}'.
 - `authors`: name, sort_name, provider_ids jsonb.

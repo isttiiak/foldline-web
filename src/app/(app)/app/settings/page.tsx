@@ -1,5 +1,12 @@
-import { Download, ShieldCheck, Trash2, UserRound } from "lucide-react";
+import {
+  ArrowRight,
+  Download,
+  ShieldCheck,
+  Trash2,
+  UserRound,
+} from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -77,6 +84,18 @@ export default async function SettingsPage() {
           />
           {t("account.provider")}
         </p>
+        <div>
+          <Link
+            href="/app/profile"
+            className={cn(
+              buttonVariants({ variant: "outline", size: "lg" }),
+              "h-11 gap-2 rounded-xl px-4",
+            )}
+          >
+            {t("account.editProfile")}
+            <ArrowRight className="size-4" aria-hidden />
+          </Link>
+        </div>
       </Card>
 
       <Card icon={Download} title={t("data.title")}>

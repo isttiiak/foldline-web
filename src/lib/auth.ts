@@ -149,11 +149,29 @@ export async function deleteDevUsers(
 }
 
 /**
- * Delete the user and, through `on delete cascade`, every row they own. Then
+ * Delete the user's photo files, then the user and, through `on delete cascade`,
+ * every row they own. Then
  * drop the session cookies locally (the user no longer exists server-side).
  */
 export async function deleteAccount(userId: string): Promise<AuthResult> {
-  const { error } = await createAdminClient().auth.admin.deleteUser(userId);
+  const admin = createAdminClient();
+  // Storage files do not cascade with the user: remove their photos first.
+  const photos = admin.storage.from("avatars");
+  const { data: files, error: listError } = await photos.list(userId, {
+    limit: 1000,
+  });
+  // A missing bucket holds no files (projects before migration 0004).
+  if (listError && !/bucket not found/i.test(listError.message)) {
+    return { ok: false, error: listError.message };
+  }
+  if (files && files.length > 0) {
+    const { error: removeError } = await photos.remove(
+      files.map((file) => `${userId}/${file.name}`),
+    );
+    if (removeError) return { ok: false, error: removeError.message };
+  }
+
+  const { error } = await admin.auth.admin.deleteUser(userId);
   if (error) return { ok: false, error: error.message };
   const supabase = await createClient();
   await supabase.auth.signOut({ scope: "local" });

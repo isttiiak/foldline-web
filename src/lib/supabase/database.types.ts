@@ -123,28 +123,43 @@ export type Database = {
       };
       profiles: {
         Row: {
+          avatar_path: string | null;
+          avatar_url: string | null;
+          bio: string | null;
           created_at: string;
           display_name: string | null;
+          favourite_genres: string[];
           id: string;
           locale: string;
+          preferred_formats: Database["public"]["Enums"]["edition_format"][];
           settings: Json;
           timezone: string;
           updated_at: string;
         };
         Insert: {
+          avatar_path?: string | null;
+          avatar_url?: string | null;
+          bio?: string | null;
           created_at?: string;
           display_name?: string | null;
+          favourite_genres?: string[];
           id: string;
           locale?: string;
+          preferred_formats?: Database["public"]["Enums"]["edition_format"][];
           settings?: Json;
           timezone?: string;
           updated_at?: string;
         };
         Update: {
+          avatar_path?: string | null;
+          avatar_url?: string | null;
+          bio?: string | null;
           created_at?: string;
           display_name?: string | null;
+          favourite_genres?: string[];
           id?: string;
           locale?: string;
+          preferred_formats?: Database["public"]["Enums"]["edition_format"][];
           settings?: Json;
           timezone?: string;
           updated_at?: string;

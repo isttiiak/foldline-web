@@ -24,6 +24,9 @@ session: tick what is done, add what is next.
       see `docs/SETUP.md`)
 - [x] `0003_create_library.sql` applied to dev (confirmed 2026-10-01: export e2e passes).
       Prod later, with the Vercel deploy
+- [ ] Once CI is green: paste `supabase/migrations/0004_profile_details.sql` into the dev SQL
+      Editor and tick it in `docs/MIGRATIONS.md`. Then paste
+      `supabase/dev-seeds/sample_library.sql` (dev only) to fill the izhaaannn test account
 
 ## Claude
 
@@ -54,10 +57,14 @@ types and the new tables in the export (typecheck fails if a `user_id` table is 
 Also done on 2026-10-01: metadata providers (`src/features/metadata/`, routes under
 `/api/metadata/`), cached in `provider_cache`, lock-aware enrichment (`enrichEdition`).
 
-Next: the private profile page (added to the roadmap after the providers item, owner's
-decisions: prefilled from Google, editable any time, own photo upload to a private Storage
-bucket as WebP, fields name/photo/email/member since/timezone/bio/reading preferences).
-It needs migration 0004 (profile columns + Storage bucket and policies). Then "Add book". The Vercel deploy is
+Also done on 2026-10-01: private profile page `/app/profile` (hero, details form, photo
+upload resized to WebP in the browser, private `avatars` bucket), sidebar shows the reader's
+photo and name, migration 0004, and the dev sample library script. The profile e2e tests
+and the browser check need 0004 applied on dev first; re-run `pnpm test:e2e` after.
+
+Next: Phase 2 "Add book: search, paste ISBN/URL, manual entry" (uses `/api/metadata/*` and
+`enrichEdition`; manual edits must call `lockFields`). Then "Library views", which is what
+makes the sample books visible on `/app`. The Vercel deploy is
 postponed by the owner; Phase 1's last item stays open until then. Landing copy describes
 Phase 2-3 features (search, ISBN, goals, stats) that are not built yet.
 

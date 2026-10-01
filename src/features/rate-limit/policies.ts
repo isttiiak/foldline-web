@@ -52,6 +52,12 @@ export const RATE_LIMITS = {
     limit: 5,
     windowSeconds: 3600,
   },
+  profileUpdate: {
+    name: "profile-update",
+    per: "user",
+    limit: 30,
+    windowSeconds: 600,
+  },
   metadataLookup: {
     name: "metadata-lookup",
     per: "user",

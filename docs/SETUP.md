@@ -63,6 +63,13 @@ users on the **dev** project (they are deleted after each run). The route is a 4
 production builds, off localhost, or without the secret. **Never set `DEV_LOGIN_SECRET` on
 Vercel.** Without it, `pnpm test:e2e` runs only the signed-out tests (as CI does).
 
+### Sample library (optional, dev only)
+
+`supabase/dev-seeds/sample_library.sql` fills one test account with 12 books (6 English,
+6 Bangla) in every reading state, with authors, editions and progress. Set the email prefix
+at its top (`v_prefix`), then paste it into the **dev** project's SQL Editor and run it. It
+can be run again: it replaces only the rows it created. Never run it on prod.
+
 ## 3. Vercel hosting
 
 Do this after the prod Supabase project is set up (section 1) and CI is green on `main`.

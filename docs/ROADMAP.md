@@ -27,7 +27,7 @@ Tick items as they are completed. One item per Claude Code session.
 
 - [x] Migration: works, authors, work_authors, editions, reads, progress_events, provider_cache (+ pgTAP RLS tests)
 - [x] Metadata providers (Open Library, Google Books) + cache + field locks
-- [ ] Private profile page: Google name/photo prefilled, own photo upload (private Storage, WebP), email (read-only), member since, timezone, short bio, reading preferences (formats, genres); editable any time, never public
+- [x] Private profile page: Google name/photo prefilled, own photo upload (private Storage, WebP), email (read-only), member since, timezone, short bio, reading preferences (formats, genres); editable any time, never public
 - [ ] Add book: search, paste ISBN/URL, manual entry (no-ISBN books, cover photo upload)
 - [ ] ISBN barcode scan (`barcode-detector` polyfill)
 - [ ] Book detail page: editions, reads, progress logging in any unit

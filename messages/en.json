@@ -135,9 +135,10 @@
   "AppNav": {
     "label": "Main",
     "library": "Library",
+    "profile": "Profile",
     "signOut": "Sign out",
-    "signedInAs": "Signed in as",
-    "settings": "Settings"
+    "settings": "Settings",
+    "yourProfile": "Your profile"
   },
   "Library": {
     "title": "Your library",
@@ -316,7 +317,8 @@
     "account": {
       "title": "Account",
       "signedInAs": "Signed in as",
-      "provider": "You sign in with Google. Foldline never sees your password."
+      "provider": "You sign in with Google. Foldline never sees your password.",
+      "editProfile": "Edit your profile"
     },
     "data": {
       "title": "Your data",
@@ -335,6 +337,71 @@
         "mismatch": "That does not match your email. Nothing was deleted.",
         "generic": "Something went wrong and nothing was deleted. Please try again in a moment.",
         "rateLimited": "Too many tries for now. Please wait a little while, then try again."
+      }
+    }
+  },
+  "Profile": {
+    "metaTitle": "Profile",
+    "title": "Your profile",
+    "private": "Only you can see this page. Foldline has no public profiles.",
+    "unavailable": "Your profile could not be loaded just now. Please refresh in a moment.",
+    "hero": {
+      "unnamed": "Reader",
+      "detailsLabel": "About your account",
+      "memberSince": "Reading with Foldline since {date}",
+      "booksOnShelf": "{count, plural, =0 {No books on your shelf yet} one {# book on your shelf} other {# books on your shelf}}",
+      "noBio": "Add a few words about yourself as a reader, just for you.",
+      "formats": "Favourite ways to read",
+      "genres": "Genres you love"
+    },
+    "formats": {
+      "paperback": "Paperback",
+      "hardcover": "Hardcover",
+      "ebook": "Ebook",
+      "audiobook": "Audiobook",
+      "other": "Other"
+    },
+    "form": {
+      "title": "About you",
+      "name": "Name",
+      "bio": "About you as a reader",
+      "bioHint": "Optional, private, and yours to change any time.",
+      "bioPlaceholder": "Rainy-day rereader, poetry before bed, always one audiobook on the go...",
+      "timezone": "Timezone",
+      "timezoneHint": "Used to put your reading days on the right date.",
+      "detectTimezone": "Use device timezone",
+      "formats": "Favourite ways to read",
+      "genres": "Genres you love",
+      "genresHint": "Press Enter or comma to add. Up to {max}.",
+      "genrePlaceholder": "Add a genre",
+      "genresFull": "That's a full shelf of genres",
+      "removeGenre": "Remove {genre}",
+      "ideas": "Ideas:",
+      "save": "Save changes",
+      "saved": "Saved. Lovely.",
+      "errors": {
+        "name": "Please enter a name of 1 to 80 characters.",
+        "bio": "Please keep this to 600 characters.",
+        "timezone": "Please pick a timezone from the list.",
+        "genres": "Up to 12 genres, each up to 40 characters.",
+        "invalid": "Some details need another look; see the notes above.",
+        "generic": "Something went wrong and nothing was saved. Please try again in a moment.",
+        "rateLimited": "That was a lot of changes at once. Please wait a little while, then try again."
+      }
+    },
+    "photo": {
+      "title": "Photo",
+      "hint": "Any photo works: it is cropped to a square and kept small and private.",
+      "add": "Add a photo",
+      "change": "Change photo",
+      "useProvider": "Use my Google photo",
+      "remove": "Remove photo",
+      "saved": "Photo updated.",
+      "errors": {
+        "type": "That file is not a photo we can use. Try a JPEG, PNG or WebP.",
+        "size": "That photo is too large, even after shrinking. Try another one.",
+        "generic": "The photo could not be saved. Please try again in a moment.",
+        "rateLimited": "That was a lot of changes at once. Please wait a little while, then try again."
       }
     }
   },
