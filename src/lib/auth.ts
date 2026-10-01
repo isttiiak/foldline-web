@@ -148,27 +148,44 @@ export async function deleteDevUsers(
   }
 }
 
+/** Storage buckets with per-user folders (`<user id>/<file>`). */
+const USER_FILE_BUCKETS = ["avatars", "covers"] as const;
+
+/** Remove every file in the user's folder of a bucket, a page at a time. */
+async function removeUserFiles(
+  admin: ReturnType<typeof createAdminClient>,
+  bucket: string,
+  userId: string,
+): Promise<AuthResult> {
+  const files = admin.storage.from(bucket);
+  // Bounded, in case listing ever lags behind removal.
+  for (let page = 0; page < 100; page++) {
+    const { data, error } = await files.list(userId, { limit: 1000 });
+    // A missing bucket holds no files (projects before its migration).
+    if (error) {
+      return /bucket not found/i.test(error.message)
+        ? { ok: true }
+        : { ok: false, error: error.message };
+    }
+    if (!data || data.length === 0) return { ok: true };
+    const { error: removeError } = await files.remove(
+      data.map((file) => `${userId}/${file.name}`),
+    );
+    if (removeError) return { ok: false, error: removeError.message };
+  }
+  return { ok: false, error: `${bucket}: too many files to remove` };
+}
+
 /**
- * Delete the user's photo files, then the user and, through `on delete cascade`,
- * every row they own. Then
- * drop the session cookies locally (the user no longer exists server-side).
+ * Delete the user's Storage files (photos and covers do not cascade), then the
+ * user and, through `on delete cascade`, every row they own. Then drop the
+ * session cookies locally (the user no longer exists server-side).
  */
 export async function deleteAccount(userId: string): Promise<AuthResult> {
   const admin = createAdminClient();
-  // Storage files do not cascade with the user: remove their photos first.
-  const photos = admin.storage.from("avatars");
-  const { data: files, error: listError } = await photos.list(userId, {
-    limit: 1000,
-  });
-  // A missing bucket holds no files (projects before migration 0004).
-  if (listError && !/bucket not found/i.test(listError.message)) {
-    return { ok: false, error: listError.message };
-  }
-  if (files && files.length > 0) {
-    const { error: removeError } = await photos.remove(
-      files.map((file) => `${userId}/${file.name}`),
-    );
-    if (removeError) return { ok: false, error: removeError.message };
+  for (const bucket of USER_FILE_BUCKETS) {
+    const removed = await removeUserFiles(admin, bucket, userId);
+    if (!removed.ok) return removed;
   }
 
   const { error } = await admin.auth.admin.deleteUser(userId);

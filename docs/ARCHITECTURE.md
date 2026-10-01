@@ -132,7 +132,16 @@ only, per-user limit `metadata-lookup`.
 - Cache TTLs: found by ISBN 30 days, not found 1 day, searches 1 day. Keys are normalised
   (`isbn:<13 digits>`, `search:<query>`) and never include a user. Expired rows are swept on
   about 1% of writes.
+- Adding a book (`src/features/books/`, `/app/add`): one "Find your book" box takes a
+  title/author search, an ISBN (any spelling) or a link containing an ISBN; or the reader
+  adds the book by hand. `addBookAction` writes work → authors (reused by exact name) →
+  work_authors → edition → first read, undoing its own rows if a later step fails (no
+  transactions over the Data API). An ISBN-13 already on the shelf is reported, not
+  duplicated. With an ISBN, `enrichEdition` runs in `after()` to fill gaps.
+- Own cover photos are resized in the browser (max 600 px, WebP) and stored in the private
+  `covers` bucket (`<user id>/<edition id>-<ts>.webp`, migration 0005), shown via signed URLs.
 - Field locks: a field a person edits by hand is added to `field_locks` (`lockFields`).
+  When adding, every field typed by hand (or changed from the catalogue's value) is locked.
   Enrichment overwrites only unlocked fields with non-empty values; ISBNs are only filled
   while empty; edition title/subtitle are never set by providers.
   Many Bangla/local editions will have no provider data. Manual entry + cover photo is a

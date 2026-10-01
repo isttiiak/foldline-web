@@ -1,6 +1,5 @@
 import { describe, expect, test } from "vitest";
 
-import { centreSquare } from "./resize-photo";
 import {
   initials,
   isTimeZone,
@@ -106,9 +105,4 @@ test("initials take up to two whole letters, in any script", () => {
   expect(initials("রবীন্দ্রনাথ ঠাকুর")).toBe("রঠা");
   expect(initials("")).toBe("?");
   expect(initials(null)).toBe("?");
-});
-
-test("centreSquare crops the middle of a photo", () => {
-  expect(centreSquare(400, 300)).toEqual({ sx: 50, sy: 0, side: 300 });
-  expect(centreSquare(300, 500)).toEqual({ sx: 0, sy: 100, side: 300 });
 });

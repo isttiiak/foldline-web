@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  BookPlus,
   Library,
   LogOut,
   Menu,
@@ -29,12 +30,13 @@ import { UserAvatar } from "@/features/profile/components/user-avatar";
 import { springs } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
-type NavKey = "library" | "profile" | "settings";
+type NavKey = "library" | "add" | "profile" | "settings";
 type NavItem = { key: NavKey; href: string; icon: LucideIcon };
 
 // Add items here as their routes land (shelves, highlights, import).
 const NAV_ITEMS: NavItem[] = [
   { key: "library", href: "/app", icon: Library },
+  { key: "add", href: "/app/add", icon: BookPlus },
   { key: "profile", href: "/app/profile", icon: UserRound },
   { key: "settings", href: "/app/settings", icon: Settings },
 ];

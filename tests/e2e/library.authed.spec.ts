@@ -2,16 +2,24 @@ import { expect, test } from "@playwright/test";
 
 import { signInAsNewUser } from "./auth-file";
 
-test("the library opens for a signed-in reader", async ({ page }) => {
-  await page.goto("/app");
-  await expect(page).toHaveURL(/\/app$/);
-  await expect(
-    page.getByRole("heading", { level: 1, name: "Your library" }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("heading", { name: "A fresh, empty shelf" }),
-  ).toBeVisible();
-  await expect(page.getByText(/@foldline\.test/).first()).toBeAttached();
+test.describe("a new reader", () => {
+  // Other tests add books to the shared user; an empty shelf needs a user of its own.
+  test.use({ storageState: { cookies: [], origins: [] } });
+
+  test("sees an empty shelf that invites a first book", async ({ page }) => {
+    await signInAsNewUser(page);
+    await page.goto("/app");
+    await expect(page).toHaveURL(/\/app$/);
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Your library" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "A fresh, empty shelf" }),
+    ).toBeVisible();
+    await expect(page.getByText(/@foldline\.test/).first()).toBeAttached();
+    await page.getByRole("link", { name: "Add your first book" }).click();
+    await expect(page).toHaveURL(/\/app\/add$/);
+  });
 });
 
 test("signed-in readers skip the login page", async ({ page }) => {

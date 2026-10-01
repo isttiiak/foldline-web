@@ -135,6 +135,7 @@
   "AppNav": {
     "label": "Main",
     "library": "Library",
+    "add": "Add book",
     "profile": "Profile",
     "signOut": "Sign out",
     "settings": "Settings",
@@ -143,7 +144,102 @@
   "Library": {
     "title": "Your library",
     "emptyTitle": "A fresh, empty shelf",
-    "emptyBody": "Soon you will add books here. For now, enjoy the quiet before the first page."
+    "emptyBody": "Search by title or author, paste an ISBN or a book link, or type a book in by hand. Your first one is a few taps away.",
+    "add": "Add a book",
+    "addFirst": "Add your first book"
+  },
+  "Shelf": {
+    "label": "Your books",
+    "progress": "Progress"
+  },
+  "AddBook": {
+    "metaTitle": "Add a book",
+    "title": "Add a book",
+    "intro": "Find it by title or author, paste an ISBN or a link, or add it by hand. Local and Bangla editions are welcome even when no library knows them.",
+    "find": {
+      "label": "Find your book",
+      "placeholder": "Title, author, ISBN or a book link",
+      "hint": "Searches Open Library and Google Books. Nothing about you is sent.",
+      "searching": "Searching...",
+      "found": "{count, plural, one {# book found} other {# books found}}",
+      "resultsLabel": "Matching books",
+      "noResults": "No matches. Try fewer words, the author's name, or add it by hand below.",
+      "invalidIsbn": "That ISBN does not look right. Check the digits, or add the book by hand.",
+      "unsupportedUrl": "We could not find an ISBN in that link. Paste the ISBN instead, or add it by hand.",
+      "byHandHint": "Can't find it? Many books, especially local editions, are not in the online catalogues.",
+      "byHand": "Add it by hand",
+      "errors": {
+        "not_found": "No book with that ISBN in the catalogues. You can add it by hand.",
+        "busy": "The book catalogues are slow right now. Try again in a moment, or add it by hand.",
+        "rate_limited": "That was a lot of searching at once. Please wait a little while, then try again.",
+        "invalid_input": "Please type at least two letters.",
+        "network": "We could not reach Foldline just now. Check your connection and try again."
+      }
+    },
+    "form": {
+      "back": "Back to search",
+      "untitled": "Your book",
+      "addCover": "Add a cover photo",
+      "changeCover": "Change cover",
+      "removeCover": "Remove",
+      "title": "Title",
+      "subtitle": "Subtitle",
+      "authors": "Authors",
+      "authorsHint": "Press Enter or comma after each name.",
+      "authorPlaceholder": "Add an author",
+      "authorsFull": "That's plenty of authors",
+      "removeAuthor": "Remove {name}",
+      "format": "Format",
+      "pages": "Pages",
+      "minutes": "Length in minutes",
+      "language": "Language",
+      "languageUnknown": "Not sure",
+      "isbn": "ISBN",
+      "isbnHint": "Optional. 10 or 13 digits, with or without dashes.",
+      "translator": "Translated by",
+      "publisher": "Publisher",
+      "published": "Published",
+      "publishedPlaceholder": "e.g. 1999 or ১৯২৯",
+      "description": "Description",
+      "addDescription": "Add a description",
+      "shelf": "Where does it go on your shelf?",
+      "startedOn": "Started on",
+      "finishedOn": "Finished on",
+      "stoppedOn": "Stopped on",
+      "save": "Add to my shelf",
+      "duplicate": "\"{title}\" is already on your shelf.",
+      "errors": {
+        "title": "Please give the book a title.",
+        "authors": "Up to 10 authors.",
+        "isbn": "That ISBN does not look right. Check the digits or leave it empty.",
+        "count": "Please use a whole number.",
+        "cover": "That photo could not be used. Try a JPEG, PNG or WebP.",
+        "invalid": "Some details need another look; see the notes above.",
+        "generic": "Something went wrong and the book was not added. Please try again in a moment.",
+        "rateLimited": "That was a lot of books at once. Please wait a little while, then try again."
+      }
+    },
+    "formats": {
+      "paperback": "Paperback",
+      "hardcover": "Hardcover",
+      "ebook": "Ebook",
+      "audiobook": "Audiobook",
+      "other": "Other"
+    },
+    "states": {
+      "planned": "Want to read",
+      "reading": "Reading",
+      "finished": "Finished",
+      "resting": "Resting",
+      "dnf": "Didn't finish"
+    },
+    "added": {
+      "title": "\"{title}\" is on your shelf",
+      "body": "Lovely. It's waiting for you whenever you are ready.",
+      "coverNotSaved": "The book is saved, but its cover photo was not. You can add it again later.",
+      "seeShelf": "See your shelf",
+      "another": "Add another"
+    }
   },
   "Login": {
     "metaTitle": "Sign in",

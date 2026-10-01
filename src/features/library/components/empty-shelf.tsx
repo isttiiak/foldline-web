@@ -12,7 +12,15 @@ const BOOKS = [
 ];
 
 /** A tiny shelf of books that drop in, settle with a bounce, and lean when hovered. */
-export function EmptyShelf({ title, body }: { title: string; body: string }) {
+export function EmptyShelf({
+  title,
+  body,
+  children,
+}: {
+  title: string;
+  body: string;
+  children?: React.ReactNode;
+}) {
   return (
     <section className="flex flex-col items-center gap-6 rounded-3xl border bg-card/60 px-6 py-14 text-center backdrop-blur-sm">
       <div aria-hidden className="flex flex-col items-center">
@@ -41,6 +49,7 @@ export function EmptyShelf({ title, body }: { title: string; body: string }) {
         <h2 className="text-2xl font-semibold">{title}</h2>
         <p className="leading-relaxed text-muted-foreground">{body}</p>
       </div>
+      {children}
     </section>
   );
 }

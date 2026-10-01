@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { springs } from "@/lib/motion";
 
-import { resizePhoto } from "../resize-photo";
+import { resizePhoto } from "@/lib/images";
 import { AVATAR_TYPES, type AvatarState } from "../schemas";
 import { removeAvatarAction, uploadAvatarAction } from "../server/actions";
 import { UserAvatar } from "./user-avatar";

@@ -1,10 +1,12 @@
 "use client";
 
-import { Check, Loader2, LocateFixed, Plus, X } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { Check, Loader2, LocateFixed, Plus } from "lucide-react";
+import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useActionState, useId, useState } from "react";
 
+import { Field, fieldClass } from "@/components/form-field";
+import { TagInput } from "@/components/tag-input";
 import { Button } from "@/components/ui/button";
 import { springs } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -32,42 +34,6 @@ const GENRE_IDEAS = [
   "Bangla literature",
 ];
 
-const fieldClass =
-  "w-full rounded-xl border border-input bg-background/60 px-4 text-base outline-none transition-colors placeholder:text-muted-foreground/70 focus-visible:border-amber/60 focus-visible:ring-3 focus-visible:ring-ring/40 aria-invalid:border-destructive/60";
-
-function Field({
-  id,
-  label,
-  hint,
-  error,
-  children,
-}: {
-  id: string;
-  label: string;
-  hint?: React.ReactNode;
-  error?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="text-sm font-medium">
-        {label}
-      </label>
-      {children}
-      {hint && (
-        <div id={`${id}-hint`} className="text-sm text-muted-foreground">
-          {hint}
-        </div>
-      )}
-      {error && (
-        <p id={`${id}-error`} className="text-sm text-destructive">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
-
 /** Name, bio, timezone and reading preferences. Everything is optional except a name. */
 export function ProfileForm({
   initial,
@@ -92,7 +58,6 @@ export function ProfileForm({
   const [bio, setBio] = useState(initial.bio ?? "");
   const [timezone, setTimezone] = useState(initial.timezone);
   const [genres, setGenres] = useState<string[]>(initial.favouriteGenres);
-  const [draft, setDraft] = useState("");
 
   const invalid = (field: ProfileField) =>
     state.status === "error" && state.fields?.includes(field);
@@ -100,21 +65,8 @@ export function ProfileForm({
 
   function addGenre(value: string) {
     setGenres((current) =>
-      normalizeGenres([...current, value.slice(0, PROFILE_LIMITS.genre)]).slice(
-        0,
-        PROFILE_LIMITS.genres,
-      ),
+      normalizeGenres([...current, value]).slice(0, PROFILE_LIMITS.genres),
     );
-  }
-
-  function onGenreKey(event: React.KeyboardEvent<HTMLInputElement>) {
-    if (event.key === "Enter" || event.key === ",") {
-      event.preventDefault();
-      if (draft.trim()) addGenre(draft);
-      setDraft("");
-    } else if (event.key === "Backspace" && !draft && genres.length > 0) {
-      setGenres((current) => current.slice(0, -1));
-    }
   }
 
   const zones = timeZones.includes(timezone)
@@ -236,49 +188,19 @@ export function ProfileForm({
         hint={t("genresHint", { max: PROFILE_LIMITS.genres })}
         error={invalid("favouriteGenres") ? t("errors.genres") : undefined}
       >
-        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-input bg-background/60 p-2 focus-within:border-amber/60 focus-within:ring-3 focus-within:ring-ring/40">
-          <AnimatePresence initial={false}>
-            {genres.map((genre) => (
-              <motion.span
-                key={genre}
-                layout
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={springs.snappy}
-                className="inline-flex items-center gap-1 rounded-full bg-amber/15 py-1 pr-1 pl-3 text-sm text-amber"
-              >
-                {genre}
-                <input type="hidden" name="favouriteGenres" value={genre} />
-                <button
-                  type="button"
-                  onClick={() =>
-                    setGenres((current) => current.filter((g) => g !== genre))
-                  }
-                  aria-label={t("removeGenre", { genre })}
-                  className="rounded-full p-1 hover:bg-amber/20 focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:outline-none"
-                >
-                  <X className="size-3.5" aria-hidden />
-                </button>
-              </motion.span>
-            ))}
-          </AnimatePresence>
-          <input
-            id={`${id}-genre`}
-            value={draft}
-            disabled={full}
-            maxLength={PROFILE_LIMITS.genre}
-            onChange={(event) => setDraft(event.target.value)}
-            onKeyDown={onGenreKey}
-            onBlur={() => {
-              if (draft.trim()) addGenre(draft);
-              setDraft("");
-            }}
-            placeholder={full ? t("genresFull") : t("genrePlaceholder")}
-            aria-describedby={`${id}-genre-hint`}
-            className="h-8 min-w-36 flex-1 bg-transparent px-2 text-base outline-none placeholder:text-muted-foreground/70"
-          />
-        </div>
+        <TagInput
+          id={`${id}-genre`}
+          name="favouriteGenres"
+          values={genres}
+          onChange={setGenres}
+          max={PROFILE_LIMITS.genres}
+          maxLength={PROFILE_LIMITS.genre}
+          placeholder={t("genrePlaceholder")}
+          fullPlaceholder={t("genresFull")}
+          removeLabel={(genre) => t("removeGenre", { genre })}
+          describedBy={`${id}-genre-hint`}
+          invalid={invalid("favouriteGenres")}
+        />
         {!full && ideas.length > 0 && (
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs text-muted-foreground">{t("ideas")}</span>

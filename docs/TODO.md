@@ -26,6 +26,8 @@ session: tick what is done, add what is next.
       Prod later, with the Vercel deploy
 - [x] `0004_profile_details.sql` and `supabase/dev-seeds/sample_library.sql` run on dev
       (2026-10-01): profile e2e passes, izhaaannn account has 12 sample books
+- [ ] Once CI is green: paste `supabase/migrations/0005_book_covers.sql` on dev (own cover
+      photos need it; adding books works without it) and tick it in `docs/MIGRATIONS.md`
 
 ## Claude
 
@@ -61,11 +63,14 @@ upload resized to WebP in the browser, private `avatars` bucket), sidebar shows 
 photo and name, migration 0004, and the dev sample library script. Checked in the browser
 pane at desktop and phone width after 0004 was applied.
 
-Next: Phase 2 "Add book: search, paste ISBN/URL, manual entry" (uses `/api/metadata/*` and
-`enrichEdition`; manual edits must call `lockFields`). Then "Library views", which is what
-makes the sample books visible on `/app`. The Vercel deploy is
-postponed by the owner; Phase 1's last item stays open until then. Landing copy describes
-Phase 2-3 features (search, ISBN, goals, stats) that are not built yet.
+Also done on 2026-10-01: "Add book" (`/app/add`: search, ISBN or link, by hand, cover
+photo; background enrichment) and a simple shelf grid on `/app` (cover or generated cover,
+state badge, progress bar). TanStack Query is now installed (`QueryProvider` in the app
+layout, not persisted yet). Shared bits: `src/components/{tag-input,form-field}.tsx`,
+`src/lib/{images,text}.ts`.
+
+Next: Phase 2 "ISBN barcode scan (`barcode-detector` polyfill)", then "Book detail page".
+"Library views" later replaces the simple grid with sorting, filters and search.
 
 ## Known context
 

@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { Constants } from "@/lib/supabase/database.types";
+import { uniqueNames } from "@/lib/text";
 
 export const EDITION_FORMATS = Constants.public.Enums.edition_format;
 export type EditionFormat = (typeof EDITION_FORMATS)[number];
@@ -31,19 +32,8 @@ export function isTimeZone(value: string): boolean {
   }
 }
 
-/** Trim, collapse spaces, drop empties and case-insensitive duplicates (first wins). */
-export function normalizeGenres(values: readonly string[]): string[] {
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const raw of values) {
-    const genre = raw.replace(/\s+/g, " ").trim();
-    const key = genre.toLowerCase();
-    if (!genre || seen.has(key)) continue;
-    seen.add(key);
-    out.push(genre);
-  }
-  return out;
-}
+/** Genres: trimmed, no empties, no case-insensitive duplicates. */
+export const normalizeGenres = uniqueNames;
 
 export const profileSchema = z.object({
   displayName: z.string().trim().min(1).max(PROFILE_LIMITS.name),

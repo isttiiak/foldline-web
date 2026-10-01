@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { QueryProvider } from "@/components/query-provider";
 import { getProfile } from "@/features/profile/server/queries";
 import { AppShell } from "@/features/shell/components/app-shell";
 import { requireUser } from "@/lib/auth";
@@ -19,7 +20,7 @@ export default async function AppLayout({ children }: LayoutProps<"/app">) {
         avatarSrc: profile?.avatarSrc ?? null,
       }}
     >
-      {children}
+      <QueryProvider>{children}</QueryProvider>
     </AppShell>
   );
 }
