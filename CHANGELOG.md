@@ -4,6 +4,33 @@ All notable changes to Foldline. Versions follow [SemVer](https://semver.org); w
 version is `0.x`, anything may still change. Each release is an annotated git tag
 (`vX.Y.Z`) with `package.json` at the same version.
 
+## v0.2.0 (2026-10-01)
+
+Every book now has its own page: fix its details, keep several editions, track each read
+and log progress in whatever unit the book speaks.
+
+### Added
+
+- Book page (`/app/books/<id>`), opened from the shelf: cover, authors, series, details,
+  description and editions.
+- Edit a book's and an edition's details by hand; edited fields are locked against the
+  catalogues and can be unlocked again. Refresh an edition from the catalogues by ISBN.
+- Editions: add another (format, ISBN, pages or minutes), edit, remove, and give each its
+  own cover photo.
+- Reads: want to read, reading, resting, finished or didn't finish, with dates; a rating
+  in half stars; a few words for future you; read a book again and keep earlier reads.
+- Progress in pages, percent, location, minutes or chapter, with a calm history.
+- Remove a book with all its reads, progress and cover photos.
+
+### Fixed
+
+- Reads created at the same moment (such as the dev sample library) now agree on which
+  one is current, on the shelf and on the book page.
+
+### Database migrations
+
+None.
+
 ## v0.1.0 (2026-10-01)
 
 The first usable build: sign in, set up a private profile, add books in English or Bangla
