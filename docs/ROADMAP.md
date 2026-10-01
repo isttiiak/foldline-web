@@ -29,7 +29,6 @@ Tick items as they are completed. One item per Claude Code session.
 - [x] Metadata providers (Open Library, Google Books) + cache + field locks
 - [x] Private profile page: Google name/photo prefilled, own photo upload (private Storage, WebP), email (read-only), member since, timezone, short bio, reading preferences (formats, genres); editable any time, never public
 - [x] Add book: search, paste ISBN/URL, manual entry (no-ISBN books, cover photo upload)
-- [ ] ISBN barcode scan (`barcode-detector` polyfill)
 - [ ] Book detail page: editions, reads, progress logging in any unit
 - [ ] Library views: by state, sort, filter, trigram search
 - [ ] Command palette (⌘K): add, log progress, find
@@ -73,6 +72,8 @@ Tick items as they are completed. One item per Claude Code session.
 
 - [ ] Opt-in share cards (finished book, year summary) as unlisted links the user can revoke
 - [ ] AI features (opt-in, explain what data they use): e.g. smart summaries, recommendations from your own library
+- [ ] Scan a book: photograph its information (copyright) page and let an opt-in, free vision model fill in title, authors, publisher, ISBN and year (many local editions have no barcode). Deferred from Phase 2 (owner, 2026-10-01)
+- [ ] ISBN barcode scan (`barcode-detector` polyfill), alongside the photo scan
 
 ## Phase 9: Growth & operations
 

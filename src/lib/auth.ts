@@ -131,7 +131,8 @@ export async function createDevSession(email: string): Promise<AuthResult> {
 export async function deleteDevUsers(
   domain: string,
 ): Promise<{ ok: true; deleted: number } | { ok: false; error: string }> {
-  const admin = createAdminClient().auth.admin;
+  const client = createAdminClient();
+  const admin = client.auth.admin;
   const suffix = `@${domain}`;
   let deleted = 0;
 
@@ -140,6 +141,10 @@ export async function deleteDevUsers(
     if (error) return { ok: false, error: error.message };
     for (const user of data.users) {
       if (!user.email?.endsWith(suffix)) continue;
+      for (const bucket of USER_FILE_BUCKETS) {
+        const removed = await removeUserFiles(client, bucket, user.id);
+        if (!removed.ok) return removed;
+      }
       const result = await admin.deleteUser(user.id);
       if (result.error) return { ok: false, error: result.error.message };
       deleted++;

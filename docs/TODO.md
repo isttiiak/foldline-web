@@ -26,8 +26,9 @@ session: tick what is done, add what is next.
       Prod later, with the Vercel deploy
 - [x] `0004_profile_details.sql` and `supabase/dev-seeds/sample_library.sql` run on dev
       (2026-10-01): profile e2e passes, izhaaannn account has 12 sample books
-- [ ] Once CI is green: paste `supabase/migrations/0005_book_covers.sql` on dev (own cover
-      photos need it; adding books works without it) and tick it in `docs/MIGRATIONS.md`
+- [x] `0005_book_covers.sql` run on dev (2026-10-01): cover upload e2e passes
+- [ ] `git push origin main v0.1.0`, then create the GitHub release from the tag (notes in
+      `CHANGELOG.md`)
 
 ## Claude
 
@@ -69,7 +70,10 @@ state badge, progress bar). TanStack Query is now installed (`QueryProvider` in 
 layout, not persisted yet). Shared bits: `src/components/{tag-input,form-field}.tsx`,
 `src/lib/{images,text}.ts`.
 
-Next: Phase 2 "ISBN barcode scan (`barcode-detector` polyfill)", then "Book detail page".
+Barcode scan deferred by the owner (moved to Phase 8 with a photo-scan idea using an opt-in
+vision model). Tagged `v0.1.0` locally (see `CHANGELOG.md`).
+
+Next: Phase 2 "Book detail page: editions, reads, progress logging in any unit".
 "Library views" later replaces the simple grid with sorting, filters and search.
 
 ## Known context

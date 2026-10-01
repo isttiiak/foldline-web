@@ -43,6 +43,40 @@ test("a Bangla book typed by hand lands on the shelf", async ({ page }) => {
   await expect(card.getByText("Reading", { exact: true })).toBeVisible();
 });
 
+test("an own cover photo is stored and shown on the shelf", async ({
+  page,
+}) => {
+  const title = `Cover test ${Date.now()}`;
+  await openHandForm(page);
+  await page.getByLabel("Title", { exact: true }).fill(title);
+  // A tiny 2x3 PNG: the browser resizes and re-encodes it before upload.
+  const png = Buffer.from(
+    "iVBORw0KGgoAAAANSUhEUgAAAAIAAAADCAIAAAA2iEnWAAAAEklEQVR4nGP4UBX1oSqKAYUCAHLVCpkXcAQuAAAAAElFTkSuQmCC",
+    "base64",
+  );
+  await page
+    .locator('input[type="file"]')
+    .setInputFiles({ name: "cover.png", mimeType: "image/png", buffer: png });
+  await expect(
+    page.getByRole("button", { name: "Change cover" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Add to my shelf" }).click();
+  await expect(
+    page.getByRole("heading", { name: `"${title}" is on your shelf` }),
+  ).toBeVisible(SAVE);
+  await expect(page.getByText("its cover photo was not")).toHaveCount(0);
+
+  await page.goto("/app");
+  const card = page
+    .getByRole("list", { name: "Your books" })
+    .getByRole("listitem")
+    .filter({ hasText: title });
+  await expect(card.locator("img")).toHaveAttribute(
+    "src",
+    /\/storage\/v1\/object\/sign\/covers\//,
+  );
+});
+
 test("the same ISBN cannot be added twice", async ({ page }) => {
   for (const attempt of [1, 2]) {
     await openHandForm(page);
