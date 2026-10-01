@@ -54,13 +54,15 @@ export const getProfile = cache(async (): Promise<Profile | null> => {
     id: row.id,
     email: user.email,
     displayName: row.display_name,
-    avatarSrc: ownPhoto ?? row.avatar_url,
+    // `??` fallbacks: a project without migration 0004 (or a stale API schema
+    // cache) has no such columns, and the page should still render.
+    avatarSrc: ownPhoto ?? row.avatar_url ?? null,
     hasOwnPhoto: Boolean(row.avatar_path),
     hasProviderPhoto: Boolean(row.avatar_url),
-    bio: row.bio,
+    bio: row.bio ?? null,
     timezone: row.timezone,
-    preferredFormats: row.preferred_formats,
-    favouriteGenres: row.favourite_genres,
+    preferredFormats: row.preferred_formats ?? [],
+    favouriteGenres: row.favourite_genres ?? [],
     memberSince: row.created_at,
     booksOnShelf: count ?? 0,
   };
