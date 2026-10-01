@@ -3,9 +3,16 @@ import { describe, expect, test } from "vitest";
 import type { BookCandidate } from "@/features/metadata/types";
 
 import { paletteIndex } from "./components/book-cover";
-import { lockedFields } from "./locks";
+import { changedFields, lockedFields, nextLocks } from "./locks";
 import { parseFindInput } from "./parse-input";
-import { addBookSchema, formValuesFrom, readDates } from "./schemas";
+import {
+  addBookSchema,
+  editionColumns,
+  editionEditSchema,
+  formValuesFrom,
+  readDates,
+  workEditSchema,
+} from "./schemas";
 
 const candidate: BookCandidate = {
   provider: "openlibrary",
@@ -184,4 +191,108 @@ describe("lockedFields", () => {
 test("generated covers keep their colours", () => {
   expect(paletteIndex("পথের পাঁচালী")).toBe(paletteIndex("পথের পাঁচালী"));
   expect(paletteIndex("The Odyssey")).toBeGreaterThanOrEqual(0);
+});
+
+describe("editing on the book page", () => {
+  const workId = "8f7c5c2e-7d1f-4d8e-9a43-0c6f1b2a3d4e";
+
+  test("changedFields finds edits, treats blank as empty, and counts clearing", () => {
+    const current = {
+      title: "The Hobbit",
+      subtitle: null,
+      description: "Old",
+      series_position: 1,
+      id: "x",
+    };
+    expect(
+      changedFields(current, {
+        title: "The Hobbit",
+        subtitle: "",
+        description: null,
+        series_position: 1,
+      }),
+    ).toEqual(["description"]);
+    expect(
+      changedFields(current, { title: "Hobbit", series_position: 2 }),
+    ).toEqual(["title", "series_position"]);
+    expect(changedFields({}, { format: "ebook", page_count: null })).toEqual([
+      "format",
+    ]);
+  });
+
+  test("nextLocks adds edited fields and drops unlocked ones", () => {
+    expect(nextLocks(["title"], ["description"], [])).toEqual([
+      "description",
+      "title",
+    ]);
+    expect(nextLocks(["title", "description"], [], ["title"])).toEqual([
+      "description",
+    ]);
+    // Unlocking wins for that save, even if the field also changed.
+    expect(nextLocks([], ["title"], ["title"])).toEqual([]);
+  });
+
+  test("workEditSchema tidies text, authors and unlocks", () => {
+    const parsed = workEditSchema.parse({
+      workId,
+      title: "  The Hobbit ",
+      subtitle: "",
+      authors: ["J. R. R. Tolkien", " j. r. r. tolkien "],
+      series_position: 2.5,
+      unlock: ["description"],
+    });
+    expect(parsed).toMatchObject({
+      title: "The Hobbit",
+      subtitle: null,
+      authors: ["J. R. R. Tolkien"],
+      series_name: null,
+      series_position: 2.5,
+      unlock: ["description"],
+    });
+    expect(workEditSchema.safeParse({ workId, title: " " }).success).toBe(
+      false,
+    );
+    expect(
+      workEditSchema.safeParse({
+        workId,
+        title: "A",
+        authors: [],
+        unlock: ["user_id"],
+      }).success,
+    ).toBe(false);
+    expect(
+      workEditSchema.safeParse({
+        workId,
+        title: "A",
+        authors: [],
+        series_position: -1,
+      }).success,
+    ).toBe(false);
+  });
+
+  test("editionEditSchema normalises the ISBN, editionColumns picks the length unit", () => {
+    const parsed = editionEditSchema.parse({
+      editionId: workId,
+      format: "audiobook",
+      isbn_13: "0-14-026886-3",
+      page_count: 300,
+      duration_minutes: 725,
+    });
+    expect(parsed.isbn_13).toBe("9780140268867");
+    expect(editionColumns(parsed)).toMatchObject({
+      page_count: null,
+      duration_minutes: 725,
+    });
+    expect(editionColumns({ ...parsed, format: "paperback" })).toMatchObject({
+      page_count: 300,
+      duration_minutes: null,
+    });
+    expect(
+      editionEditSchema.safeParse({
+        editionId: workId,
+        format: "ebook",
+        isbn_13: "978-0-14-044913-7",
+      }).success,
+    ).toBe(false);
+  });
 });

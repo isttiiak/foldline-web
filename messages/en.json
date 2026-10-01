@@ -241,6 +241,206 @@
       "another": "Add another"
     }
   },
+  "BookDetail": {
+    "back": "Your library",
+    "notFound": {
+      "metaTitle": "Book not found",
+      "title": "This book is not on your shelf",
+      "body": "It may have been removed, or the link is not quite right. Your library is just one tap away.",
+      "back": "Back to your library"
+    },
+    "hero": {
+      "pages": "{count, plural, one {# page} other {# pages}}",
+      "duration": "{hours} h {minutes} min",
+      "seriesWithPosition": "{series} · {position}",
+      "by": "by {authors}",
+      "translatedBy": "Translated by {name}",
+      "edit": "Edit details"
+    },
+    "locks": {
+      "locked": "Locked",
+      "unlocking": "Unlocks on save",
+      "unlockLabel": "Locked. Unlock {field}",
+      "relockLabel": "Unlocks on save. Keep {field} locked",
+      "hint": "You edited this by hand, so the catalogues will not change it. Unlock it to let them update it again."
+    },
+    "work": {
+      "title": "Edit details",
+      "intro": "Fix anything the catalogues got wrong, or fill in what they did not know. Your edits stay yours.",
+      "series": "Series",
+      "seriesPlaceholder": "e.g. Earthsea",
+      "seriesPosition": "Number",
+      "positionError": "Please use a number, like 2 or 2.5.",
+      "originalTitle": "Original title",
+      "originalLanguage": "Original language",
+      "locksNote": "Fields you change here are locked, so a catalogue refresh never overwrites them.",
+      "save": "Save details"
+    },
+    "edition": {
+      "addTitle": "Add an edition",
+      "editTitle": "Edit edition",
+      "addIntro": "Another format, a translation or a different printing of the same book.",
+      "editIntro": "Fields you change here are locked, so a catalogue refresh never overwrites them.",
+      "isbnTaken": "That ISBN is already on another book or edition on your shelf.",
+      "ownTitleLegend": "A different title for this edition",
+      "ownTitleHint": "Optional, for translations or editions published under another name.",
+      "ownTitle": "Edition title",
+      "ownSubtitle": "Edition subtitle",
+      "save": "Save edition",
+      "add": "Add edition"
+    },
+    "editions": {
+      "title": "Editions",
+      "add": "Add",
+      "edit": "Edit",
+      "editLabel": "Edit the {format} edition",
+      "addPhoto": "Add photo",
+      "changePhoto": "Change photo",
+      "removePhoto": "Remove photo",
+      "coverSaved": "Cover photo saved.",
+      "refresh": "Refresh from catalogues",
+      "refreshed": "{count, plural, one {Updated # detail from the catalogues.} other {Updated # details from the catalogues.}}",
+      "nothingNew": "Nothing new in the catalogues. Everything is up to date.",
+      "lockedField": "Kept as you typed it",
+      "noDetails": "No details yet. Edit to add pages, ISBN or publisher.",
+      "remove": "Remove",
+      "removeLabel": "Remove the {format} edition",
+      "confirmRemove": "Remove edition",
+      "keep": "Keep it"
+    },
+    "errors": {
+      "invalid": "Some details need another look; see the notes above.",
+      "generic": "Something went wrong and nothing was changed. Please try again in a moment.",
+      "rateLimited": "That was a lot of changes at once. Please wait a little while, then try again.",
+      "duplicate": "That ISBN is already on your shelf.",
+      "lastEdition": "A book keeps at least one edition. Add another before removing this one.",
+      "not_found": "The catalogues do not know this ISBN. Your details stay as they are.",
+      "busy": "The book catalogues are slow right now. Try again in a moment.",
+      "no_isbn": "Add an ISBN to this edition to look it up in the catalogues."
+    },
+    "delete": {
+      "open": "Remove book",
+      "title": "Remove \"{title}\"?",
+      "body": "This removes the book with all its editions, reads, ratings, reflections and progress, and any cover photos you added. It cannot be undone.",
+      "keep": "Keep it",
+      "confirm": "Remove book"
+    },
+    "about": {
+      "title": "About this book",
+      "more": "Read more",
+      "less": "Show less",
+      "originalTitle": "Original title",
+      "originalLanguage": "Original language"
+    }
+  },
+  "Reads": {
+    "current": "Your reading",
+    "currentReread": "This read",
+    "none": "This book has no reads yet. Start one whenever you like.",
+    "startReading": "Start reading",
+    "reread": "Read it again",
+    "progress": "Progress",
+    "logProgress": "Log progress",
+    "past": "Earlier reads",
+    "editPast": "Show and edit this read",
+    "stateLegend": "Where is this read?",
+    "edition": "Edition for this read",
+    "noEdition": "Not sure",
+    "dates": {
+      "started": "Started",
+      "finished": "Finished",
+      "stopped": "Stopped",
+      "save": "Save dates",
+      "cancel": "Cancel",
+      "unknown": "not set",
+      "change": "Change dates"
+    },
+    "reflection": {
+      "label": "A few words for future you",
+      "placeholder": "What stayed with you? Optional, and only ever yours.",
+      "save": "Save words",
+      "saved": "Saved."
+    },
+    "delete": {
+      "open": "Delete this read",
+      "question": "Delete this read and its progress?",
+      "confirm": "Delete read",
+      "keep": "Keep it"
+    },
+    "rating": {
+      "legend": "Your rating",
+      "stars": "{stars, plural, one {# star} other {# stars}}",
+      "clear": "Clear rating"
+    },
+    "errors": {
+      "invalid": "That change could not be saved; check the details.",
+      "generic": "Something went wrong and nothing was changed. Please try again in a moment.",
+      "rateLimited": "That was a lot of changes at once. Please wait a little while, then try again.",
+      "dateOrder": "The end date comes before the start date. Check the dates.",
+      "future": "Dates cannot be in the future.",
+      "notYet": "Finish or set this read down first, then start a new one."
+    }
+  },
+  "Progress": {
+    "log": {
+      "unit": "Measured in",
+      "value": {
+        "pages": "Page",
+        "percent": "Percent",
+        "location": "Location",
+        "minutes": "Time listened",
+        "chapter": "Chapter"
+      },
+      "minutesPlaceholder": "e.g. 1:35",
+      "of": "Of how many",
+      "ofPages": "of {total} pages",
+      "ofMinutes": "of {total} minutes",
+      "when": "When",
+      "hint": "Log whenever you like. There is no right amount.",
+      "noPageCount": "Add the page count to this edition to see how far along you are.",
+      "noDuration": "Add the length in minutes to this edition to see how far along you are.",
+      "typedTotalHint": "Add \"of how many\" to see how far along you are; it is remembered for next time.",
+      "save": "Log it",
+      "close": "Close",
+      "logged": "Logged.",
+      "loggedPercent": "Logged. You are {percent}% of the way through.",
+      "wholeBook": "That is the whole book. Lovely.",
+      "markFinished": "Mark it finished"
+    },
+    "units": {
+      "pages": "Pages",
+      "percent": "%",
+      "location": "Location",
+      "minutes": "Minutes",
+      "chapter": "Chapter"
+    },
+    "errors": {
+      "invalid": "Please type where you are as a number.",
+      "generic": "Something went wrong and nothing was logged. Please try again in a moment.",
+      "rateLimited": "That was a lot at once. Please wait a little while, then try again.",
+      "pastTheEnd": "That is past the end of the book. Check the number or the total.",
+      "future": "That day has not happened yet."
+    },
+    "entry": {
+      "pages": "Page {value}",
+      "pagesOf": "Page {value} of {total}",
+      "percent": "{value}%",
+      "percentOf": "{value}%",
+      "location": "Location {value}",
+      "locationOf": "Location {value} of {total}",
+      "minutes": "{value} listened",
+      "minutesOf": "{value} of {total}",
+      "chapter": "Chapter {value}",
+      "chapterOf": "Chapter {value} of {total}"
+    },
+    "history": {
+      "title": "Along the way",
+      "remove": "Remove \"{entry}\"",
+      "confirm": "Remove",
+      "keep": "Keep",
+      "error": "That entry could not be removed. Please try again."
+    }
+  },
   "Login": {
     "metaTitle": "Sign in",
     "title": "Welcome to Foldline",

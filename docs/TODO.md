@@ -73,8 +73,18 @@ layout, not persisted yet). Shared bits: `src/components/{tag-input,form-field}.
 Barcode scan deferred by the owner (moved to Phase 8 with a photo-scan idea using an opt-in
 vision model). Tagged `v0.1.0` locally (see `CHANGELOG.md`).
 
-Next: Phase 2 "Book detail page: editions, reads, progress logging in any unit".
-"Library views" later replaces the simple grid with sorting, filters and search.
+Done on 2026-10-01: book detail page `/app/books/[id]` (shelf cards link to it). Edit work
+and edition details in side sheets (edited fields locked, locked fields can be unlocked),
+refresh an edition from the catalogues, add/remove editions, own cover photo per edition,
+reads (state chips, dates, half-star rating, reflection, edition, reread after finish/DNF,
+delete), progress in pages/percent/location/minutes/chapter with a calm history, delete a
+book (covers removed from Storage, unused authors tidied). No migration. New rate limits
+`book-edit` and `book-refresh`. Checked in the browser pane at desktop and phone width.
+Fixed: reads created together (the dev seed) now order by latest activity, so the shelf and
+book page agree on the current read.
+
+Next: Phase 2 "Library views: by state, sort, filter, trigram search" (replaces the simple
+grid on `/app`).
 
 ## Known context
 

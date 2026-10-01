@@ -29,7 +29,7 @@ Tick items as they are completed. One item per Claude Code session.
 - [x] Metadata providers (Open Library, Google Books) + cache + field locks
 - [x] Private profile page: Google name/photo prefilled, own photo upload (private Storage, WebP), email (read-only), member since, timezone, short bio, reading preferences (formats, genres); editable any time, never public
 - [x] Add book: search, paste ISBN/URL, manual entry (no-ISBN books, cover photo upload)
-- [ ] Book detail page: editions, reads, progress logging in any unit
+- [x] Book detail page: editions, reads, progress logging in any unit
 - [ ] Library views: by state, sort, filter, trigram search
 - [ ] Command palette (⌘K): add, log progress, find
 

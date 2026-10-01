@@ -146,6 +146,20 @@ only, per-user limit `metadata-lookup`.
   while empty; edition title/subtitle are never set by providers.
   Many Bangla/local editions will have no provider data. Manual entry + cover photo is a
   first-class path, not an error state.
+- Book page (`/app/books/[id]`, work id): `getBook` (`src/features/books/server/queries.ts`)
+  loads the work, credits, editions (signed cover URLs) and reads with their latest 200
+  progress entries in one request. The current read is the newest (`newestReadFirst` in
+  `src/features/reads/order.ts`: created last, ties broken by the latest date). Edits go
+  through server actions in `books/server/detail-actions.ts`, `reads/server/actions.ts` and
+  `progress/server/actions.ts` (Zod input, typed results, `book-edit` / `book-refresh` rate
+  limits, `revalidatePath("/app", "layout")`). Edit forms use column names as keys, so
+  `changedFields` maps edits straight to locks; `nextLocks` adds edited fields and removes
+  the ones the reader unlocked. Read state/date rules: `reads/transitions.ts`.
+- Progress: `fraction` = pages / `page_count`, minutes / `duration_minutes`, percent / 100,
+  or location/chapter / a total typed in the log form (not stored; the next form prefills
+  it from value / fraction of the last entry). Unknown totals keep `fraction` null. Logging
+  a planned or resting read moves it to reading. Deleting a book removes its cover files
+  and any author rows no longer credited on another book.
 
 ## Environment variables (`.env.example`)
 

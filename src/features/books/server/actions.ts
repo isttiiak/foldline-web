@@ -20,19 +20,11 @@ import {
   addBookSchema,
   type AddBookState,
   type AddBookValues,
-  BOOK_LIMITS,
-  COVER_TYPES,
   readDates,
 } from "../schemas";
-import { COVER_BUCKET } from "./covers";
-
-type Supabase = Awaited<ReturnType<typeof createClient>>;
-
-const EXTENSIONS: Record<(typeof COVER_TYPES)[number], string> = {
-  "image/webp": "webp",
-  "image/jpeg": "jpg",
-  "image/png": "png",
-};
+import { authorIds } from "./authors";
+import { coverFile, uploadCover } from "./covers";
+import type { Supabase } from "./guard";
 
 function parseBook(formData: FormData) {
   const raw = formData.get("book");
@@ -42,40 +34,6 @@ function parseBook(formData: FormData) {
   } catch {
     return null;
   }
-}
-
-/** A picked cover photo, if it is one we can store. */
-function coverFile(formData: FormData): File | null | "invalid" {
-  const file = formData.get("cover");
-  if (!(file instanceof File) || file.size === 0) return null;
-  const allowed = COVER_TYPES.some((type) => type === file.type);
-  return allowed && file.size <= BOOK_LIMITS.coverBytes ? file : "invalid";
-}
-
-/** The reader's author rows for these names: existing ones reused, the rest created. */
-async function authorIds(
-  supabase: Supabase,
-  names: string[],
-): Promise<{ ids: Map<string, string>; created: string[] } | null> {
-  const ids = new Map<string, string>();
-  if (names.length === 0) return { ids, created: [] };
-
-  const { data: existing, error } = await supabase
-    .from("authors")
-    .select("id, name")
-    .in("name", names);
-  if (error) return null;
-  for (const author of existing) ids.set(author.name.toLowerCase(), author.id);
-
-  const missing = names.filter((name) => !ids.has(name.toLowerCase()));
-  if (missing.length === 0) return { ids, created: [] };
-  const { data: inserted, error: insertError } = await supabase
-    .from("authors")
-    .insert(missing.map((name) => ({ name })))
-    .select("id, name");
-  if (insertError) return null;
-  for (const author of inserted) ids.set(author.name.toLowerCase(), author.id);
-  return { ids, created: inserted.map((author) => author.id) };
 }
 
 /** Write the work, credits, edition and first read. Returns the new ids. */
@@ -176,33 +134,6 @@ async function insertBook(
   return { ok: true, workId: work.id, editionId: edition.id };
 }
 
-/** Upload a cover photo for the new edition; the book is saved either way. */
-async function saveCover(
-  supabase: Supabase,
-  userId: string,
-  editionId: string,
-  file: File,
-): Promise<boolean> {
-  const type = COVER_TYPES.find((allowed) => allowed === file.type)!;
-  const path = `${userId}/${editionId}-${Date.now()}.${EXTENSIONS[type]}`;
-  const { error } = await supabase.storage
-    .from(COVER_BUCKET)
-    .upload(path, file, { contentType: type, upsert: false });
-  if (error) {
-    console.error(`[books] cover upload failed: ${error.message}`);
-    return false;
-  }
-  const { error: updateError } = await supabase
-    .from("editions")
-    .update({ cover_storage_path: path })
-    .eq("id", editionId);
-  if (updateError) {
-    await supabase.storage.from(COVER_BUCKET).remove([path]);
-    return false;
-  }
-  return true;
-}
-
 /** Add a book to the reader's shelf: from a provider record or typed by hand. */
 export async function addBookAction(
   _prev: AddBookState,
@@ -253,7 +184,7 @@ export async function addBookAction(
   }
 
   const coverSaved = cover
-    ? await saveCover(supabase, user.id, result.editionId, cover)
+    ? (await uploadCover(supabase, user.id, result.editionId, cover)) !== null
     : true;
 
   if (values.isbn) {

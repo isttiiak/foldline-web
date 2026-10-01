@@ -1,12 +1,11 @@
 "use client";
 
 import { ArrowLeft, ImagePlus, Loader2, Plus, X } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import {
   startTransition,
   useActionState,
   useId,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -15,6 +14,7 @@ import { Field, fieldClass } from "@/components/form-field";
 import { TagInput } from "@/components/tag-input";
 import { Button } from "@/components/ui/button";
 import type { BookCandidate } from "@/features/metadata/types";
+import { localToday as today } from "@/lib/dates";
 import { resizeCover } from "@/lib/images";
 import { cn } from "@/lib/utils";
 
@@ -29,35 +29,11 @@ import {
   READ_STATES,
   type ReadState,
 } from "../schemas";
+import { languageOptions, useLanguageName } from "../languages";
 import { addBookAction } from "../server/actions";
 import { BookCover } from "./book-cover";
 
 const idle: AddBookState = { status: "idle" };
-
-/** Languages offered first; any other code from a provider is added to the list. */
-const LANGUAGES = [
-  "en",
-  "bn",
-  "hi",
-  "ur",
-  "ar",
-  "fr",
-  "de",
-  "es",
-  "it",
-  "pt",
-  "ru",
-  "ja",
-  "zh",
-  "ko",
-  "tr",
-  "fa",
-];
-
-/** The reader's local calendar date, YYYY-MM-DD. */
-function today(): string {
-  return new Date().toLocaleDateString("en-CA");
-}
 
 function text(form: FormData, name: string): string {
   const value = form.get(name);
@@ -85,7 +61,6 @@ export function BookForm({
   const t = useTranslations("AddBook.form");
   const tFormats = useTranslations("AddBook.formats");
   const tStates = useTranslations("AddBook.states");
-  const locale = useLocale();
   const id = useId();
   const initial = formValuesFrom(candidate);
 
@@ -109,14 +84,8 @@ export function BookForm({
     idle,
   );
 
-  const languageNames = useMemo(
-    () => new Intl.DisplayNames([locale], { type: "language" }),
-    [locale],
-  );
-  const languages =
-    initial.language && !LANGUAGES.includes(initial.language)
-      ? [initial.language, ...LANGUAGES]
-      : LANGUAGES;
+  const languageName = useLanguageName();
+  const languages = languageOptions(initial.language);
 
   const invalid = (field: AddBookField) =>
     state.status === "error" && state.fields?.includes(field);
@@ -355,7 +324,7 @@ export function BookForm({
                 <option value="">{t("languageUnknown")}</option>
                 {languages.map((code) => (
                   <option key={code} value={code}>
-                    {languageNames.of(code) ?? code}
+                    {languageName(code)}
                   </option>
                 ))}
               </select>

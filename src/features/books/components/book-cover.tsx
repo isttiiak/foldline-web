@@ -23,6 +23,11 @@ export function paletteIndex(title: string): number {
   return hash % PALETTES.length;
 }
 
+/** The two colours of a book's generated cover, for glows around it. */
+export function coverColours(title: string): readonly [string, string] {
+  return PALETTES[paletteIndex(title)];
+}
+
 /**
  * A book cover: the real image when there is one, otherwise a generated cover
  * with the title and author on a warm gradient (many local editions have none).
@@ -40,7 +45,7 @@ export function BookCover({
   className?: string;
   sizes?: string;
 }) {
-  const [from, to] = PALETTES[paletteIndex(title)];
+  const [from, to] = coverColours(title);
 
   return (
     <div

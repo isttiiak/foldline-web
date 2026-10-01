@@ -2,6 +2,7 @@ import "server-only";
 
 import { signedCoverUrls } from "@/features/books/server/covers";
 import type { ReadState } from "@/features/books/schemas";
+import { newestReadFirst } from "@/features/reads/order";
 import { createClient } from "@/lib/supabase/server";
 
 export type ShelfBook = {
@@ -28,7 +29,7 @@ export async function getShelf(): Promise<ShelfBook[]> {
       `id, title, created_at,
        work_authors(position, role, authors(name)),
        editions!editions_work_id_user_id_fkey(id, cover_url, cover_storage_path, created_at),
-       reads(id, state, edition_id, created_at,
+       reads(id, state, edition_id, created_at, started_on, finished_on, stopped_on,
              progress_events(fraction, occurred_at))`,
     )
     .order("created_at", { ascending: false })
@@ -44,9 +45,7 @@ export async function getShelf(): Promise<ShelfBook[]> {
   }
 
   const books = data.map((work) => {
-    const latestRead = [...work.reads].sort((a, b) =>
-      b.created_at.localeCompare(a.created_at),
-    )[0];
+    const latestRead = [...work.reads].sort(newestReadFirst)[0];
     const editions = [...work.editions].sort((a, b) =>
       a.created_at.localeCompare(b.created_at),
     );

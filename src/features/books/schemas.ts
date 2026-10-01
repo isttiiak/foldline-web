@@ -17,6 +17,8 @@ export const BOOK_LIMITS = {
   publisher: 500,
   published: 50,
   description: 20000,
+  series: 500,
+  seriesPosition: 100000,
   count: 100000,
   coverBytes: 2 * 1024 * 1024,
 } as const;
@@ -67,19 +69,38 @@ export const candidateSchema = z.object({
     .nullable(),
 }) satisfies z.ZodType<BookCandidate>;
 
-const isoDate = z
+/** A calendar date, YYYY-MM-DD. */
+export const isoDate = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/)
   .refine((value) => !Number.isNaN(Date.parse(value)));
+
+/** An ISBN in any spelling, stored as ISBN-13 digits; empty means none. */
+const isbnInput = z
+  .string()
+  .trim()
+  .max(40)
+  .optional()
+  .transform((value, ctx) => {
+    if (!value) return null;
+    const isbn = toIsbn13(value);
+    if (!isbn) {
+      ctx.addIssue({ code: "custom", message: "invalid ISBN" });
+      return z.NEVER;
+    }
+    return isbn;
+  });
+
+const authorsInput = z
+  .array(z.string().max(BOOK_LIMITS.author))
+  .transform(uniqueNames)
+  .pipe(z.array(z.string()).max(BOOK_LIMITS.authors));
 
 /** The book as the form sends it (JSON in the `book` field of the FormData). */
 export const addBookSchema = z.object({
   title: z.string().trim().min(1).max(BOOK_LIMITS.title),
   subtitle: optionalText(BOOK_LIMITS.title),
-  authors: z
-    .array(z.string().max(BOOK_LIMITS.author))
-    .transform(uniqueNames)
-    .pipe(z.array(z.string()).max(BOOK_LIMITS.authors)),
+  authors: authorsInput,
   translator: optionalText(BOOK_LIMITS.author),
   format: z.enum(EDITION_FORMATS),
   pageCount: optionalCount,
@@ -87,20 +108,7 @@ export const addBookSchema = z.object({
   publisher: optionalText(BOOK_LIMITS.publisher),
   publishedDate: optionalText(BOOK_LIMITS.published),
   language: optionalText(35),
-  isbn: z
-    .string()
-    .trim()
-    .max(40)
-    .optional()
-    .transform((value, ctx) => {
-      if (!value) return null;
-      const isbn = toIsbn13(value);
-      if (!isbn) {
-        ctx.addIssue({ code: "custom", message: "invalid ISBN" });
-        return z.NEVER;
-      }
-      return isbn;
-    }),
+  isbn: isbnInput,
   description: optionalText(BOOK_LIMITS.description),
   state: z.enum(READ_STATES),
   /** The reader's local date (YYYY-MM-DD) for "started" or "finished". */
@@ -158,4 +166,101 @@ export function formValuesFrom(candidate: BookCandidate | null) {
     isbn: candidate?.isbn13 ?? candidate?.isbn10 ?? "",
     description: candidate?.description ?? "",
   };
+}
+
+/* Editing a book on its page. Keys are column names, so changed fields map to locks. */
+
+/** Work columns a reader can edit (and so lock against enrichment). */
+export const WORK_FIELDS = [
+  "title",
+  "subtitle",
+  "description",
+  "series_name",
+  "series_position",
+  "original_title",
+  "original_language",
+] as const;
+export type WorkField = (typeof WORK_FIELDS)[number];
+
+/** Edition columns a reader can edit (and so lock against enrichment). */
+export const EDITION_FIELDS = [
+  "format",
+  "isbn_13",
+  "page_count",
+  "duration_minutes",
+  "publisher",
+  "published_date",
+  "language",
+  "title",
+  "subtitle",
+] as const;
+export type EditionField = (typeof EDITION_FIELDS)[number];
+
+export const workEditSchema = z.object({
+  workId: z.uuid(),
+  title: z.string().trim().min(1).max(BOOK_LIMITS.title),
+  subtitle: optionalText(BOOK_LIMITS.title),
+  description: optionalText(BOOK_LIMITS.description),
+  series_name: optionalText(BOOK_LIMITS.series),
+  series_position: z
+    .number()
+    .min(0)
+    .max(BOOK_LIMITS.seriesPosition)
+    .nullable()
+    .optional()
+    .transform((value) => value ?? null),
+  original_title: optionalText(BOOK_LIMITS.title),
+  original_language: optionalText(35),
+  authors: authorsInput,
+  translator: optionalText(BOOK_LIMITS.author),
+  /** Locked fields the reader asked to let the catalogues update again. */
+  unlock: z.array(z.enum(WORK_FIELDS)).max(WORK_FIELDS.length).default([]),
+});
+export type WorkEditInput = z.input<typeof workEditSchema>;
+export type WorkEditValues = z.output<typeof workEditSchema>;
+
+const editionFields = {
+  format: z.enum(EDITION_FORMATS),
+  isbn_13: isbnInput,
+  page_count: optionalCount,
+  duration_minutes: optionalCount,
+  publisher: optionalText(BOOK_LIMITS.publisher),
+  published_date: optionalText(BOOK_LIMITS.published),
+  language: optionalText(35),
+  title: optionalText(BOOK_LIMITS.title),
+  subtitle: optionalText(BOOK_LIMITS.title),
+};
+
+export const editionEditSchema = z.object({
+  editionId: z.uuid(),
+  ...editionFields,
+  unlock: z
+    .array(z.enum(EDITION_FIELDS))
+    .max(EDITION_FIELDS.length)
+    .default([]),
+});
+export type EditionEditInput = z.input<typeof editionEditSchema>;
+
+export const editionAddSchema = z.object({
+  workId: z.uuid(),
+  ...editionFields,
+});
+export type EditionAddInput = z.input<typeof editionAddSchema>;
+
+type EditionColumns = Omit<z.output<typeof editionAddSchema>, "workId">;
+
+/** Audiobooks are measured in minutes, everything else in pages. */
+export function editionColumns<T extends EditionColumns>(values: T) {
+  const audio = values.format === "audiobook";
+  return {
+    format: values.format,
+    isbn_13: values.isbn_13,
+    page_count: audio ? null : values.page_count,
+    duration_minutes: audio ? values.duration_minutes : null,
+    publisher: values.publisher,
+    published_date: values.published_date,
+    language: values.language,
+    title: values.title,
+    subtitle: values.subtitle,
+  } satisfies Record<EditionField, unknown>;
 }

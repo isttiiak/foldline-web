@@ -64,6 +64,19 @@ export const RATE_LIMITS = {
     limit: 60,
     windowSeconds: 600,
   },
+  // Editing a book: details, editions, covers, reads and progress entries.
+  bookEdit: {
+    name: "book-edit",
+    per: "user",
+    limit: 300,
+    windowSeconds: 600,
+  },
+  bookRefresh: {
+    name: "book-refresh",
+    per: "user",
+    limit: 30,
+    windowSeconds: 600,
+  },
   metadataLookup: {
     name: "metadata-lookup",
     per: "user",

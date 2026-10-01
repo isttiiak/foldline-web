@@ -49,3 +49,40 @@ export function lockedFields(
     edition: lockFields([], edited(edition, manual)),
   };
 }
+
+function same(a: unknown, b: unknown): boolean {
+  const blank = (value: unknown) =>
+    value === null || value === undefined || value === "";
+  if (blank(a) && blank(b)) return true;
+  if (typeof a === "number" || typeof b === "number") {
+    return Number(a) === Number(b);
+  }
+  return a === b;
+}
+
+/**
+ * Columns whose new value differs from the stored one. Cleared fields count as
+ * changed: a reader who removed a wrong description should not see it return.
+ */
+export function changedFields<K extends string>(
+  current: Partial<Record<NoInfer<K>, unknown>>,
+  next: Record<K, unknown>,
+): K[] {
+  return (Object.keys(next) as K[]).filter(
+    (key) => !same(current[key], next[key]),
+  );
+}
+
+/**
+ * Locks after a hand edit: edited fields are added, and fields the reader chose
+ * to unlock are removed (unlocking wins for that save).
+ */
+export function nextLocks(
+  current: readonly string[],
+  edited: readonly string[],
+  unlocked: readonly string[],
+): string[] {
+  return lockFields(current, edited).filter(
+    (field) => !unlocked.includes(field),
+  );
+}

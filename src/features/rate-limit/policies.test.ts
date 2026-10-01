@@ -41,4 +41,11 @@ describe("policies", () => {
       bucketFor(RATE_LIMITS.magicLinkEmail, "s"),
     );
   });
+
+  test("book edits and catalogue refreshes are counted apart", () => {
+    expect(bucketFor(RATE_LIMITS.bookEdit, "u1")).toBe("book-edit:user:u1");
+    expect(bucketFor(RATE_LIMITS.bookRefresh, "u1")).toBe(
+      "book-refresh:user:u1",
+    );
+  });
 });

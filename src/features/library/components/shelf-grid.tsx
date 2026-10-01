@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { BookCover } from "@/features/books/components/book-cover";
@@ -32,59 +33,64 @@ export function ShelfGrid({ books }: { books: ShelfBook[] }) {
       {books.map((book, index) => (
         <li
           key={book.id}
-          className="flex enter flex-col gap-2"
+          className="enter"
           style={
             {
               "--enter-delay": `${Math.min(index, 12) * 40}ms`,
             } as React.CSSProperties
           }
         >
-          <motion.div
-            whileHover={{ y: -6, rotate: -1 }}
-            transition={springs.snappy}
-            className="relative"
+          <Link
+            href={`/app/books/${book.id}`}
+            className="flex flex-col gap-2 rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:ring-offset-4 focus-visible:ring-offset-background"
           >
-            <BookCover
-              src={book.coverSrc}
-              title={book.title}
-              author={book.authors[0]}
-            />
-            {book.state && (
-              <span
-                className={cn(
-                  "absolute top-2 right-2 rounded-full px-2.5 py-1 text-xs font-medium shadow-sm backdrop-blur-sm",
-                  STATE_STYLES[book.state],
-                )}
-              >
-                {tStates(book.state)}
-              </span>
-            )}
-            {book.state === "reading" && book.fraction !== null && (
-              <span
-                role="progressbar"
-                aria-label={t("progress")}
-                aria-valuemin={0}
-                aria-valuemax={100}
-                aria-valuenow={Math.round(book.fraction * 100)}
-                className="absolute inset-x-2 bottom-2 h-1.5 overflow-hidden rounded-full bg-black/40"
-              >
+            <motion.div
+              whileHover={{ y: -6, rotate: -1 }}
+              transition={springs.snappy}
+              className="relative"
+            >
+              <BookCover
+                src={book.coverSrc}
+                title={book.title}
+                author={book.authors[0]}
+              />
+              {book.state && (
                 <span
-                  className="block h-full rounded-full bg-gradient-to-r from-amber to-coral"
-                  style={{ width: `${Math.round(book.fraction * 100)}%` }}
-                />
+                  className={cn(
+                    "absolute top-2 right-2 rounded-full px-2.5 py-1 text-xs font-medium shadow-sm backdrop-blur-sm",
+                    STATE_STYLES[book.state],
+                  )}
+                >
+                  {tStates(book.state)}
+                </span>
+              )}
+              {book.state === "reading" && book.fraction !== null && (
+                <span
+                  role="progressbar"
+                  aria-label={t("progress")}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={Math.round(book.fraction * 100)}
+                  className="absolute inset-x-2 bottom-2 h-1.5 overflow-hidden rounded-full bg-black/40"
+                >
+                  <span
+                    className="block h-full rounded-full bg-gradient-to-r from-amber to-coral"
+                    style={{ width: `${Math.round(book.fraction * 100)}%` }}
+                  />
+                </span>
+              )}
+            </motion.div>
+            <div className="flex flex-col gap-0.5">
+              <span className="line-clamp-2 leading-snug font-medium">
+                {book.title}
               </span>
-            )}
-          </motion.div>
-          <div className="flex flex-col gap-0.5">
-            <span className="line-clamp-2 leading-snug font-medium">
-              {book.title}
-            </span>
-            {book.authors.length > 0 && (
-              <span className="line-clamp-1 text-sm text-muted-foreground">
-                {book.authors.join(", ")}
-              </span>
-            )}
-          </div>
+              {book.authors.length > 0 && (
+                <span className="line-clamp-1 text-sm text-muted-foreground">
+                  {book.authors.join(", ")}
+                </span>
+              )}
+            </div>
+          </Link>
         </li>
       ))}
     </ul>
