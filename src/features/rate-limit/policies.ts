@@ -77,6 +77,13 @@ export const RATE_LIMITS = {
     limit: 30,
     windowSeconds: 600,
   },
+  // The command palette loads the reader's book list once each time it opens cold.
+  paletteBooks: {
+    name: "palette-books",
+    per: "user",
+    limit: 60,
+    windowSeconds: 600,
+  },
   metadataLookup: {
     name: "metadata-lookup",
     per: "user",

@@ -88,7 +88,13 @@ author (trigram-indexed `ilike`), state chips with counts, format filter and fiv
 in the URL (`?q&state&format&sort&pages`), "Show more" in pages of 60, and a kind "nothing
 matches" state. No migration. Pure view logic and URL parsing are in `library/query.ts`.
 
-Next: Phase 2 "Command palette (⌘K): add, log progress, find".
+Done on 2026-10-01: command palette (`src/features/palette/`), opened with ⌘K / Ctrl+K or the
+Search button in the sidebar and the mobile header. Find a book, add one, go to a page, or log
+progress (reuses `LogProgress`). Books load once per opening (`getPaletteBooks`, new
+`palette-books` rate limit) and matching runs in the browser. Adds the `cmdk` dependency. No
+migration. Phase 2 is complete.
+
+Next: Phase 3 "Warm, animated finish moment + optional reflection prompt (finish and DNF)".
 
 ## Known context
 

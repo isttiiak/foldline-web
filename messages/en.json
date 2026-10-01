@@ -141,6 +141,22 @@
     "settings": "Settings",
     "yourProfile": "Your profile"
   },
+  "Palette": {
+    "title": "Search and actions",
+    "placeholder": "Find a book, add one, or log progress",
+    "pickPlaceholder": "Which book?",
+    "actions": "Actions",
+    "books": "Books",
+    "addBook": "Add a book",
+    "goTo": "Go to {place}",
+    "logProgress": "Log progress",
+    "logProgressFor": "Log progress for",
+    "loggingFor": "Logging progress for {title}",
+    "loading": "Looking through your shelf",
+    "empty": "No books match that.",
+    "open": "Search",
+    "shortcutHint": "Search and actions"
+  },
   "Library": {
     "title": "Your library",
     "emptyTitle": "A fresh, empty shelf",

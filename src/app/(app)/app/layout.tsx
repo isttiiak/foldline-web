@@ -13,14 +13,16 @@ export default async function AppLayout({ children }: LayoutProps<"/app">) {
   const user = await requireUser();
   const profile = await getProfile();
   return (
-    <AppShell
-      user={{
-        email: user.email,
-        name: profile?.displayName ?? null,
-        avatarSrc: profile?.avatarSrc ?? null,
-      }}
-    >
-      <QueryProvider>{children}</QueryProvider>
-    </AppShell>
+    <QueryProvider>
+      <AppShell
+        user={{
+          email: user.email,
+          name: profile?.displayName ?? null,
+          avatarSrc: profile?.avatarSrc ?? null,
+        }}
+      >
+        {children}
+      </AppShell>
+    </QueryProvider>
   );
 }

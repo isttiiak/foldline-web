@@ -31,7 +31,7 @@ Tick items as they are completed. One item per Claude Code session.
 - [x] Add book: search, paste ISBN/URL, manual entry (no-ISBN books, cover photo upload)
 - [x] Book detail page: editions, reads, progress logging in any unit
 - [x] Library views: by state, sort, filter, trigram search
-- [ ] Command palette (⌘K): add, log progress, find
+- [x] Command palette (⌘K): add, log progress, find
 
 ## Phase 3: Motivation & personal stats
 

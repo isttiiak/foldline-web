@@ -161,6 +161,11 @@ only, per-user limit `metadata-lookup`.
   trigram-indexed `ilike` on `works.title` and `authors.name`, loads up to 1000 works with
   their latest read, then filters and sorts in TypeScript (state lives on the latest read) and
   signs covers for the visible page only (60 per page). State counts reflect search and format.
+- Command palette (⌘K / Ctrl+K, `src/features/palette/`): mounted in `AppShell`, built on `cmdk`
+  inside a base-ui Dialog. `getPaletteBooks` (`library/server/palette.ts`, rate limit
+  `palette-books`) loads a light book list once per opening into TanStack Query
+  (`QueryProvider` now wraps the shell); `match.ts` filters in the browser (case and accent
+  insensitive, title and authors), so typing sends nothing. "Log progress" rows reuse `LogProgress`.
 - Progress: `fraction` = pages / `page_count`, minutes / `duration_minutes`, percent / 100,
   or location/chapter / a total typed in the log form (not stored; the next form prefills
   it from value / fraction of the last entry). Unknown totals keep `fraction` null. Logging

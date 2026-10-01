@@ -5,6 +5,7 @@ import {
   Library,
   LogOut,
   Menu,
+  Search,
   Settings,
   UserRound,
   type LucideIcon,
@@ -13,7 +14,7 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { AmbientGlow } from "@/components/ambient-glow";
 import { SkipLink } from "@/components/skip-link";
@@ -26,6 +27,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { signOutAction } from "@/features/auth/server/actions";
+import { CommandPalette } from "@/features/palette/components/command-palette";
 import { UserAvatar } from "@/features/profile/components/user-avatar";
 import { springs } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -97,6 +99,36 @@ function NavLinks({
   );
 }
 
+/** Opens the command palette; shows the keyboard shortcut where there is a keyboard. */
+function PaletteButton({
+  onClick,
+  className,
+}: {
+  onClick: () => void;
+  className?: string;
+}) {
+  const t = useTranslations("Palette");
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "group flex w-full press items-center gap-3 rounded-xl border border-border bg-background/40 px-3 py-2.5 text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none",
+        className,
+      )}
+    >
+      <Search aria-hidden className="size-4" />
+      <span className="flex-1 text-left text-sm">{t("open")}</span>
+      <kbd
+        aria-hidden
+        className="hidden rounded-md border px-1.5 py-0.5 font-sans text-xs md:inline"
+      >
+        ⌘K
+      </kbd>
+    </button>
+  );
+}
+
 export type ShellUser = {
   email: string | null;
   name: string | null;
@@ -163,15 +195,31 @@ export function AppShell({
   user: ShellUser;
 }) {
   const t = useTranslations("Common");
+  const tPalette = useTranslations("Palette");
   const [open, setOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+
+  // ⌘K on Mac, Ctrl+K elsewhere, from anywhere in the app.
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setPaletteOpen((current) => !current);
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   return (
     <div className="relative isolate flex min-h-full flex-1">
       <SkipLink />
       <AmbientGlow className="opacity-60" />
+      <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
 
       <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col gap-8 border-r border-sidebar-border bg-sidebar/70 px-4 py-6 backdrop-blur-md md:flex">
         <Wordmark href="/app" className="px-2" />
+        <PaletteButton onClick={() => setPaletteOpen(true)} />
         <NavLinks pillId="nav-pill-desktop" />
         <div className="mt-auto">
           <AccountFooter user={user} />
@@ -181,34 +229,47 @@ export function AppShell({
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex items-center justify-between border-b border-sidebar-border px-4 py-3 md:hidden">
           <Wordmark href="/app" />
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger
-              render={
-                <Button
-                  variant="ghost"
-                  size="icon-lg"
-                  aria-label={t("openMenu")}
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon-lg"
+              aria-label={tPalette("open")}
+              onClick={() => setPaletteOpen(true)}
+            >
+              <Search aria-hidden />
+            </Button>
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon-lg"
+                    aria-label={t("openMenu")}
+                  />
+                }
+              >
+                <Menu aria-hidden />
+              </SheetTrigger>
+              <SheetContent
+                side="left"
+                closeLabel={t("close")}
+                className="w-72 bg-sidebar px-4 py-6"
+              >
+                <SheetTitle className="sr-only">{t("openMenu")}</SheetTitle>
+                <Wordmark href="/app" className="mb-6 px-2" />
+                <NavLinks
+                  pillId="nav-pill-mobile"
+                  onNavigate={() => setOpen(false)}
                 />
-              }
-            >
-              <Menu aria-hidden />
-            </SheetTrigger>
-            <SheetContent
-              side="left"
-              closeLabel={t("close")}
-              className="w-72 bg-sidebar px-4 py-6"
-            >
-              <SheetTitle className="sr-only">{t("openMenu")}</SheetTitle>
-              <Wordmark href="/app" className="mb-6 px-2" />
-              <NavLinks
-                pillId="nav-pill-mobile"
-                onNavigate={() => setOpen(false)}
-              />
-              <div className="mt-auto">
-                <AccountFooter user={user} onNavigate={() => setOpen(false)} />
-              </div>
-            </SheetContent>
-          </Sheet>
+                <div className="mt-auto">
+                  <AccountFooter
+                    user={user}
+                    onNavigate={() => setOpen(false)}
+                  />
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </header>
 
         <main

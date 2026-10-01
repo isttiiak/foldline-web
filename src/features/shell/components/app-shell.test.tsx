@@ -1,12 +1,22 @@
 import { screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
+import { QueryProvider } from "@/components/query-provider";
 import { renderWithIntl } from "@/test/render";
 
 import { AppShell } from "./app-shell";
 
 const pathname = vi.hoisted(() => ({ current: "/app" }));
-vi.mock("next/navigation", () => ({ usePathname: () => pathname.current }));
+vi.mock("next/navigation", () => ({
+  usePathname: () => pathname.current,
+  useRouter: () => ({ push: vi.fn() }),
+}));
+vi.mock("@/features/library/server/palette", () => ({
+  getPaletteBooks: vi.fn(async () => []),
+}));
+vi.mock("@/features/progress/server/actions", () => ({
+  logProgressAction: vi.fn(),
+}));
 vi.mock("@/features/auth/server/actions", () => ({ signOutAction: vi.fn() }));
 
 const user = {
@@ -21,7 +31,11 @@ describe("AppShell", () => {
   });
 
   test("renders a labelled main nav with the Library link marked current", () => {
-    renderWithIntl(<AppShell user={user}>content</AppShell>);
+    renderWithIntl(
+      <QueryProvider>
+        <AppShell user={user}>content</AppShell>
+      </QueryProvider>,
+    );
 
     const nav = screen.getByRole("navigation", { name: "Main" });
     const link = within(nav).getByRole("link", { name: "Library" });
@@ -30,7 +44,11 @@ describe("AppShell", () => {
   });
 
   test("renders children inside the main landmark with a skip link to it", () => {
-    renderWithIntl(<AppShell user={user}>page body</AppShell>);
+    renderWithIntl(
+      <QueryProvider>
+        <AppShell user={user}>page body</AppShell>
+      </QueryProvider>,
+    );
 
     expect(screen.getByRole("main")).toHaveTextContent("page body");
     expect(
@@ -39,7 +57,11 @@ describe("AppShell", () => {
   });
 
   test("offers a sign out button", () => {
-    renderWithIntl(<AppShell user={user}>x</AppShell>);
+    renderWithIntl(
+      <QueryProvider>
+        <AppShell user={user}>x</AppShell>
+      </QueryProvider>,
+    );
     expect(
       screen.getByRole("button", { name: "Sign out" }),
     ).toBeInTheDocument();
@@ -47,7 +69,11 @@ describe("AppShell", () => {
 
   test("does not mark Library current on other routes", () => {
     pathname.current = "/app/settings";
-    renderWithIntl(<AppShell user={user}>x</AppShell>);
+    renderWithIntl(
+      <QueryProvider>
+        <AppShell user={user}>x</AppShell>
+      </QueryProvider>,
+    );
 
     const nav = screen.getByRole("navigation", { name: "Main" });
     expect(
@@ -56,7 +82,11 @@ describe("AppShell", () => {
   });
 
   test("links the reader's name and initials to their profile", () => {
-    renderWithIntl(<AppShell user={user}>x</AppShell>);
+    renderWithIntl(
+      <QueryProvider>
+        <AppShell user={user}>x</AppShell>
+      </QueryProvider>,
+    );
 
     const link = screen.getByRole("link", { name: /Reader A/ });
     expect(link).toHaveAttribute("href", "/app/profile");
