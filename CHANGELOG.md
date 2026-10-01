@@ -4,6 +4,19 @@ All notable changes to Foldline. Versions follow [SemVer](https://semver.org); w
 version is `0.x`, anything may still change. Each release is an annotated git tag
 (`vX.Y.Z`) with `package.json` at the same version.
 
+## v0.4.0 (2026-10-01)
+
+Reach anything from the keyboard.
+
+### Added
+
+- Command palette: press ⌘K (Ctrl+K elsewhere) or tap Search to find a book, add one, jump to
+  a page, or log progress without leaving where you are. Works with Bangla titles.
+
+### Database migrations
+
+None.
+
 ## v0.3.0 (2026-10-01)
 
 Find your books: search, filter and sort the shelf.
