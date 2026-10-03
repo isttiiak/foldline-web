@@ -77,6 +77,8 @@ test("edit a book, log progress, finish, reread, and remove it", async ({
 
   // Finish with four and a half stars and a few words.
   await pick(page, "Finished");
+  // Finishing opens a skippable moment; carry on without it.
+  await page.getByRole("button", { name: "Not now" }).click(SAVE);
   await expect(page.getByRole("radio", { name: "Finished" })).toBeChecked();
   await expect(page.getByRole("button", { name: "Read it again" })).toBeVisible(
     SAVE,

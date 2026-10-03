@@ -166,6 +166,11 @@ only, per-user limit `metadata-lookup`.
   `palette-books`) loads a light book list once per opening into TanStack Query
   (`QueryProvider` now wraps the shell); `match.ts` filters in the browser (case and accent
   insensitive, title and authors), so typing sends nothing. "Log progress" rows reuse `LogProgress`.
+- Finish moment (`reads/components/finish-moment.tsx`): `ReadEditor` opens it after the reader
+  moves the current read to `finished` or `dnf` (given `bookTitle`; past reads and dates edits never
+  do). A base-ui Dialog: warm for a finish (one-shot sparks, skipped under reduced motion, optional
+  rating and note), quiet for a stop (note only). Saves through `updateReadAction` only when
+  something changed; "Not now" writes nothing.
 - Progress: `fraction` = pages / `page_count`, minutes / `duration_minutes`, percent / 100,
   or location/chapter / a total typed in the log form (not stored; the next form prefills
   it from value / fraction of the last entry). Unknown totals keep `fraction` null. Logging

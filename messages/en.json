@@ -420,6 +420,22 @@
       "notYet": "Finish or set this read down first, then start a new one."
     }
   },
+  "FinishMoment": {
+    "finished": {
+      "title": "You finished {title}",
+      "body": "Lovely. Take a breath. If you like, leave yourself a note before it fades.",
+      "reflectionLabel": "A few words for future you",
+      "reflectionPlaceholder": "What stayed with you? Optional, and only ever yours."
+    },
+    "dnf": {
+      "title": "You set {title} down",
+      "body": "That is completely fine. Not every book fits every season, and it will be here if you ever want it again.",
+      "reflectionLabel": "What did not fit? (optional)",
+      "reflectionPlaceholder": "A line for yourself, if you want one."
+    },
+    "save": "Save",
+    "notNow": "Not now"
+  },
   "Progress": {
     "log": {
       "unit": "Measured in",

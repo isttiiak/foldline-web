@@ -19,6 +19,7 @@ import {
   keepRelevantDates,
   type ReadDates,
 } from "../transitions";
+import { FinishMoment, type MomentKind } from "./finish-moment";
 import { RatingStars } from "./rating-stars";
 
 type Shown = ReadDates & { state: ReadState; rating: number | null };
@@ -36,9 +37,12 @@ export function ReadEditor({
   read,
   editions,
   progress,
+  bookTitle,
 }: {
   read: BookRead;
   editions: BookEdition[];
+  /** When given, finishing or setting the book down opens the finish moment. */
+  bookTitle?: string;
   progress?: (api: { state: ReadState; finish: () => void }) => React.ReactNode;
 }) {
   const t = useTranslations("Reads");
@@ -52,6 +56,7 @@ export function ReadEditor({
   const [editingDates, setEditingDates] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [reflectionSaved, setReflectionSaved] = useState(false);
+  const [moment, setMoment] = useState<MomentKind | null>(null);
 
   const stored: Shown = {
     state: read.state,
@@ -81,7 +86,11 @@ export function ReadEditor({
 
   function changeState(state: ReadState) {
     const dates = datesForState(shown, state, localToday());
-    save({ state, ...dates }, { state, ...dates });
+    save({ state, ...dates }, { state, ...dates }, () => {
+      if (bookTitle && (state === "finished" || state === "dnf")) {
+        setMoment(state);
+      }
+    });
   }
 
   function onDates(event: React.FormEvent<HTMLFormElement>) {
@@ -226,6 +235,7 @@ export function ReadEditor({
           name="reflection"
           rows={3}
           maxLength={READ_LIMITS.reflection}
+          key={read.reflection ?? ""}
           defaultValue={read.reflection ?? ""}
           placeholder={t("reflection.placeholder")}
           onChange={() => setReflectionSaved(false)}
@@ -329,6 +339,20 @@ export function ReadEditor({
           </p>
         )}
       </div>
+
+      {moment && bookTitle && (
+        <FinishMoment
+          open
+          onOpenChange={(open) => {
+            if (!open) setMoment(null);
+          }}
+          kind={moment}
+          title={bookTitle}
+          readId={read.id}
+          rating={shown.rating}
+          reflection={read.reflection}
+        />
+      )}
     </div>
   );
 }

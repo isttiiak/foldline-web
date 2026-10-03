@@ -127,6 +127,7 @@ function CurrentRead({
         key={read.id}
         read={read}
         editions={book.editions}
+        bookTitle={book.title}
         progress={({ state, finish }) => (
           <div className="flex flex-col gap-4">
             {fraction !== null && (

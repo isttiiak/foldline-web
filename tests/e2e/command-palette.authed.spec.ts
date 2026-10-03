@@ -37,8 +37,11 @@ test("find, add and log progress from the command palette", async ({
   const input = dialog.getByRole("combobox");
 
   // Opens from the keyboard and closes with Escape.
-  await page.keyboard.press("ControlOrMeta+k");
-  await expect(input).toBeFocused();
+  // The shortcut only works once the page has hydrated: retry until it does.
+  await expect(async () => {
+    await page.keyboard.press("ControlOrMeta+k");
+    await expect(input).toBeFocused({ timeout: 2000 });
+  }).toPass();
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
 

@@ -94,7 +94,15 @@ progress (reuses `LogProgress`). Books load once per opening (`getPaletteBooks`,
 `palette-books` rate limit) and matching runs in the browser. Adds the `cmdk` dependency. No
 migration. Phase 2 is complete.
 
-Next: Phase 3 "Warm, animated finish moment + optional reflection prompt (finish and DNF)".
+Done on 2026-10-03: finish moment (`reads/components/finish-moment.tsx`). Moving the current read
+to Finished (or using "Mark finished") opens a warm dialog with a short one-shot animation, an
+optional rating and an optional note; moving it to Didn't finish opens a quiet, shame-free one with
+an optional note. Both are skippable and save only on request. No migration.
+
+Personal: `supabase/personal/` is gitignored (public repo). `notion_import.sql` there is the owner's
+one-off Notion import (run by hand on prod).
+
+Next: Phase 3 "Opt-in reading goals".
 
 ## Known context
 
