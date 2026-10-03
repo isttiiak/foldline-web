@@ -15,6 +15,7 @@ function row(overrides: Partial<LibraryRow> & { id: string }): LibraryRow {
     authors: [],
     coverPath: null,
     coverUrl: null,
+    coverDesign: null,
     state: "planned",
     fraction: null,
     rating: null,

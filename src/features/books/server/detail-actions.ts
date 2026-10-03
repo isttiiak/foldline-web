@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { z } from "zod";
 
+import { COVER_DESIGN_LOCK } from "@/features/covers/designs";
 import { isbn13To10 } from "@/features/metadata/isbn";
 import { lockFields } from "@/features/metadata/merge";
 import { enrichEdition } from "@/features/metadata/server/enrich";
@@ -12,6 +13,7 @@ import { type ActionResult, invalidFields } from "@/lib/action-result";
 
 import { changedFields, nextLocks } from "../locks";
 import {
+  coverDesignSchema,
   editionAddSchema,
   editionColumns,
   editionEditSchema,
@@ -296,6 +298,50 @@ export async function removeEditionCoverAction(
     return generic;
   }
   await removeCoverFiles(supabase, [edition.cover_storage_path]);
+  refreshLibrary();
+  return saved();
+}
+
+/**
+ * Choose the designed cover for an edition, or (design null) go back to letting a
+ * catalogue cover win. Choosing is locked so the catalogues never undo it.
+ */
+export async function setCoverDesignAction(
+  input: unknown,
+): Promise<SaveResult> {
+  const session = await signedInClient(RATE_LIMITS.bookEdit);
+  if (!session) return rateLimited;
+  const parsed = coverDesignSchema.safeParse(input);
+  if (!parsed.success) return { status: "error", reason: "invalid" };
+  const { editionId, design } = parsed.data;
+  const { supabase } = session;
+
+  const { data: edition } = await supabase
+    .from("editions")
+    .select("id, field_locks")
+    .eq("id", editionId)
+    .maybeSingle();
+  if (!edition) return generic;
+
+  const { error } = await supabase
+    .from("editions")
+    .update(
+      design
+        ? {
+            cover_design: design,
+            field_locks: lockFields(edition.field_locks, [COVER_DESIGN_LOCK]),
+          }
+        : {
+            field_locks: edition.field_locks.filter(
+              (field) => field !== COVER_DESIGN_LOCK,
+            ),
+          },
+    )
+    .eq("id", editionId);
+  if (error) {
+    console.error(`[books] cover design failed: ${error.message}`);
+    return generic;
+  }
   refreshLibrary();
   return saved();
 }

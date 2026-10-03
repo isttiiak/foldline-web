@@ -7,6 +7,8 @@ import { useId, useState, useTransition } from "react";
 import { ChoiceChips } from "@/components/choice-chips";
 import { Field, fieldClass } from "@/components/form-field";
 import { Button } from "@/components/ui/button";
+import { CoverPicker } from "@/features/covers/cover-picker";
+import type { CoverDesign } from "@/features/covers/designs";
 import { cn } from "@/lib/utils";
 
 import { languageOptions, useLanguageName } from "../languages";
@@ -21,6 +23,7 @@ import {
   addEditionAction,
   type AddEditionResult,
   type SaveResult,
+  setCoverDesignAction,
   updateEditionAction,
 } from "../server/detail-actions";
 import type { BookEdition } from "../server/queries";
@@ -115,6 +118,7 @@ function EditionForm({
       publisher: text(form, "publisher"),
       published_date: text(form, "published_date"),
       language: text(form, "language"),
+      bought_from: text(form, "bought_from"),
       title: text(form, "title"),
       subtitle: text(form, "subtitle"),
     };
@@ -257,7 +261,23 @@ function EditionForm({
             className={cn(fieldClass, "h-11")}
           />
         </Field>
+        <Field
+          id={`${id}-bought`}
+          label={t("boughtFrom")}
+          hint={t("boughtFromHint")}
+          action={lock("bought_from", t("boughtFrom"))}
+        >
+          <input
+            id={`${id}-bought`}
+            name="bought_from"
+            maxLength={BOOK_LIMITS.boughtFrom}
+            defaultValue={edition?.boughtFrom ?? ""}
+            className={cn(fieldClass, "h-11")}
+          />
+        </Field>
       </div>
+
+      {edition && <CoverChoice edition={edition} />}
 
       <fieldset className="flex flex-col gap-4 rounded-2xl border border-border/70 bg-background/30 p-4">
         <legend className="px-1 text-sm font-medium">
@@ -305,5 +325,67 @@ function EditionForm({
         </div>
       </div>
     </form>
+  );
+}
+
+/** Pick the designed cover for an existing edition; saved straight away. */
+function CoverChoice({ edition }: { edition: BookEdition }) {
+  const t = useTranslations("Covers");
+  const tErrors = useTranslations("BookDetail.errors");
+  const [chosen, setChosen] = useState(
+    edition.designChosen ? edition.coverDesign : null,
+  );
+  const [note, setNote] = useState<{ ok: boolean; text: string } | null>(null);
+  const [pending, startTransition] = useTransition();
+
+  function save(design: CoverDesign | null) {
+    setNote(null);
+    startTransition(async () => {
+      const result = await setCoverDesignAction({
+        editionId: edition.id,
+        design,
+      });
+      if (result.status === "error") {
+        setNote({ ok: false, text: tErrors(result.reason) });
+      } else {
+        setChosen(design);
+        setNote({ ok: true, text: t("saved") });
+      }
+    });
+  }
+
+  return (
+    <div className="flex flex-col gap-3">
+      <CoverPicker
+        legend={t("legend")}
+        selected={chosen}
+        disabled={pending}
+        onPick={save}
+      />
+      <p className="text-sm text-muted-foreground">{t("hint")}</p>
+      <div className="flex flex-wrap items-center gap-3">
+        {chosen && edition.hasCatalogueCover && (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={pending}
+            className="rounded-lg"
+            onClick={() => save(null)}
+          >
+            {t("useCatalogue")}
+          </Button>
+        )}
+        <span
+          aria-live="polite"
+          className={cn(
+            "text-sm",
+            note?.ok === false ? "text-destructive" : "text-teal",
+          )}
+        >
+          {note?.text}
+        </span>
+      </div>
+    </div>
   );
 }

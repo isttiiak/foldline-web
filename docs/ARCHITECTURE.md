@@ -171,6 +171,14 @@ only, per-user limit `metadata-lookup`.
   do). A base-ui Dialog: warm for a finish (one-shot sparks, skipped under reduced motion, optional
   rating and note), quiet for a stop (note only). Saves through `updateReadAction` only when
   something changed; "Not now" writes nothing.
+- Covers (`src/features/covers/`): ten calm SVG designs (`cover-art.tsx`, ids in `designs.ts`) for books
+  without a photo or catalogue cover. `editions.cover_design` stores the id (random at add time; a
+  title hash is the fallback for older rows). Priority: own photo > a design the reader chose on purpose
+  (marked by the `cover_design` entry in `field_locks`, so catalogues never undo it) > catalogue cover >
+  stored/default design. `setCoverDesignAction` sets or releases the choice. `editions.bought_from` is
+  free text ("where I got it"); a plain web link renders as a link (`books/bought-from.ts`).
+- Favicon and home-screen icon are generated from the fold mark (`app/icon.tsx`, `app/apple-icon.tsx`,
+  `lib/mark-image.tsx`).
 - Progress: `fraction` = pages / `page_count`, minutes / `duration_minutes`, percent / 100,
   or location/chapter / a total typed in the log form (not stored; the next form prefills
   it from value / fraction of the last entry). Unknown totals keep `fraction` null. Logging

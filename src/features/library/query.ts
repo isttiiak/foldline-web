@@ -56,6 +56,7 @@ export type LibraryRow = {
   authors: string[];
   coverPath: string | null;
   coverUrl: string | null;
+  coverDesign: string | null;
   state: ReadState | null;
   /** 0..1 from the latest progress entry of the latest read, when known. */
   fraction: number | null;

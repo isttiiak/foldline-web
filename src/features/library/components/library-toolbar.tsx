@@ -40,12 +40,15 @@ export function LibraryToolbar({
   const [text, setText] = useState(params.q);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-  // Following a link or the back button changes the URL; keep the box in step.
+  // The URL echoes back what we pushed, often a few letters behind what is typed now.
+  // Only a value we did not push (a link, the back button) replaces the box.
+  const [pushed, setPushed] = useState<string[]>([]);
   const [seenQ, setSeenQ] = useState(params.q);
   if (seenQ !== params.q) {
     setSeenQ(params.q);
-    // Our own debounced update trims the text; leave what is being typed alone.
-    if (params.q !== text.trim()) setText(params.q);
+    const ours = pushed.indexOf(params.q);
+    if (ours === -1) setText(params.q);
+    else setPushed(pushed.slice(ours + 1));
   }
   useEffect(() => () => clearTimeout(timer.current), []);
 
@@ -58,7 +61,11 @@ export function LibraryToolbar({
   function onSearch(value: string) {
     setText(value);
     clearTimeout(timer.current);
-    timer.current = setTimeout(() => go({ q: value.trim() }), SEARCH_DELAY_MS);
+    timer.current = setTimeout(() => {
+      const q = value.trim();
+      setPushed((list) => [...list, q]);
+      go({ q });
+    }, SEARCH_DELAY_MS);
   }
 
   const selectClass = cn(fieldClass, "h-10 w-auto appearance-auto py-0 pr-8");

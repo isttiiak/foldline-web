@@ -102,7 +102,12 @@ an optional note. Both are skippable and save only on request. No migration.
 Personal: `supabase/personal/` is gitignored (public repo). `notion_import.sql` there is the owner's
 one-off Notion import (run by hand on prod).
 
-Next: Phase 3 "Opt-in reading goals".
+Done on 2026-10-03 (v0.6.0): search-typing fix, state chip off the cover, calm designed SVG covers with
+random assignment and a picker (add form and edition sheet), "Where I got it", ISBN carry-over to the
+by-hand form, new favicon. Migration `0006` (owner runs it on dev and prod before deploying).
+
+Next: v0.7.0 Bengali-aware search (phonetic matching in the library and palette, romanised variants for
+the catalogue search), then Phase 3 "Opt-in reading goals".
 
 ## Known context
 

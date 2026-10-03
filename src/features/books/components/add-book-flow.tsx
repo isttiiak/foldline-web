@@ -18,7 +18,7 @@ import { FindBook } from "./find-book";
 
 type Step =
   | { name: "find" }
-  | { name: "form"; candidate: BookCandidate | null }
+  | { name: "form"; candidate: BookCandidate | null; isbn?: string }
   | {
       name: "added";
       result: Extract<AddBookState, { status: "added" }>;
@@ -111,7 +111,9 @@ export function AddBookFlow() {
       {step.name === "find" && (
         <motion.div key="find" {...stepMotion}>
           <FindBook
-            onPick={(candidate) => setStep({ name: "form", candidate })}
+            onPick={(candidate, isbn) =>
+              setStep({ name: "form", candidate, isbn })
+            }
           />
         </motion.div>
       )}
@@ -119,6 +121,7 @@ export function AddBookFlow() {
         <motion.div key="form" {...stepMotion}>
           <BookForm
             candidate={step.candidate}
+            isbn={step.isbn}
             onBack={() => setStep({ name: "find" })}
             onDone={(result) =>
               setStep({ name: "added", result, candidate: step.candidate })

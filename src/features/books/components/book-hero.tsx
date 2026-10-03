@@ -43,10 +43,14 @@ export function BookHero({
   const languageName = useLanguageName();
   const [editing, setEditing] = useState(false);
   const [from, to] = coverColours(book.title);
+  const primary =
+    book.editions.find((e) => e.id === edition?.id) ?? book.editions[0];
+  // Another edition's cover stands in only if this one has no say in the matter.
   const cover =
-    book.editions.find((e) => e.id === edition?.id)?.coverSrc ??
-    book.editions.find((e) => e.coverSrc)?.coverSrc ??
-    null;
+    primary?.coverSrc ??
+    (primary?.designChosen
+      ? null
+      : (book.editions.find((e) => e.coverSrc)?.coverSrc ?? null));
 
   const facts = [
     edition && tFormats(edition.format),
@@ -89,6 +93,7 @@ export function BookHero({
         >
           <BookCover
             src={cover}
+            design={primary?.coverDesign}
             title={book.title}
             author={book.authors[0]}
             sizes="(min-width: 768px) 192px, 160px"

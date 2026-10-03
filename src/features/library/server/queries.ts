@@ -1,5 +1,6 @@
 import "server-only";
 
+import { showsCatalogueCover } from "@/features/covers/designs";
 import { signedCoverUrls } from "@/features/books/server/covers";
 import type { ReadState } from "@/features/books/schemas";
 import { newestReadFirst } from "@/features/reads/order";
@@ -19,6 +20,7 @@ export type ShelfBook = {
   title: string;
   authors: string[];
   coverSrc: string | null;
+  coverDesign: string | null;
   state: ReadState | null;
   /** 0..1 from the latest progress entry of the latest read, when known. */
   fraction: number | null;
@@ -89,7 +91,7 @@ export async function getLibrary(params: LibraryParams): Promise<Library> {
     .select(
       `id, title, created_at,
        work_authors(position, role, authors(name)),
-       editions!editions_work_id_user_id_fkey(id, format, cover_url, cover_storage_path, created_at),
+       editions!editions_work_id_user_id_fkey(id, format, cover_url, cover_storage_path, cover_design, field_locks, created_at),
        reads(id, state, edition_id, rating, created_at, started_on, finished_on, stopped_on,
              progress_events(fraction, occurred_at))`,
     )
@@ -113,8 +115,11 @@ export async function getLibrary(params: LibraryParams): Promise<Library> {
     // The edition being read first, then any edition with a cover.
     const preferred = editions.find((e) => e.id === latestRead?.edition_id);
     const withCover = [preferred, ...editions].find(
-      (e) => e?.cover_storage_path || e?.cover_url,
+      (e) =>
+        e?.cover_storage_path ||
+        (e?.cover_url && showsCatalogueCover(e.field_locks)),
     );
+    const design = (preferred ?? editions[0])?.cover_design ?? null;
     const authors = [...work.work_authors]
       .filter((credit) => credit.role === "author")
       .sort((a, b) => a.position - b.position)
@@ -134,6 +139,7 @@ export async function getLibrary(params: LibraryParams): Promise<Library> {
       coverUrl: withCover?.cover_storage_path
         ? null
         : (withCover?.cover_url ?? null),
+      coverDesign: design,
       state: latestRead?.state ?? null,
       fraction: fraction === null ? null : Number(fraction),
       rating: ratings.length > 0 ? Math.max(...ratings) : null,
@@ -159,6 +165,7 @@ export async function getLibrary(params: LibraryParams): Promise<Library> {
       coverSrc: row.coverPath
         ? (signed.get(row.coverPath) ?? null)
         : row.coverUrl,
+      coverDesign: row.coverDesign,
       state: row.state,
       fraction: row.fraction,
     })),

@@ -25,6 +25,7 @@ import {
   uploadEditionCoverAction,
 } from "../server/detail-actions";
 import type { BookDetail, BookEdition } from "../server/queries";
+import { boughtFromLink } from "../bought-from";
 import { BookCover } from "./book-cover";
 import { EditionSheet } from "./edition-sheet";
 
@@ -126,7 +127,12 @@ function EditionCard({
     startTransition(action);
   }
 
-  const rows: { field: EditionField; label: string; value: string | null }[] = [
+  const rows: {
+    field: EditionField;
+    label: string;
+    value: string | null;
+    href?: string | null;
+  }[] = [
     { field: "isbn_13", label: tForm("isbn"), value: edition.isbn13 },
     edition.format === "audiobook"
       ? {
@@ -150,6 +156,12 @@ function EditionCard({
       label: tForm("language"),
       value: edition.language ? languageName(edition.language) : null,
     },
+    {
+      field: "bought_from",
+      label: tForm("boughtFrom"),
+      value: edition.boughtFrom,
+      href: boughtFromLink(edition.boughtFrom),
+    },
   ];
   const shown = rows.filter((row) => row.value);
 
@@ -159,6 +171,7 @@ function EditionCard({
         <div className="w-16 shrink-0">
           <BookCover
             src={edition.coverSrc}
+            design={edition.coverDesign}
             title={edition.title ?? book.title}
             author={book.authors[0]}
             sizes="64px"
@@ -178,7 +191,18 @@ function EditionCard({
                 <div key={row.field} className="contents">
                   <dt className="text-muted-foreground">{row.label}</dt>
                   <dd className="flex min-w-0 items-center gap-1.5">
-                    <span className="min-w-0 break-words">{row.value}</span>
+                    {row.href ? (
+                      <a
+                        href={row.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="min-w-0 break-all text-amber underline-offset-2 hover:underline focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
+                      >
+                        {row.value}
+                      </a>
+                    ) : (
+                      <span className="min-w-0 break-words">{row.value}</span>
+                    )}
                     {edition.locks.includes(row.field) && (
                       <Lock
                         className="size-3 shrink-0 text-muted-foreground"

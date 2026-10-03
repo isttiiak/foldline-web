@@ -49,6 +49,8 @@ export type Database = {
       };
       editions: {
         Row: {
+          bought_from: string | null;
+          cover_design: string | null;
           cover_storage_path: string | null;
           cover_url: string | null;
           created_at: string;
@@ -70,6 +72,8 @@ export type Database = {
           work_id: string;
         };
         Insert: {
+          bought_from?: string | null;
+          cover_design?: string | null;
           cover_storage_path?: string | null;
           cover_url?: string | null;
           created_at?: string;
@@ -91,6 +95,8 @@ export type Database = {
           work_id: string;
         };
         Update: {
+          bought_from?: string | null;
+          cover_design?: string | null;
           cover_storage_path?: string | null;
           cover_url?: string | null;
           created_at?: string;

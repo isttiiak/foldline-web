@@ -256,7 +256,10 @@
         "invalid": "Some details need another look; see the notes above.",
         "generic": "Something went wrong and the book was not added. Please try again in a moment.",
         "rateLimited": "That was a lot of books at once. Please wait a little while, then try again."
-      }
+      },
+      "boughtFrom": "Where I got it",
+      "boughtFromHint": "A shop link or address (optional). Only you can see it.",
+      "chooseCover": "Choose a designed cover"
     },
     "formats": {
       "paperback": "Paperback",
@@ -326,7 +329,9 @@
       "ownTitle": "Edition title",
       "ownSubtitle": "Edition subtitle",
       "save": "Save edition",
-      "add": "Add edition"
+      "add": "Add edition",
+      "boughtFrom": "Where I got it",
+      "boughtFromHint": "A shop link or address. Only you can see it."
     },
     "editions": {
       "title": "Editions",
@@ -761,5 +766,24 @@
     "title": "Your shelf is cleared",
     "body": "Your account and all its data are gone. Backups age out within 90 days. Thank you for reading with Foldline, and happy reading, wherever your next book takes you.",
     "home": "Back to the home page"
+  },
+  "Covers": {
+    "legend": "Designed cover",
+    "hint": "Shown when there is no photo. A photo you add always comes first.",
+    "shuffle": "Shuffle",
+    "useCatalogue": "Use the catalogue cover",
+    "saved": "Cover updated.",
+    "names": {
+      "dusk": "Dusk",
+      "ridge": "Ridge",
+      "ripple": "Ripple",
+      "arch": "Arch",
+      "grove": "Grove",
+      "dunes": "Dunes",
+      "stitch": "Stitch",
+      "tide": "Tide",
+      "lantern": "Lantern",
+      "paper": "Paper"
+    }
   }
 }

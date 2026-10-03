@@ -18,6 +18,7 @@ function pairs(values: AddBookValues, candidate: BookCandidate | null) {
       published_date: [values.publishedDate, candidate?.publishedDate ?? null],
       page_count: [values.pageCount, candidate?.pageCount ?? null],
       language: [values.language, candidate?.language ?? null],
+      bought_from: [values.boughtFrom, null],
     } satisfies Record<string, [Comparable, Comparable]>,
   };
 }

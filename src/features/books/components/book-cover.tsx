@@ -1,8 +1,10 @@
 import Image from "next/image";
 
+import { CoverArt } from "@/features/covers/cover-art";
+import { designOrDefault } from "@/features/covers/designs";
 import { cn } from "@/lib/utils";
 
-/** Warm gradient pairs for generated covers (never violet). */
+/** Soft colour pairs for the glow around a book (never violet). */
 const PALETTES = [
   ["var(--amber)", "var(--coral)"],
   ["var(--teal)", "var(--lime)"],
@@ -29,24 +31,25 @@ export function coverColours(title: string): readonly [string, string] {
 }
 
 /**
- * A book cover: the real image when there is one, otherwise a generated cover
- * with the title and author on a warm gradient (many local editions have none).
+ * A book cover: the real image when there is one, otherwise a designed SVG cover
+ * with the title and author on top (many local editions have no cover at all).
+ * `design` is the stored design id; without one a stable default is used.
  */
 export function BookCover({
   src,
   title,
   author,
+  design,
   className,
   sizes = "(min-width: 768px) 180px, 45vw",
 }: {
   src: string | null;
   title: string;
   author?: string | null;
+  design?: string | null;
   className?: string;
   sizes?: string;
 }) {
-  const [from, to] = coverColours(title);
-
   return (
     <div
       className={cn(
@@ -65,19 +68,16 @@ export function BookCover({
           className="object-cover"
         />
       ) : (
-        <div
-          aria-hidden
-          className="flex size-full flex-col justify-between p-3 text-primary-foreground"
-          style={{
-            backgroundImage: `linear-gradient(160deg, ${from}, ${to})`,
-          }}
-        >
-          <span className="line-clamp-5 text-sm leading-snug font-semibold break-words">
-            {title}
-          </span>
-          {author && (
-            <span className="line-clamp-2 text-xs opacity-80">{author}</span>
-          )}
+        <div aria-hidden className="relative size-full">
+          <CoverArt design={designOrDefault(design, title)} />
+          <div className="relative flex size-full flex-col justify-between p-3 text-[#f3ead9] [text-shadow:0_1px_3px_rgb(0_0_0/0.55)]">
+            <span className="line-clamp-5 text-sm leading-snug font-semibold break-words">
+              {title}
+            </span>
+            {author && (
+              <span className="line-clamp-2 text-xs opacity-90">{author}</span>
+            )}
+          </div>
         </div>
       )}
       {/* The spine: a soft crease on the left edge. */}

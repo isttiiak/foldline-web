@@ -5,19 +5,11 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { BookCover } from "@/features/books/components/book-cover";
-import type { ReadState } from "@/features/books/schemas";
+import { STATE_BADGES } from "@/features/books/components/book-hero";
 import { springs } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 import type { ShelfBook } from "../server/queries";
-
-const STATE_STYLES: Record<ReadState, string> = {
-  planned: "bg-background/80 text-muted-foreground",
-  reading: "bg-amber/90 text-primary-foreground",
-  resting: "bg-teal/85 text-primary-foreground",
-  finished: "bg-lime/85 text-primary-foreground",
-  dnf: "bg-background/80 text-muted-foreground",
-};
 
 /** The reader's books as a calm grid: cover, title, author, where it sits. */
 export function ShelfGrid({ books }: { books: ShelfBook[] }) {
@@ -51,19 +43,10 @@ export function ShelfGrid({ books }: { books: ShelfBook[] }) {
             >
               <BookCover
                 src={book.coverSrc}
+                design={book.coverDesign}
                 title={book.title}
                 author={book.authors[0]}
               />
-              {book.state && (
-                <span
-                  className={cn(
-                    "absolute top-2 right-2 rounded-full px-2.5 py-1 text-xs font-medium shadow-sm backdrop-blur-sm",
-                    STATE_STYLES[book.state],
-                  )}
-                >
-                  {tStates(book.state)}
-                </span>
-              )}
               {book.state === "reading" && book.fraction !== null && (
                 <span
                   role="progressbar"
@@ -87,6 +70,16 @@ export function ShelfGrid({ books }: { books: ShelfBook[] }) {
               {book.authors.length > 0 && (
                 <span className="line-clamp-1 text-sm text-muted-foreground">
                   {book.authors.join(", ")}
+                </span>
+              )}
+              {book.state && (
+                <span
+                  className={cn(
+                    "mt-1 w-fit rounded-full border px-2.5 py-0.5 text-xs font-medium",
+                    STATE_BADGES[book.state],
+                  )}
+                >
+                  {tStates(book.state)}
                 </span>
               )}
             </div>

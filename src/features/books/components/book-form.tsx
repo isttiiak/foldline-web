@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ImagePlus, Loader2, Plus, X } from "lucide-react";
+import { ArrowLeft, ImagePlus, Loader2, Plus, Shuffle, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import {
   startTransition,
@@ -13,6 +13,8 @@ import {
 import { Field, fieldClass } from "@/components/form-field";
 import { TagInput } from "@/components/tag-input";
 import { Button } from "@/components/ui/button";
+import { CoverPicker } from "@/features/covers/cover-picker";
+import { type CoverDesign, randomDesign } from "@/features/covers/designs";
 import type { BookCandidate } from "@/features/metadata/types";
 import { localToday as today } from "@/lib/dates";
 import { resizeCover } from "@/lib/images";
@@ -51,10 +53,13 @@ const chip =
 /** Check, complete or type in a book, pick where it goes on the shelf, then save. */
 export function BookForm({
   candidate,
+  isbn,
   onBack,
   onDone,
 }: {
   candidate: BookCandidate | null;
+  /** An ISBN the reader typed that no catalogue knew; it prefills the field. */
+  isbn?: string;
   onBack: () => void;
   onDone: (state: Extract<AddBookState, { status: "added" }>) => void;
 }) {
@@ -62,7 +67,8 @@ export function BookForm({
   const tFormats = useTranslations("AddBook.formats");
   const tStates = useTranslations("AddBook.states");
   const id = useId();
-  const initial = formValuesFrom(candidate);
+  const tCovers = useTranslations("Covers");
+  const initial = formValuesFrom(candidate, isbn);
 
   const [authors, setAuthors] = useState<string[]>(initial.authors);
   const [format, setFormat] = useState<EditionFormat>(initial.format);
@@ -73,6 +79,10 @@ export function BookForm({
     null,
   );
   const [coverError, setCoverError] = useState(false);
+  // A random designed cover to start with; picking or shuffling makes it the reader's choice.
+  const [design, setDesign] = useState<CoverDesign>(() => randomDesign());
+  const [designChosen, setDesignChosen] = useState(false);
+  const [pickingDesign, setPickingDesign] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const [state, dispatch, pending] = useActionState(
@@ -120,6 +130,9 @@ export function BookForm({
       publishedDate: text(form, "publishedDate"),
       language: text(form, "language"),
       isbn: text(form, "isbn"),
+      boughtFrom: text(form, "boughtFrom"),
+      coverDesign: design,
+      coverDesignChosen: designChosen,
       description: text(form, "description"),
       state: readState,
       date: readState === "planned" ? undefined : date,
@@ -131,7 +144,8 @@ export function BookForm({
     startTransition(() => dispatch(payload));
   }
 
-  const coverSrc = cover?.preview ?? candidate?.coverUrl ?? null;
+  const coverSrc =
+    cover?.preview ?? (designChosen ? null : (candidate?.coverUrl ?? null));
   const dateLabel =
     readState === "finished"
       ? t("finishedOn")
@@ -156,6 +170,7 @@ export function BookForm({
           <div className="w-40 md:w-full">
             <BookCover
               src={coverSrc}
+              design={design}
               title={initial.title || t("untitled")}
               author={authors[0]}
               sizes="176px"
@@ -195,6 +210,43 @@ export function BookForm({
                 <X className="size-4" aria-hidden />
                 {t("removeCover")}
               </Button>
+            )}
+          </div>
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-wrap justify-center gap-2">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="gap-1.5 rounded-lg"
+                onClick={() => {
+                  setDesign((current) => randomDesign(current));
+                  setDesignChosen(true);
+                }}
+              >
+                <Shuffle className="size-4" aria-hidden />
+                {tCovers("shuffle")}
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                aria-expanded={pickingDesign}
+                className="rounded-lg"
+                onClick={() => setPickingDesign((open) => !open)}
+              >
+                {t("chooseCover")}
+              </Button>
+            </div>
+            {pickingDesign && (
+              <CoverPicker
+                legend={tCovers("legend")}
+                selected={designChosen ? design : null}
+                onPick={(next) => {
+                  setDesign(next);
+                  setDesignChosen(true);
+                }}
+              />
             )}
           </div>
           {(coverError || invalid("cover")) && (
@@ -351,6 +403,18 @@ export function BookForm({
                 id={`${id}-translator`}
                 name="translator"
                 maxLength={BOOK_LIMITS.author}
+                className={cn(fieldClass, "h-11")}
+              />
+            </Field>
+            <Field
+              id={`${id}-bought`}
+              label={t("boughtFrom")}
+              hint={t("boughtFromHint")}
+            >
+              <input
+                id={`${id}-bought`}
+                name="boughtFrom"
+                maxLength={BOOK_LIMITS.boughtFrom}
                 className={cn(fieldClass, "h-11")}
               />
             </Field>

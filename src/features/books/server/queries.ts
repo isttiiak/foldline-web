@@ -7,6 +7,11 @@ import { PROGRESS_LIMITS } from "@/features/progress/schemas";
 import { newestReadFirst } from "@/features/reads/order";
 import { createClient } from "@/lib/supabase/server";
 
+import {
+  COVER_DESIGN_LOCK,
+  showsCatalogueCover,
+} from "@/features/covers/designs";
+
 import type { EditionFormat, ReadState } from "../schemas";
 import { signedCoverUrls } from "./covers";
 
@@ -22,9 +27,16 @@ export type BookEdition = {
   pageCount: number | null;
   durationMinutes: number | null;
   language: string | null;
-  /** What to show: the reader's own photo first, then the catalogue cover. */
+  boughtFrom: string | null;
+  /** What to show: the reader's own photo first, then (unless a design was chosen) the catalogue cover. */
   coverSrc: string | null;
   hasOwnCover: boolean;
+  /** Whether a catalogue cover exists (it can be chosen again after picking a design). */
+  hasCatalogueCover: boolean;
+  /** The stored design id (null: a default from the title). */
+  coverDesign: string | null;
+  /** The reader picked the design on purpose, so it beats the catalogue cover. */
+  designChosen: boolean;
   locks: string[];
 };
 
@@ -142,13 +154,17 @@ export const getBook = cache(async function getBook(
       pageCount: edition.page_count,
       durationMinutes: edition.duration_minutes,
       language: edition.language,
+      boughtFrom: edition.bought_from,
       coverSrc:
         (edition.cover_storage_path
           ? signed.get(edition.cover_storage_path)
           : null) ??
-        edition.cover_url ??
+        (showsCatalogueCover(edition.field_locks) ? edition.cover_url : null) ??
         null,
       hasOwnCover: Boolean(edition.cover_storage_path),
+      hasCatalogueCover: Boolean(edition.cover_url),
+      coverDesign: edition.cover_design,
+      designChosen: edition.field_locks.includes(COVER_DESIGN_LOCK),
       locks: edition.field_locks,
     })),
     reads: [...work.reads].sort(newestReadFirst).map((read) => ({

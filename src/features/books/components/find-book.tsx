@@ -28,6 +28,12 @@ function useDebounced<T>(value: T, ms: number): T {
   return debounced;
 }
 
+/** The ISBN in the box right now, so it can follow the reader to the by-hand form. */
+function byHandIsbn(text: string): string | undefined {
+  const typed = parseFindInput(text);
+  return typed.kind === "isbn" ? typed.isbn13 : undefined;
+}
+
 function failureOf(error: unknown): MetadataFailure | null {
   if (!error) return null;
   return error instanceof MetadataError ? error.reason : "network";
@@ -37,7 +43,8 @@ function failureOf(error: unknown): MetadataFailure | null {
 export function FindBook({
   onPick,
 }: {
-  onPick: (candidate: BookCandidate | null) => void;
+  /** `isbn` is what the reader typed when no catalogue knew it. */
+  onPick: (candidate: BookCandidate | null, isbn?: string) => void;
 }) {
   const t = useTranslations("AddBook.find");
   const id = useId();
@@ -188,7 +195,7 @@ export function FindBook({
           variant="outline"
           size="lg"
           className="h-10 gap-2 rounded-xl px-4"
-          onClick={() => onPick(null)}
+          onClick={() => onPick(null, byHandIsbn(text))}
         >
           <PenLine className="size-4" aria-hidden />
           {t("byHand")}

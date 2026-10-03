@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { COVER_DESIGNS } from "@/features/covers/designs";
 import { toIsbn13 } from "@/features/metadata/isbn";
 import type { BookCandidate } from "@/features/metadata/types";
 import { Constants } from "@/lib/supabase/database.types";
@@ -16,6 +17,7 @@ export const BOOK_LIMITS = {
   authors: 10,
   publisher: 500,
   published: 50,
+  boughtFrom: 500,
   description: 20000,
   series: 500,
   seriesPosition: 100000,
@@ -109,6 +111,12 @@ export const addBookSchema = z.object({
   publishedDate: optionalText(BOOK_LIMITS.published),
   language: optionalText(35),
   isbn: isbnInput,
+  /** Where the reader got this copy: a shop link or an address. */
+  boughtFrom: optionalText(BOOK_LIMITS.boughtFrom),
+  /** The designed cover shown when there is no photo or catalogue cover. */
+  coverDesign: z.enum(COVER_DESIGNS).optional(),
+  /** True when the reader picked the design on purpose (it then beats a catalogue cover). */
+  coverDesignChosen: z.boolean().optional(),
   description: optionalText(BOOK_LIMITS.description),
   state: z.enum(READ_STATES),
   /** The reader's local date (YYYY-MM-DD) for "started" or "finished". */
@@ -151,7 +159,11 @@ export function readDates(state: ReadState, date: string | undefined) {
 }
 
 /** A provider candidate as initial form values. */
-export function formValuesFrom(candidate: BookCandidate | null) {
+export function formValuesFrom(
+  candidate: BookCandidate | null,
+  /** An ISBN the reader typed that no catalogue knew. */
+  typedIsbn = "",
+) {
   return {
     title: candidate?.title ?? "",
     subtitle: candidate?.subtitle ?? "",
@@ -163,7 +175,8 @@ export function formValuesFrom(candidate: BookCandidate | null) {
     publisher: candidate?.publisher ?? "",
     publishedDate: candidate?.publishedDate ?? "",
     language: candidate?.language ?? "",
-    isbn: candidate?.isbn13 ?? candidate?.isbn10 ?? "",
+    isbn: candidate?.isbn13 ?? candidate?.isbn10 ?? typedIsbn,
+    boughtFrom: "",
     description: candidate?.description ?? "",
   };
 }
@@ -191,6 +204,7 @@ export const EDITION_FIELDS = [
   "publisher",
   "published_date",
   "language",
+  "bought_from",
   "title",
   "subtitle",
 ] as const;
@@ -227,6 +241,7 @@ const editionFields = {
   publisher: optionalText(BOOK_LIMITS.publisher),
   published_date: optionalText(BOOK_LIMITS.published),
   language: optionalText(35),
+  bought_from: optionalText(BOOK_LIMITS.boughtFrom),
   title: optionalText(BOOK_LIMITS.title),
   subtitle: optionalText(BOOK_LIMITS.title),
 };
@@ -240,6 +255,12 @@ export const editionEditSchema = z.object({
     .default([]),
 });
 export type EditionEditInput = z.input<typeof editionEditSchema>;
+
+/** Choose a designed cover for an edition (null: let a catalogue cover win again). */
+export const coverDesignSchema = z.object({
+  editionId: z.uuid(),
+  design: z.enum(COVER_DESIGNS).nullable(),
+});
 
 export const editionAddSchema = z.object({
   workId: z.uuid(),
@@ -260,6 +281,7 @@ export function editionColumns<T extends EditionColumns>(values: T) {
     publisher: values.publisher,
     published_date: values.published_date,
     language: values.language,
+    bought_from: values.bought_from,
     title: values.title,
     subtitle: values.subtitle,
   } satisfies Record<EditionField, unknown>;

@@ -14,6 +14,8 @@ import {
 import { getSessionUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
+import { COVER_DESIGN_LOCK, randomDesign } from "@/features/covers/designs";
+
 import { lockedFields } from "../locks";
 import {
   type AddBookField,
@@ -110,11 +112,15 @@ async function insertBook(
       duration_minutes:
         values.format === "audiobook" ? values.durationMinutes : null,
       language: values.language,
+      bought_from: values.boughtFrom,
+      cover_design: values.coverDesign ?? randomDesign(),
       cover_url: candidate?.coverUrl ?? null,
       provider_ids: candidate
         ? mergeProviderIds({}, candidate.providerIds)
         : {},
-      field_locks: locks.edition,
+      field_locks: values.coverDesignChosen
+        ? [...locks.edition, COVER_DESIGN_LOCK]
+        : locks.edition,
     })
     .select("id")
     .single();
