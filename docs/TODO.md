@@ -5,18 +5,13 @@ session: tick what is done, add what is next.
 
 ## Owner (needs your accounts or keys)
 
-- [ ] GitHub secrets: set `SUPABASE_URL` to the base URL only
-      (`https://ugfyxuhuxyzxxeckqgcx.supabase.co`, nothing after `.co`)
-- [ ] GitHub secrets: set `SUPABASE_DB_URL` to the **Session pooler** URI (host contains
-      `pooler.supabase.com`, user `postgres.ugfyxuhuxyzxxeckqgcx`), not Direct connection
-- [ ] `git push`, then Actions → run **supabase-keepalive** and **supabase-backup** by hand;
-      both green, backup run has a `db-backup-…` artifact
-- [ ] Google Auth Platform → Branding: fill **Developer contact information**, Save, no logo.
-      Then Audience → **Publish app**. If still greyed out, wait for the Vercel deploy below.
-- [ ] Until published: add testers under Audience → **Test users** (max 100)
-- [ ] After the Claude build below: deploy to Vercel (steps in `docs/SETUP.md`), then set
-      Google Branding app domain fields (home, `/privacy`, `/terms`, authorized domain
-      `<project>.vercel.app`) and publish
+- [x] GitHub secrets set to the **prod** project (`SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`,
+      `SUPABASE_DB_URL` as the Session pooler URI, `BACKUP_PASSPHRASE`); **supabase-keepalive** and
+      **supabase-backup** both ran green by hand on 2026-10-03 and the backup produced a
+      `db-backup-…` artifact. Keep the passphrase in the password manager: backups need it.
+- [x] Vercel deploy live at https://myfoldline.vercel.app (prod Supabase project); Google
+      Branding filled, consent screen In production; a fresh Google account signed in
+      successfully (2026-10-03). Re-check the Google consent screen only if sign-in ever breaks.
 - [x] Supabase: "Allow new users to sign up" is **on** (sign-up opens now, per owner)
 - [x] `.env.local` has `DEV_LOGIN_SECRET`; `.env.example` lists it
 - [x] `.env.local` has `OPEN_LIBRARY_CONTACT_EMAIL` (live lookup used Open Library,
@@ -27,8 +22,8 @@ session: tick what is done, add what is next.
 - [x] `0004_profile_details.sql` and `supabase/dev-seeds/sample_library.sql` run on dev
       (2026-10-01): profile e2e passes, izhaaannn account has 12 sample books
 - [x] `0005_book_covers.sql` run on dev (2026-10-01): cover upload e2e passes
-- [ ] `git push origin main v0.1.0`, then create the GitHub release from the tag (notes in
-      `CHANGELOG.md`)
+- [ ] Optional: create GitHub Releases from the pushed tags (notes are in `CHANGELOG.md`); only
+      `v0.1.0` has one
 
 ## Claude
 

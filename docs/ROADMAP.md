@@ -9,7 +9,7 @@ Tick items as they are completed. One item per Claude Code session.
 - [x] Supabase local setup (`supabase init`), `src/lib/supabase/{client,server,admin}.ts`
 - [x] Auth: Google via `src/lib/auth.ts`, protected `/app`, profiles table + trigger
 - [x] CI: GitHub Actions for typecheck, lint, test, build (+ e2e and pgTAP jobs)
-- [ ] Keep-alive and weekly backup workflows configured with repo secrets
+- [x] Keep-alive and weekly backup workflows configured with repo secrets
 
 ## Phase 1: Launch readiness
 
@@ -21,7 +21,7 @@ Tick items as they are completed. One item per Claude Code session.
 - [x] Settings page: delete my account (removes all data) + download my data (JSON)
 - [x] Rate limits on server actions and route handlers (per user and per IP)
 - [x] SEO basics: metadata, Open Graph image, `sitemap.xml`, `robots.txt`, landing page copy
-- [ ] Deploy to Vercel with the prod Supabase project; Google consent screen "In production"
+- [x] Deploy to Vercel with the prod Supabase project; Google consent screen "In production"
 
 ## Phase 2: Core library
 
