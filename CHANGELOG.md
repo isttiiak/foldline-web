@@ -4,6 +4,33 @@ All notable changes to Foldline. Versions follow [SemVer](https://semver.org); w
 version is `0.x`, anything may still change. Each release is an annotated git tag
 (`vX.Y.Z`) with `package.json` at the same version.
 
+## v0.6.0 (2026-10-03)
+
+Calmer covers, a search box that behaves, and a note for where a book came from.
+
+### Added
+
+- Ten designed, softly coloured covers for books with no photo or catalogue cover. One is picked
+  at random when you add a book; shuffle or choose another while adding, or later in the edition
+  sheet. Your own photo always comes first.
+- "Where I got it" on every edition: a shop link or an address, only visible to you.
+- A new favicon and home-screen icon drawn from the fold mark.
+- Typing an ISBN no catalogue knows now carries the number into "Add it by hand".
+
+### Changed
+
+- The reading-state label sits under the title on shelf cards instead of covering the cover.
+- Covers use calm, low-saturation colours instead of bright gradients.
+
+### Fixed
+
+- Typing in the library search could delete the letters just typed.
+
+### Database migrations
+
+- `0006_cover_design_and_source.sql`: two optional columns on `editions` (`cover_design`, `bought_from`).
+  Run it before using this version.
+
 ## v0.5.0 (2026-10-03)
 
 A warm moment for finishing, a gentle one for putting a book down.
