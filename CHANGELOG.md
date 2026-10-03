@@ -4,6 +4,24 @@ All notable changes to Foldline. Versions follow [SemVer](https://semver.org); w
 version is `0.x`, anything may still change. Each release is an annotated git tag
 (`vX.Y.Z`) with `package.json` at the same version.
 
+## v0.5.0 (2026-10-03)
+
+A warm moment for finishing, a gentle one for putting a book down.
+
+### Added
+
+- Finishing a book opens a short, animated moment with an optional rating and a few words for
+  future you. Setting a book down opens a quiet one with an optional note. Both are skippable,
+  and nothing is saved unless you ask.
+
+### Fixed
+
+- A reflection saved elsewhere now shows up in the read editor without a reload.
+
+### Database migrations
+
+None.
+
 ## v0.4.0 (2026-10-01)
 
 Reach anything from the keyboard.
