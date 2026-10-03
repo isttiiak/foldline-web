@@ -52,7 +52,7 @@ test("designed covers: assigned, calm card, chosen later, and where I got it", a
   await page
     .getByRole("button", { name: /^Edit the Paperback edition$/ })
     .click();
-  await page.getByRole("radio", { name: "Ridge" }).check({ force: true });
+  await page.locator("label", { hasText: /^Ridge$/ }).click();
   await expect(page.getByText("Cover updated.")).toBeVisible(SAVE);
   await page.reload();
   await page

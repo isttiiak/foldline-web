@@ -92,16 +92,9 @@ function Artwork({ design, uid }: { design: CoverDesign; uid: string }) {
             x="16"
             y="16"
             width="168"
-            height="268"
+            height="236"
             rx="6"
             fill="none"
-            stroke="#a56a5e"
-            strokeWidth="2.5"
-            strokeDasharray="9 7"
-            strokeLinecap="round"
-          />
-          <path
-            d="M40 250 H160"
             stroke="#a56a5e"
             strokeWidth="2.5"
             strokeDasharray="9 7"

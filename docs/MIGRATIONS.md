@@ -24,4 +24,4 @@ migration history does not know about SQL Editor runs.
 | 3   | `0003_create_library.sql`          | works, authors, editions, reads, progress (RLS), `provider_cache`, pg_trgm               | [x] | [ ]  |
 | 4   | `0004_profile_details.sql`         | profile photo, bio, reading preferences; private `avatars` Storage bucket                | [x] | [ ]  |
 | 5   | `0005_book_covers.sql`             | private `covers` Storage bucket for readers' own cover photos                            | [x] | [ ]  |
-| 6   | `0006_cover_design_and_source.sql` | `editions.cover_design` (designed cover id) and `bought_from` (where the copy came from) | [ ] | [ ]  |
+| 6   | `0006_cover_design_and_source.sql` | `editions.cover_design` (designed cover id) and `bought_from` (where the copy came from) | [x] | [x]  |
