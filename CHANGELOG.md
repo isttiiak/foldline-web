@@ -4,6 +4,22 @@ All notable changes to Foldline. Versions follow [SemVer](https://semver.org); w
 version is `0.x`, anything may still change. Each release is an annotated git tag
 (`vX.Y.Z`) with `package.json` at the same version.
 
+## v0.7.0 (2026-10-03)
+
+A quiet page about your own reading.
+
+### Added
+
+- Stats: how many books are on your shelf and in each state, books finished per year and over the last
+  twelve months, pages and listening time, formats and languages, a typical time to finish, your rating
+  average and the authors you finished most. Only you can see it, and it never scores you.
+- Hide your stats whenever you like. While hidden nothing is calculated and the link disappears.
+- Stats in the sidebar and in the search palette.
+
+### Database migrations
+
+None.
+
 ## v0.6.0 (2026-10-03)
 
 Calmer covers, a search box that behaves, and a note for where a book came from.
