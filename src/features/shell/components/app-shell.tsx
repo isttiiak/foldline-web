@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  BarChart3,
   BookPlus,
   Library,
   LogOut,
@@ -32,12 +33,13 @@ import { UserAvatar } from "@/features/profile/components/user-avatar";
 import { springs } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
-type NavKey = "library" | "add" | "profile" | "settings";
+type NavKey = "library" | "stats" | "add" | "profile" | "settings";
 type NavItem = { key: NavKey; href: string; icon: LucideIcon };
 
 // Add items here as their routes land (shelves, highlights, import).
 const NAV_ITEMS: NavItem[] = [
   { key: "library", href: "/app", icon: Library },
+  { key: "stats", href: "/app/stats", icon: BarChart3 },
   { key: "add", href: "/app/add", icon: BookPlus },
   { key: "profile", href: "/app/profile", icon: UserRound },
   { key: "settings", href: "/app/settings", icon: Settings },
@@ -50,9 +52,11 @@ function isActive(pathname: string, href: string) {
 function NavLinks({
   pillId,
   onNavigate,
+  showStats,
 }: {
   pillId: string;
   onNavigate?: () => void;
+  showStats: boolean;
 }) {
   const t = useTranslations("AppNav");
   const pathname = usePathname();
@@ -60,40 +64,42 @@ function NavLinks({
   return (
     <nav aria-label={t("label")}>
       <ul className="flex flex-col gap-1">
-        {NAV_ITEMS.map(({ key, href, icon: Icon }) => {
-          const active = isActive(pathname, href);
-          return (
-            <li key={key}>
-              <Link
-                href={href}
-                onClick={onNavigate}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "group relative flex press items-center gap-3 rounded-xl px-3 py-2.5 font-medium focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none",
-                  active
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-              >
-                {active && (
-                  <motion.span
-                    layoutId={pillId}
-                    className="absolute inset-0 -z-10 rounded-xl border border-amber/20 bg-gradient-to-r from-amber/15 via-coral/10 to-transparent"
-                    transition={springs.snappy}
-                  />
-                )}
-                <Icon
-                  aria-hidden
+        {NAV_ITEMS.filter(({ key }) => showStats || key !== "stats").map(
+          ({ key, href, icon: Icon }) => {
+            const active = isActive(pathname, href);
+            return (
+              <li key={key}>
+                <Link
+                  href={href}
+                  onClick={onNavigate}
+                  aria-current={active ? "page" : undefined}
                   className={cn(
-                    "size-5 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6",
-                    active && "text-amber",
+                    "group relative flex press items-center gap-3 rounded-xl px-3 py-2.5 font-medium focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none",
+                    active
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
-                />
-                {t(key)}
-              </Link>
-            </li>
-          );
-        })}
+                >
+                  {active && (
+                    <motion.span
+                      layoutId={pillId}
+                      className="absolute inset-0 -z-10 rounded-xl border border-amber/20 bg-gradient-to-r from-amber/15 via-coral/10 to-transparent"
+                      transition={springs.snappy}
+                    />
+                  )}
+                  <Icon
+                    aria-hidden
+                    className={cn(
+                      "size-5 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6",
+                      active && "text-amber",
+                    )}
+                  />
+                  {t(key)}
+                </Link>
+              </li>
+            );
+          },
+        )}
       </ul>
     </nav>
   );
@@ -190,9 +196,12 @@ function AccountFooter({
 export function AppShell({
   children,
   user,
+  showStats = true,
 }: {
   children: React.ReactNode;
   user: ShellUser;
+  /** False when the reader hid their stats: the link and the palette entry go away. */
+  showStats?: boolean;
 }) {
   const t = useTranslations("Common");
   const tPalette = useTranslations("Palette");
@@ -215,12 +224,16 @@ export function AppShell({
     <div className="relative isolate flex min-h-full flex-1">
       <SkipLink />
       <AmbientGlow className="opacity-60" />
-      <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
+      <CommandPalette
+        open={paletteOpen}
+        onOpenChange={setPaletteOpen}
+        showStats={showStats}
+      />
 
       <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col gap-8 border-r border-sidebar-border bg-sidebar/70 px-4 py-6 backdrop-blur-md md:flex">
         <Wordmark href="/app" className="px-2" />
         <PaletteButton onClick={() => setPaletteOpen(true)} />
-        <NavLinks pillId="nav-pill-desktop" />
+        <NavLinks pillId="nav-pill-desktop" showStats={showStats} />
         <div className="mt-auto">
           <AccountFooter user={user} />
         </div>
@@ -259,6 +272,7 @@ export function AppShell({
                 <Wordmark href="/app" className="mb-6 px-2" />
                 <NavLinks
                   pillId="nav-pill-mobile"
+                  showStats={showStats}
                   onNavigate={() => setOpen(false)}
                 />
                 <div className="mt-auto">

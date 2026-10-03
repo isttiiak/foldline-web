@@ -179,6 +179,12 @@ only, per-user limit `metadata-lookup`.
   free text ("where I got it"); a plain web link renders as a link (`books/bought-from.ts`).
 - Favicon and home-screen icon are generated from the fold mark (`app/icon.tsx`, `app/apple-icon.tsx`,
   `lib/mark-image.tsx`).
+- Stats (`/app/stats`, `src/features/stats/`): `getStats` reads the reader's books once (like the library, up
+  to 1000) and `computeStats` (pure) turns each book's current read and edition into counts, finished books
+  per year and per month (dates are plain strings, no time-zone drift), pages, listening time, formats,
+  languages, median days to finish (shown from 3 dated reads), rating average and top authors. Descriptive
+  only. Hiding is `profiles.settings.hide_stats` (`setStatsHiddenAction`): the page then calculates nothing and
+  the sidebar link and palette entry disappear (`showStats`). Genres wait for tags (Phase 4).
 - Progress: `fraction` = pages / `page_count`, minutes / `duration_minutes`, percent / 100,
   or location/chapter / a total typed in the log form (not stored; the next form prefills
   it from value / fraction of the last entry). Unknown totals keep `fraction` null. Logging

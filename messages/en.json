@@ -139,7 +139,8 @@
     "profile": "Profile",
     "signOut": "Sign out",
     "settings": "Settings",
-    "yourProfile": "Your profile"
+    "yourProfile": "Your profile",
+    "stats": "Stats"
   },
   "Palette": {
     "title": "Search and actions",
@@ -785,5 +786,52 @@
       "lantern": "Lantern",
       "paper": "Paper"
     }
+  },
+  "Stats": {
+    "metaTitle": "Your stats",
+    "title": "Your reading",
+    "intro": "Only you can see this. It describes, it never scores.",
+    "hide": "Hide my stats",
+    "show": "Show my stats",
+    "hiddenTitle": "Your stats are hidden",
+    "hiddenBody": "Nothing is calculated while they are hidden. You can bring them back whenever you like.",
+    "unknownDate": "Date unknown",
+    "unknownLanguage": "Language unknown",
+    "shelf": {
+      "title": "On your shelf",
+      "caption": "{count, plural, one {book} other {books}}"
+    },
+    "finished": {
+      "title": "Finished",
+      "datedNote": "{dated} with a finish date"
+    },
+    "months": {
+      "title": "The last twelve months"
+    },
+    "volume": {
+      "title": "Pages and listening",
+      "pages": "{count, plural, one {pages, from # book with a page count} other {pages, from # books with a page count}}",
+      "hours": "{hours} h",
+      "listening": "{count, plural, one {of listening, from # audiobook} other {of listening, from # audiobooks}}"
+    },
+    "formats": {
+      "title": "Formats you finished"
+    },
+    "languages": {
+      "title": "Languages you finished"
+    },
+    "pace": {
+      "title": "Pace and ratings",
+      "days": "{days, plural, one {# day} other {# days}}",
+      "caption": "Typical time to finish, from {count} dated reads"
+    },
+    "rating": {
+      "average": "{stars} stars",
+      "caption": "{count, plural, one {Your rating, from # book} other {Average of your ratings, from # books}}"
+    },
+    "authors": {
+      "title": "Authors you finished most"
+    },
+    "genresNote": "Genres will appear here once books can be tagged."
   }
 }

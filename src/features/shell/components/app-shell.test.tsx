@@ -43,6 +43,31 @@ describe("AppShell", () => {
     expect(link).toHaveAttribute("aria-current", "page");
   });
 
+  test("lists Stats, and drops it when the reader hid their stats", () => {
+    const { unmount } = renderWithIntl(
+      <QueryProvider>
+        <AppShell user={user}>x</AppShell>
+      </QueryProvider>,
+    );
+    const nav = () => screen.getByRole("navigation", { name: "Main" });
+    expect(within(nav()).getByRole("link", { name: "Stats" })).toHaveAttribute(
+      "href",
+      "/app/stats",
+    );
+    unmount();
+
+    renderWithIntl(
+      <QueryProvider>
+        <AppShell user={user} showStats={false}>
+          x
+        </AppShell>
+      </QueryProvider>,
+    );
+    expect(
+      within(nav()).queryByRole("link", { name: "Stats" }),
+    ).not.toBeInTheDocument();
+  });
+
   test("renders children inside the main landmark with a skip link to it", () => {
     renderWithIntl(
       <QueryProvider>

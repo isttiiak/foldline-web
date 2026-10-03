@@ -3,6 +3,7 @@
 import { Dialog } from "@base-ui/react/dialog";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  BarChart3,
   BookPlus,
   BookOpen,
   Library,
@@ -39,6 +40,7 @@ type Destination = { key: string; href: string; icon: LucideIcon };
 const DESTINATIONS: Destination[] = [
   { key: "add", href: "/app/add", icon: BookPlus },
   { key: "library", href: "/app", icon: Library },
+  { key: "stats", href: "/app/stats", icon: BarChart3 },
   { key: "profile", href: "/app/profile", icon: UserRound },
   { key: "settings", href: "/app/settings", icon: Settings },
 ];
@@ -50,7 +52,10 @@ const DESTINATIONS: Destination[] = [
 export function CommandPalette({
   open,
   onOpenChange,
+  showStats = true,
 }: {
+  /** False when the reader hid their stats. */
+  showStats?: boolean;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -87,10 +92,11 @@ export function CommandPalette({
   const folded = fold(query);
   const destinations = DESTINATIONS.filter(
     ({ key }) =>
-      folded === "" ||
-      fold(tNav(key as "add" | "library" | "profile" | "settings")).includes(
-        folded,
-      ),
+      (showStats || key !== "stats") &&
+      (folded === "" ||
+        fold(
+          tNav(key as "add" | "library" | "stats" | "profile" | "settings"),
+        ).includes(folded)),
   );
   const showLogAction =
     !picking && (folded === "" || fold(t("logProgress")).includes(folded));
@@ -145,7 +151,8 @@ export function CommandPalette({
                           ? t("addBook")
                           : t("goTo", {
                               place: tNav(
-                                key as "library" | "profile" | "settings",
+                                key as
+                                  "library" | "stats" | "profile" | "settings",
                               ),
                             })}
                       </CommandItem>

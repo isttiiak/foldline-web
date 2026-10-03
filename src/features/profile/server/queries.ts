@@ -24,6 +24,8 @@ export type Profile = {
   favouriteGenres: string[];
   memberSince: string;
   booksOnShelf: number;
+  /** The reader hid their stats page. */
+  hideStats: boolean;
 };
 
 /**
@@ -65,5 +67,10 @@ export const getProfile = cache(async (): Promise<Profile | null> => {
     favouriteGenres: row.favourite_genres ?? [],
     memberSince: row.created_at,
     booksOnShelf: count ?? 0,
+    hideStats:
+      typeof row.settings === "object" &&
+      row.settings !== null &&
+      !Array.isArray(row.settings) &&
+      row.settings.hide_stats === true,
   };
 });

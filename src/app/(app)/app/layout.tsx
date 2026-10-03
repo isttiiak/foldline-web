@@ -15,6 +15,7 @@ export default async function AppLayout({ children }: LayoutProps<"/app">) {
   return (
     <QueryProvider>
       <AppShell
+        showStats={!profile?.hideStats}
         user={{
           email: user.email,
           name: profile?.displayName ?? null,

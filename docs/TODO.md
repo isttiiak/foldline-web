@@ -106,8 +106,18 @@ Done on 2026-10-03 (v0.6.0): search-typing fix, state chip off the cover, calm d
 random assignment and a picker (add form and edition sheet), "Where I got it", ISBN carry-over to the
 by-hand form, new favicon. Migration `0006` (owner runs it on dev and prod before deploying).
 
-Next: v0.7.0 Bengali-aware search (phonetic matching in the library and palette, romanised variants for
-the catalogue search), then Phase 3 "Opt-in reading goals".
+Done on 2026-10-03 (v0.7.0): personal stats dashboard `/app/stats` (hideable, nothing calculated while
+hidden). No migration.
+
+Next: Phase 3 "Opt-in reading goals", then "Reading rhythm view".
+
+Later (owner deferred, needs more effort): **Bengali-aware search**. Design agreed 2026-10-03:
+`src/features/search/` with `romanize.ts` (Bangla script to Latin), `phonetic.ts` (coarse key: vowel length,
+aspirates, b/v, s/sh, ch), `match.ts` (token-wise fuzzy match and ranking), used in memory by the library
+page and the palette (also search `original_title` and `subtitle`; drop the DB `ilike`), plus romanised query
+variants for the Open Library search (it holds Bengali books in Latin spelling, e.g. "Adarsha Hindu Hotel";
+the Bangla-script title finds nothing). Limits: no Latin to Bangla suggestions without ML (opt-in AI, Phase 8).
+Tests with real titles from the owner's list (adarsha/adarsh/আদর্শ, productive/প্রোডাক্টিভ). No migration.
 
 ## Known context
 
