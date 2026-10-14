@@ -4,6 +4,25 @@ All notable changes to Foldline. Versions follow [SemVer](https://semver.org); w
 version is `0.x`, anything may still change. Each release is an annotated git tag
 (`vX.Y.Z`) with `package.json` at the same version.
 
+## Unreleased
+
+### Added
+
+- Reading rhythm on the stats page: a calendar of the days you read or logged something, year by
+  year. No streak counter and no "broken" state; quiet days are simply quiet.
+- Tags on books, your own shelves, and smart shelves that save a library view and keep themselves up
+  to date. A new Shelves page lists shelves, tags and books out on loan. The library filters by tag,
+  shelf and your own status.
+- Your own statuses inside the usual states (for example "Up next" inside Planned), a choice of
+  rating scale (half stars, whole stars, out of 10, or no ratings), and your own fields on every book.
+- Copies and loans: note the copies you have, where they live, who you lent one to or borrowed it from.
+- The stats page shows the tags on books you finished.
+
+### Database migrations
+
+Run in order on dev, then prod: `0008_tags_and_shelves.sql`, `0009_statuses_and_fields.sql`,
+`0010_copies_and_loans.sql`.
+
 ## v0.9.1 (2026-10-15)
 
 Checked on the smallest current iPhone screen (iPhone SE, 375 x 667).

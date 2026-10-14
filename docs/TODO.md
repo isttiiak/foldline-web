@@ -24,8 +24,10 @@ session: tick what is done, add what is next.
 - [x] `0005_book_covers.sql` run on dev (2026-10-01): cover upload e2e passes
 - [ ] Optional: create GitHub Releases for older tags (notes are in `CHANGELOG.md`); `v0.1.0` and
       `v0.9.0` have one
-- [ ] Optional (Claude settings): allow GitHub commands without prompts in `.claude/settings.json`
-      (Claude may not edit its own permissions; see the snippet in the v0.9.0 session)
+- [x] Claude settings: GitHub and routine git commands allowed in `.claude/settings.json` (2026-10-15)
+- [ ] Run `0008_tags_and_shelves.sql`, `0009_statuses_and_fields.sql`, `0010_copies_and_loans.sql`
+      (in order) on dev, then run the full e2e suite (`organise.authed.spec.ts` and the settings
+      export test need them), then prod before deploying. Mark them in `docs/MIGRATIONS.md`.
 
 ## Claude
 
@@ -122,7 +124,24 @@ To try the service worker locally: `pnpm build`, then the `foldline-prod` launch
 Also 2026-10-15 (v0.9.1): iPhone SE (375 x 667) pass; `tests/e2e/responsive.authed.spec.ts` guards every app
 page against sideways overflow and sub-16px fields (set `RESPONSIVE_SHOTS=<dir>` to save screenshots).
 
-Next: Phase 3 "Reading rhythm view" (then Phase 4, which gates v1.0.0).
+Done on 2026-10-15: Phase 3 "Reading rhythm view" (`src/features/rhythm/`, a calendar card on
+`/app/stats`, `?year=`; counts progress entries and read start/finish/stop days in the reader's time
+zone; no streaks). Phase 3 is complete.
+
+Done on 2026-10-15 (not released yet, migrations pending): the first three Phase 4 items.
+
+- Tags and shelves (`src/features/shelves/`): book page "Tags and shelves" section, `/app/shelves`
+  page (shelves, tags, open loans), library filters `?tag&shelf&status`, "Save as a smart shelf" in
+  the toolbar. Shelves nav item.
+- Custom statuses, rating scale, custom fields (`src/features/custom/`): three Settings cards,
+  status chips in the read editor, "Your fields" on the book page. `RatingScaleProvider` in the app
+  layout; `RatingStars`/`StarsDisplay` follow the scale (and hide when off).
+- Copies and loans (`src/features/copies/`): "Copies" section on the book page, "On loan" card.
+- New rate limit policy `library-edit`. All new tables are in the JSON export.
+- After the migrations are applied and e2e is green, release as v0.10.0.
+
+Next: Phase 4 "Bulk edit, duplicate/edition merge, undo", then the full export and the Goodreads +
+StoryGraph import (both gate v1.0.0).
 
 Later (owner deferred, needs more effort): **Bengali-aware search**. Design agreed 2026-10-03:
 `src/features/search/` with `romanize.ts` (Bangla script to Latin), `phonetic.ts` (coarse key: vowel length,

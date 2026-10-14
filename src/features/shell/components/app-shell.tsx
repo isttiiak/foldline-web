@@ -5,6 +5,7 @@ import {
   BookPlus,
   Flag,
   Library,
+  LibraryBig,
   LogOut,
   Menu,
   Search,
@@ -37,12 +38,14 @@ import { UserAvatar } from "@/features/profile/components/user-avatar";
 import { springs } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
-type NavKey = "library" | "stats" | "goals" | "add" | "profile" | "settings";
+type NavKey =
+  "library" | "shelves" | "stats" | "goals" | "add" | "profile" | "settings";
 type NavItem = { key: NavKey; href: string; icon: LucideIcon };
 
-// Add items here as their routes land (shelves, highlights, import).
+// Add items here as their routes land (highlights, import).
 const NAV_ITEMS: NavItem[] = [
   { key: "library", href: "/app", icon: Library },
+  { key: "shelves", href: "/app/shelves", icon: LibraryBig },
   { key: "stats", href: "/app/stats", icon: BarChart3 },
   { key: "goals", href: "/app/goals", icon: Flag },
   { key: "add", href: "/app/add", icon: BookPlus },

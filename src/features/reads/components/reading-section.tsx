@@ -14,6 +14,7 @@ import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { STATE_BADGES } from "@/features/books/components/book-hero";
 import type { BookDetail, BookRead } from "@/features/books/server/queries";
+import type { CustomStatus } from "@/features/custom/server/queries";
 import { LogProgress } from "@/features/progress/components/log-progress";
 import { ProgressHistory } from "@/features/progress/components/progress-history";
 import { localToday } from "@/lib/dates";
@@ -38,13 +39,36 @@ function useStartRead(workId: string) {
   return { start, pending, error };
 }
 
+type Statuses = {
+  /** The reader's own statuses. */
+  statuses?: CustomStatus[];
+  /** Each read's custom status, by read id. */
+  statusByRead?: Record<string, string>;
+};
+
 /** The current read, with progress logging, and the reads before it. */
-export function ReadingSection({ book }: { book: BookDetail }) {
+export function ReadingSection({
+  book,
+  statuses = [],
+  statusByRead = {},
+}: { book: BookDetail } & Statuses) {
   const [current, ...past] = book.reads;
   return (
     <>
-      <CurrentRead book={book} read={current ?? null} />
-      {past.length > 0 && <PastReads book={book} reads={past} />}
+      <CurrentRead
+        book={book}
+        read={current ?? null}
+        statuses={statuses}
+        statusByRead={statusByRead}
+      />
+      {past.length > 0 && (
+        <PastReads
+          book={book}
+          reads={past}
+          statuses={statuses}
+          statusByRead={statusByRead}
+        />
+      )}
     </>
   );
 }
@@ -52,10 +76,12 @@ export function ReadingSection({ book }: { book: BookDetail }) {
 function CurrentRead({
   book,
   read,
+  statuses,
+  statusByRead = {},
 }: {
   book: BookDetail;
   read: BookRead | null;
-}) {
+} & Statuses) {
   const t = useTranslations("Reads");
   const reread = useStartRead(book.id);
   const [logging, setLogging] = useState(false);
@@ -128,6 +154,8 @@ function CurrentRead({
         read={read}
         editions={book.editions}
         bookTitle={book.title}
+        statuses={statuses}
+        statusId={statusByRead[read.id] ?? null}
         progress={({ state, finish }) => (
           <div className="flex flex-col gap-4">
             {fraction !== null && (
@@ -184,7 +212,12 @@ function CurrentRead({
   );
 }
 
-function PastReads({ book, reads }: { book: BookDetail; reads: BookRead[] }) {
+function PastReads({
+  book,
+  reads,
+  statuses,
+  statusByRead = {},
+}: { book: BookDetail; reads: BookRead[] } & Statuses) {
   const t = useTranslations("Reads");
   const tStates = useTranslations("AddBook.states");
   const format = useFormatter();
@@ -258,7 +291,12 @@ function PastReads({ book, reads }: { book: BookDetail; reads: BookRead[] }) {
                     className="overflow-hidden"
                   >
                     <div className="border-t border-border/60 p-4">
-                      <ReadEditor read={read} editions={book.editions} />
+                      <ReadEditor
+                        read={read}
+                        editions={book.editions}
+                        statuses={statuses}
+                        statusId={statusByRead[read.id] ?? null}
+                      />
                     </div>
                   </motion.div>
                 )}

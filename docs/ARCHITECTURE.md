@@ -87,10 +87,28 @@ another user's row, whoever writes it. A read's edition must belong to its work
 (`(edition_id, work_id, user_id) -> editions`); deleting the edition clears it from the read.
 Library tables grant only select/insert/update/delete to `authenticated`, nothing to `anon`.
 
+### Organising (Phase 4, migrations 0008-0010)
+
+- `tags` (name unique per reader ignoring case, tone: one of the warm colours) and `work_tags`
+  (work_id, tag_id). `shelves`: kind 'manual' (books placed by hand in `shelf_items`) or 'smart'
+  (`query` jsonb: a saved library view `{q, state, format, tag, status, sort}`, validated by
+  `smartQuerySchema` and opened as `/app?...`; a trigger refuses items on a smart shelf).
+- `custom_statuses` (name, base_state): the reader's own names inside a built-in state.
+  `reads.custom_status_id` (cleared when the read changes state or the status is removed).
+- `custom_fields` (name, kind text|number|date|boolean|choice, options) with the values in
+  `works.custom_values` jsonb `{ "<field id>": value }`, cleaned against the fields on save
+  (`cleanCustomValues`).
+- Rating scale: `profiles.settings.rating_scale` ('half-stars' default, 'stars', 'ten', 'off').
+  Ratings always stay 1-10 in `reads.rating`; the scale only changes how they are shown and picked.
+- `copies` (work_id, edition_id null, ownership owned|borrowed|library|subscription, location,
+  acquired_on, note) and `loans` (copy_id, direction lent|borrowed from the copy's ownership,
+  person free text, started_on, due_on, returned_on; one open loan per copy).
+- The library, book page and stats read these tables in separate queries that fail soft, so the
+  app still loads (without these features) on a project where the migrations are not yet applied.
+
 ### Later phases
 
-- Phase 2: `tags`, `work_tags`, `shelves` (kind 'manual'|'smart', query jsonb), `shelf_items`,
-  `custom_statuses`, `copies` (ownership, location, loans), `people`, `imports`.
+- Later: `people`, `imports`.
 - Phase 4: `kosync_credentials` (username unique, key_hash), `kosync_documents`
   (document_hash, edition_id null, progress, percentage, device, device_id),
   `automation_rules` (trigger, conditions jsonb, action jsonb, enabled).

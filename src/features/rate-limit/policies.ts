@@ -77,6 +77,13 @@ export const RATE_LIMITS = {
     limit: 30,
     windowSeconds: 600,
   },
+  // Setting up the library: tags, shelves, custom statuses and custom fields.
+  libraryEdit: {
+    name: "library-edit",
+    per: "user",
+    limit: 200,
+    windowSeconds: 600,
+  },
   // Creating, changing, hiding and removing reading goals.
   goalEdit: {
     name: "goal-edit",

@@ -1,6 +1,7 @@
 import "server-only";
 
 import { newestReadFirst } from "@/features/reads/order";
+import { getBookLinks, getTags } from "@/features/shelves/server/queries";
 import { createClient } from "@/lib/supabase/server";
 
 import { computeStats, type Stats, type StatsRow } from "../compute";
@@ -19,6 +20,7 @@ export function todayIn(timeZone: string, now = new Date()): string {
 /** The reader's stats, computed from their current reads. Empty when the read fails. */
 export async function getStats(timeZone: string): Promise<Stats> {
   const supabase = await createClient();
+  const linksRead = Promise.all([getBookLinks(supabase), getTags(supabase)]);
   const { data, error } = await supabase
     .from("works")
     .select(
@@ -29,6 +31,8 @@ export async function getStats(timeZone: string): Promise<Stats> {
     )
     .limit(FETCH_LIMIT);
   if (error) console.error(`[stats] read failed: ${error.message}`);
+  const [{ tagsByWork }, tags] = await linksRead;
+  const tagName = new Map(tags.map((tag) => [tag.id, tag.name]));
 
   const rows: StatsRow[] = (data ?? []).map((work) => {
     const read = [...work.reads].sort(newestReadFirst)[0];
@@ -52,6 +56,10 @@ export async function getStats(timeZone: string): Promise<Stats> {
       language: edition?.language ?? null,
       pageCount: edition?.page_count ?? null,
       durationMinutes: edition?.duration_minutes ?? null,
+      tags: (tagsByWork.get(work.id) ?? []).flatMap((id) => {
+        const name = tagName.get(id);
+        return name ? [name] : [];
+      }),
     };
   });
   return computeStats(rows, todayIn(timeZone));

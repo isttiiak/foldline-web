@@ -19,6 +19,14 @@ export const EXPORTED_TABLES = [
   "reads",
   "progress_events",
   "reading_goals",
+  "tags",
+  "work_tags",
+  "shelves",
+  "shelf_items",
+  "custom_statuses",
+  "custom_fields",
+  "copies",
+  "loans",
 ] as const satisfies TableName[];
 
 /** Tables with a `user_id` column: all of them must be exported. */

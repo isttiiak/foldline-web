@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 
 import { QueryProvider } from "@/components/query-provider";
+import { RatingScaleProvider } from "@/features/custom/components/rating-scale";
+import { DEFAULT_RATING_SCALE } from "@/features/custom/schemas";
 import { getProfile } from "@/features/profile/server/queries";
 import { AppShell } from "@/features/shell/components/app-shell";
 import { requireUser } from "@/lib/auth";
@@ -14,16 +16,18 @@ export default async function AppLayout({ children }: LayoutProps<"/app">) {
   const profile = await getProfile();
   return (
     <QueryProvider>
-      <AppShell
-        showStats={!profile?.hideStats}
-        user={{
-          email: user.email,
-          name: profile?.displayName ?? null,
-          avatarSrc: profile?.avatarSrc ?? null,
-        }}
-      >
-        {children}
-      </AppShell>
+      <RatingScaleProvider scale={profile?.ratingScale ?? DEFAULT_RATING_SCALE}>
+        <AppShell
+          showStats={!profile?.hideStats}
+          user={{
+            email: user.email,
+            name: profile?.displayName ?? null,
+            avatarSrc: profile?.avatarSrc ?? null,
+          }}
+        >
+          {children}
+        </AppShell>
+      </RatingScaleProvider>
     </QueryProvider>
   );
 }

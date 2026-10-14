@@ -4,6 +4,7 @@ import { useFormatter, useTranslations } from "next-intl";
 
 import { useLanguageName } from "@/features/books/languages";
 import { READ_STATES } from "@/features/books/schemas";
+import { useRatingScale } from "@/features/custom/components/rating-scale";
 import { cn } from "@/lib/utils";
 
 import type { Counted, Stats } from "../compute";
@@ -99,6 +100,8 @@ export function StatsView({
   const tFormats = useTranslations("AddBook.formats");
   const format = useFormatter();
   const languageName = useLanguageName();
+  const scale = useRatingScale();
+  const showRating = scale !== "off" && stats.rating.average !== null;
 
   const number = (value: number) => format.number(value);
   const year = (key: string | null) => key ?? t("unknownDate");
@@ -224,7 +227,7 @@ export function StatsView({
         </Card>
       )}
 
-      {(stats.pace.medianDays !== null || stats.rating.average !== null) && (
+      {(stats.pace.medianDays !== null || showRating) && (
         <Card id="stats-pace" title={t("pace.title")}>
           {stats.pace.medianDays !== null && (
             <Big
@@ -234,11 +237,17 @@ export function StatsView({
               caption={t("pace.caption", { count: stats.pace.sample })}
             />
           )}
-          {stats.rating.average !== null && (
+          {showRating && (
             <Big
-              value={t("rating.average", {
-                stars: Math.round(stats.rating.average * 10) / 10,
-              })}
+              value={
+                scale === "ten"
+                  ? t("rating.averageTen", {
+                      points: Math.round(stats.rating.average! * 20) / 10,
+                    })
+                  : t("rating.average", {
+                      stars: Math.round(stats.rating.average! * 10) / 10,
+                    })
+              }
               caption={t("rating.caption", { count: stats.rating.count })}
             />
           )}
@@ -251,9 +260,15 @@ export function StatsView({
         </Card>
       )}
 
-      <p className="text-sm text-muted-foreground md:col-span-2">
-        {t("genresNote")}
-      </p>
+      {stats.tags.length > 0 ? (
+        <Card id="stats-tags" title={t("tags.title")}>
+          <BarList tone="teal" items={named(stats.tags, (key) => key)} />
+        </Card>
+      ) : (
+        <p className="text-sm text-muted-foreground md:col-span-2">
+          {t("tags.note")}
+        </p>
+      )}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import "server-only";
 
 import { cache } from "react";
 
+import { ratingScaleFrom, type RatingScale } from "@/features/custom/schemas";
 import { getSessionUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
@@ -26,6 +27,8 @@ export type Profile = {
   booksOnShelf: number;
   /** The reader hid their stats page. */
   hideStats: boolean;
+  /** How ratings look (or "off"). */
+  ratingScale: RatingScale;
 };
 
 /**
@@ -72,5 +75,6 @@ export const getProfile = cache(async (): Promise<Profile | null> => {
       row.settings !== null &&
       !Array.isArray(row.settings) &&
       row.settings.hide_stats === true,
+    ratingScale: ratingScaleFrom(row.settings),
   };
 });

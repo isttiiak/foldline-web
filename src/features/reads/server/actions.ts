@@ -87,6 +87,14 @@ export async function updateReadAction(
       ? { status: "error", reason: "invalid" }
       : generic;
   }
+  if (state !== read.state) {
+    // A custom status belongs to one state: a new state starts without one.
+    await supabase
+      .from("reads")
+      .update({ custom_status_id: null })
+      .eq("id", read.id)
+      .not("custom_status_id", "is", null);
+  }
 
   refreshLibrary();
   return { status: "saved", savedAt: Date.now() };

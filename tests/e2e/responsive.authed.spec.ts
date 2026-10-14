@@ -123,7 +123,7 @@ test("every app page fits an iPhone SE screen", async ({ page }) => {
   await fits(page, "palette");
   await page.keyboard.press("Escape");
 
-  for (const path of ["stats", "goals", "profile", "settings"]) {
+  for (const path of ["stats", "shelves", "goals", "profile", "settings"]) {
     await page.goto(`/app/${path}`);
     await fits(page, path);
   }

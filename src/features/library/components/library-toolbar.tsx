@@ -12,6 +12,7 @@ import {
   READ_STATES,
   type ReadState,
 } from "@/features/books/schemas";
+import { SaveSmartShelf } from "@/features/shelves/components/save-smart-shelf";
 import { cn } from "@/lib/utils";
 
 import {
@@ -25,12 +26,21 @@ const SEARCH_DELAY_MS = 300;
 const STATE_OPTIONS = ["all", ...READ_STATES] as const;
 
 /** Search, state chips, format and sort for the library. Every choice lives in the URL. */
+export type Named = { id: string; name: string };
+
 export function LibraryToolbar({
   params,
   counts,
+  tags = [],
+  shelves = [],
+  statuses = [],
 }: {
   params: LibraryParams;
   counts: StateCounts;
+  /** The reader's tags, manual shelves and custom statuses, offered as filters. */
+  tags?: Named[];
+  shelves?: Named[];
+  statuses?: Named[];
 }) {
   const t = useTranslations("Library.toolbar");
   const tStates = useTranslations("AddBook.states");
@@ -130,6 +140,32 @@ export function LibraryToolbar({
             </option>
           ))}
         </select>
+        {(
+          [
+            ["tag", tags, t("tag"), t("allTags")],
+            ["shelf", shelves, t("shelf"), t("allShelves")],
+            ["status", statuses, t("status"), t("allStatuses")],
+          ] as const
+        ).map(([key, options, label, all]) =>
+          options.length > 0 ? (
+            <select
+              key={key}
+              aria-label={label}
+              value={params[key] ?? ""}
+              onChange={(event) =>
+                go({ [key]: event.target.value || undefined })
+              }
+              className={cn(selectClass, "max-w-48")}
+            >
+              <option value="">{all}</option>
+              {options.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.name}
+                </option>
+              ))}
+            </select>
+          ) : null,
+        )}
         <select
           aria-label={t("sort")}
           value={params.sort}
@@ -155,6 +191,7 @@ export function LibraryToolbar({
         onChange={(value) => go({ state: value === "all" ? undefined : value })}
         label={stateLabel}
       />
+      <SaveSmartShelf params={params} />
     </search>
   );
 }

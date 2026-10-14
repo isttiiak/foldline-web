@@ -23,6 +23,8 @@ const MAX_QUERY_LENGTH = 100;
 /** One value from a URL query entry (`?a=1&a=2` gives the first). */
 const first = (value: unknown) => (Array.isArray(value) ? value[0] : value);
 
+const optionalId = z.preprocess(first, z.uuid().optional().catch(undefined));
+
 const optionalEnum = <T extends readonly [string, ...string[]]>(values: T) =>
   z.preprocess(first, z.enum(values).optional().catch(undefined));
 
@@ -34,6 +36,10 @@ export const libraryParamsSchema = z.object({
   ),
   state: optionalEnum(READ_STATES),
   format: optionalEnum(EDITION_FORMATS),
+  /** A tag, a manual shelf and a custom status, each by id. */
+  tag: optionalId,
+  shelf: optionalId,
+  status: optionalId,
   sort: z.preprocess(first, z.enum(SORTS).catch("added").default("added")),
   pages: z.preprocess(
     first,
@@ -66,6 +72,11 @@ export type LibraryRow = {
   finishedOn: string | null;
   createdAt: string;
   formats: EditionFormat[];
+  tagIds: string[];
+  /** Manual shelves the book is on. */
+  shelfIds: string[];
+  /** The custom status of the latest read. */
+  statusId: string | null;
 };
 
 export type StateCounts = Record<ReadState | "all", number>;
@@ -109,16 +120,22 @@ export function countByState(rows: LibraryRow[]): StateCounts {
 }
 
 /**
- * The library the reader asked for. Counts describe the format filter (and
- * search, applied before this) so each state chip says how many books it shows.
+ * The library the reader asked for. Counts describe the format, tag, shelf and
+ * status filters (and search, applied before this) so each state chip says how
+ * many books it shows.
  */
 export function applyLibraryView(
   rows: LibraryRow[],
-  params: Pick<LibraryParams, "state" | "format" | "sort">,
+  params: Pick<LibraryParams, "state" | "format" | "sort"> &
+    Partial<Pick<LibraryParams, "tag" | "shelf" | "status">>,
 ): { books: LibraryRow[]; counts: StateCounts } {
-  const inFormat = params.format
-    ? rows.filter((row) => row.formats.includes(params.format!))
-    : rows;
+  const inFormat = rows.filter(
+    (row) =>
+      (!params.format || row.formats.includes(params.format)) &&
+      (!params.tag || row.tagIds.includes(params.tag)) &&
+      (!params.shelf || row.shelfIds.includes(params.shelf)) &&
+      (!params.status || row.statusId === params.status),
+  );
   const inState = params.state
     ? inFormat.filter((row) => row.state === params.state)
     : inFormat;
@@ -139,6 +156,9 @@ export function libraryHref(params: Partial<LibraryParams>): string {
   if (params.q) search.set("q", params.q);
   if (params.state) search.set("state", params.state);
   if (params.format) search.set("format", params.format);
+  if (params.tag) search.set("tag", params.tag);
+  if (params.shelf) search.set("shelf", params.shelf);
+  if (params.status) search.set("status", params.status);
   if (params.sort && params.sort !== "added") search.set("sort", params.sort);
   if (params.pages && params.pages > 1)
     search.set("pages", String(params.pages));

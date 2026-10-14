@@ -17,6 +17,8 @@ export type StatsRow = {
   language: string | null;
   pageCount: number | null;
   durationMinutes: number | null;
+  /** The book's tag names. */
+  tags?: string[];
 };
 
 export type Counted<K> = { key: K; count: number };
@@ -42,11 +44,14 @@ export type Stats = {
   /** Average in stars (0.5 steps), and how many books have a rating per whole star. */
   rating: { average: number | null; count: number; byStars: number[] };
   authors: Counted<string>[];
+  /** Tags on finished books, most worn first. */
+  tags: Counted<string>[];
 };
 
 /** Fewer reads than this say nothing reliable about pace. */
 export const MIN_PACE_SAMPLE = 3;
 const TOP_AUTHORS = 5;
+const TOP_TAGS = 8;
 
 function dayNumber(date: string): number {
   return Date.parse(`${date}T00:00:00Z`) / 86_400_000;
@@ -161,5 +166,8 @@ export function computeStats(rows: StatsRow[], today: string): Stats {
       byStars,
     },
     authors: authorCounts.sort(byCountThenName).slice(0, TOP_AUTHORS),
+    tags: tally(finished.flatMap((row) => row.tags ?? []))
+      .sort(byCountThenName)
+      .slice(0, TOP_TAGS),
   };
 }

@@ -9,6 +9,8 @@ import { fieldClass } from "@/components/form-field";
 import { Button } from "@/components/ui/button";
 import { READ_STATES, type ReadState } from "@/features/books/schemas";
 import type { BookEdition, BookRead } from "@/features/books/server/queries";
+import { setReadStatusAction } from "@/features/custom/server/actions";
+import type { CustomStatus } from "@/features/custom/server/queries";
 import { localToday } from "@/lib/dates";
 import { cn } from "@/lib/utils";
 
@@ -22,7 +24,13 @@ import {
 import { FinishMoment, type MomentKind } from "./finish-moment";
 import { RatingStars } from "./rating-stars";
 
-type Shown = ReadDates & { state: ReadState; rating: number | null };
+type Shown = ReadDates & {
+  state: ReadState;
+  rating: number | null;
+  statusId: string | null;
+};
+
+const NO_STATUS = "none";
 
 /** A YYYY-MM-DD date as a local calendar day (no time zone shift). */
 function day(date: string) {
@@ -38,9 +46,14 @@ export function ReadEditor({
   editions,
   progress,
   bookTitle,
+  statuses = [],
+  statusId = null,
 }: {
   read: BookRead;
   editions: BookEdition[];
+  /** The reader's own statuses; those of the read's state show as choices. */
+  statuses?: CustomStatus[];
+  statusId?: string | null;
   /** When given, finishing or setting the book down opens the finish moment. */
   bookTitle?: string;
   progress?: (api: { state: ReadState; finish: () => void }) => React.ReactNode;
@@ -61,6 +74,7 @@ export function ReadEditor({
   const stored: Shown = {
     state: read.state,
     rating: read.rating,
+    statusId,
     started_on: read.startedOn,
     finished_on: read.finishedOn,
     stopped_on: read.stoppedOn,
@@ -84,9 +98,23 @@ export function ReadEditor({
     });
   }
 
+  function changeStatus(next: string) {
+    const value = next === NO_STATUS ? null : next;
+    setError(null);
+    startTransition(async () => {
+      setShown({ statusId: value });
+      const result = await setReadStatusAction({
+        readId: read.id,
+        statusId: value,
+      });
+      if (result.status === "error") setError(tErrors(result.reason));
+    });
+  }
+
   function changeState(state: ReadState) {
     const dates = datesForState(shown, state, localToday());
-    save({ state, ...dates }, { state, ...dates }, () => {
+    // A custom status belongs to one state: the server clears it too.
+    save({ state, ...dates }, { state, statusId: null, ...dates }, () => {
       if (bookTitle && (state === "finished" || state === "dnf")) {
         setMoment(state);
       }
@@ -117,6 +145,10 @@ export function ReadEditor({
     );
   }
 
+  const statusChoices = statuses.filter(
+    (status) => status.baseState === shown.state,
+  );
+
   const dateRows = (
     [
       ["started_on", t("dates.started")],
@@ -140,6 +172,29 @@ export function ReadEditor({
         onChange={changeState}
         label={(state) => tStates(state)}
       />
+
+      {statusChoices.length > 0 && (
+        <ChoiceChips
+          legend={t("customStatus", { state: tStates(shown.state) })}
+          name={`${id}-status`}
+          size="sm"
+          tone="teal"
+          disabled={pending}
+          options={[NO_STATUS, ...statusChoices.map((status) => status.id)]}
+          value={
+            statusChoices.some((status) => status.id === shown.statusId)
+              ? shown.statusId!
+              : NO_STATUS
+          }
+          onChange={changeStatus}
+          label={(value) =>
+            value === NO_STATUS
+              ? t("noCustomStatus")
+              : (statusChoices.find((status) => status.id === value)?.name ??
+                value)
+          }
+        />
+      )}
 
       {progress?.({
         state: shown.state,

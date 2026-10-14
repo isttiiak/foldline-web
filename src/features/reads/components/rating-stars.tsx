@@ -4,6 +4,7 @@ import { Star } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useId, useState } from "react";
 
+import { useRatingScale } from "@/features/custom/components/rating-scale";
 import { cn } from "@/lib/utils";
 
 const STARS = [1, 2, 3, 4, 5];
@@ -29,7 +30,7 @@ function fillFor(star: number, rating: number | null): 0 | 0.5 | 1 {
   return rating === star * 2 - 1 ? 0.5 : 0;
 }
 
-/** A 1-10 rating shown as five stars (read-only). */
+/** A 1-10 rating shown on the reader's scale (read-only); nothing when ratings are off. */
 export function StarsDisplay({
   rating,
   className,
@@ -38,24 +39,47 @@ export function StarsDisplay({
   className?: string;
 }) {
   const t = useTranslations("Reads.rating");
+  const scale = useRatingScale();
+  if (scale === "off") return null;
+  if (scale === "ten") {
+    return (
+      <span className={cn("text-sm font-medium text-amber", className)}>
+        {t("outOfTen", { rating })}
+      </span>
+    );
+  }
+  // Whole stars round a half up, so no rating is lost by switching scales.
+  const shown = scale === "stars" ? Math.ceil(rating / 2) * 2 : rating;
   return (
     <span
       role="img"
-      aria-label={t("stars", { stars: rating / 2 })}
+      aria-label={t("stars", { stars: shown / 2 })}
       className={cn("inline-flex gap-0.5", className)}
     >
       {STARS.map((star) => (
-        <StarShape key={star} fill={fillFor(star, rating)} size="size-4" />
+        <StarShape key={star} fill={fillFor(star, shown)} size="size-4" />
       ))}
     </span>
   );
 }
 
 /**
- * Pick a rating from half a star to five (stored as 1-10). Ten radios under
- * the star halves: arrow keys move between them, and each reads as "3.5 stars".
+ * Pick a rating on the reader's scale (always stored as 1-10). Nothing at all
+ * when ratings are off.
  */
-export function RatingStars({
+export function RatingStars(props: {
+  value: number | null;
+  onChange: (rating: number | null) => void;
+  disabled?: boolean;
+}) {
+  const scale = useRatingScale();
+  if (scale === "off") return null;
+  if (scale === "ten") return <RatingPoints {...props} />;
+  return <StarPicker {...props} halves={scale === "half-stars"} />;
+}
+
+/** Ten numbered chips (radios): "7 out of 10". */
+function RatingPoints({
   value,
   onChange,
   disabled = false,
@@ -66,8 +90,68 @@ export function RatingStars({
 }) {
   const t = useTranslations("Reads.rating");
   const name = useId();
+  return (
+    <fieldset disabled={disabled} className="flex flex-col gap-2">
+      <legend className="mb-2 text-sm font-medium">{t("legend")}</legend>
+      <div className="flex flex-wrap items-center gap-1.5">
+        {Array.from({ length: 10 }, (_, i) => i + 1).map((rating) => (
+          <label key={rating} className="cursor-pointer">
+            <input
+              type="radio"
+              name={name}
+              value={rating}
+              checked={value === rating}
+              onChange={() => onChange(rating)}
+              className="peer sr-only"
+            />
+            <span
+              aria-hidden
+              className={cn(
+                "inline-grid size-9 press place-items-center rounded-xl border border-border bg-background/50 text-sm text-muted-foreground tabular-nums transition-colors peer-focus-visible:ring-3 peer-focus-visible:ring-ring/50 hover:text-foreground",
+                value !== null &&
+                  rating <= value &&
+                  "border-amber/50 bg-amber/15 text-amber",
+              )}
+            >
+              {rating}
+            </span>
+            <span className="sr-only">{t("outOfTen", { rating })}</span>
+          </label>
+        ))}
+        {value !== null && (
+          <button
+            type="button"
+            onClick={() => onChange(null)}
+            className="ml-2 press rounded-lg text-sm text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
+          >
+            {t("clear")}
+          </button>
+        )}
+      </div>
+    </fieldset>
+  );
+}
+
+/**
+ * Five stars. With halves: ten radios under the star halves (arrow keys move
+ * between them, each reads as "3.5 stars"); without: five whole-star radios.
+ */
+function StarPicker({
+  value,
+  onChange,
+  disabled = false,
+  halves,
+}: {
+  value: number | null;
+  onChange: (rating: number | null) => void;
+  disabled?: boolean;
+  halves: boolean;
+}) {
+  const t = useTranslations("Reads.rating");
+  const name = useId();
   const [hover, setHover] = useState<number | null>(null);
-  const shown = hover ?? value;
+  const stored = value !== null && !halves ? Math.ceil(value / 2) * 2 : value;
+  const shown = hover ?? stored;
 
   return (
     <fieldset
@@ -81,28 +165,31 @@ export function RatingStars({
           {STARS.map((star) => (
             <span key={star} className="relative inline-block size-8">
               <StarShape fill={fillFor(star, shown)} size="size-8" />
-              {[star * 2 - 1, star * 2].map((rating) => (
-                <label
-                  key={rating}
-                  className={cn(
-                    "absolute inset-y-0 w-1/2 cursor-pointer",
-                    rating % 2 === 1 ? "left-0" : "right-0",
-                  )}
-                  onMouseEnter={() => setHover(rating)}
-                >
-                  <input
-                    type="radio"
-                    name={name}
-                    value={rating}
-                    checked={value === rating}
-                    onChange={() => onChange(rating)}
-                    className="sr-only"
-                  />
-                  <span className="sr-only">
-                    {t("stars", { stars: rating / 2 })}
-                  </span>
-                </label>
-              ))}
+              {(halves ? [star * 2 - 1, star * 2] : [star * 2]).map(
+                (rating) => (
+                  <label
+                    key={rating}
+                    className={cn(
+                      "absolute inset-y-0 cursor-pointer",
+                      !halves ? "inset-x-0" : "w-1/2",
+                      halves && (rating % 2 === 1 ? "left-0" : "right-0"),
+                    )}
+                    onMouseEnter={() => setHover(rating)}
+                  >
+                    <input
+                      type="radio"
+                      name={name}
+                      value={rating}
+                      checked={stored === rating}
+                      onChange={() => onChange(rating)}
+                      className="sr-only"
+                    />
+                    <span className="sr-only">
+                      {t("stars", { stars: rating / 2 })}
+                    </span>
+                  </label>
+                ),
+              )}
             </span>
           ))}
         </div>

@@ -61,7 +61,7 @@ export function RhythmCalendar({
   return (
     <section
       aria-labelledby="stats-rhythm"
-      className="flex enter flex-col gap-5 rounded-3xl border bg-card/60 p-6 backdrop-blur-sm md:col-span-2"
+      className="flex min-w-0 enter flex-col gap-5 rounded-3xl border bg-card/60 p-6 backdrop-blur-sm md:col-span-2"
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex flex-col gap-1">

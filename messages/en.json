@@ -141,7 +141,8 @@
     "settings": "Settings",
     "yourProfile": "Your profile",
     "stats": "Stats",
-    "goals": "Goals"
+    "goals": "Goals",
+    "shelves": "Shelves"
   },
   "Palette": {
     "title": "Search and actions",
@@ -182,7 +183,13 @@
         "finished": "Recently finished",
         "rating": "Highest rated"
       },
-      "reset": "Show everything"
+      "reset": "Show everything",
+      "tag": "Tag",
+      "allTags": "All tags",
+      "shelf": "Shelf",
+      "allShelves": "All shelves",
+      "status": "Your status",
+      "allStatuses": "All your statuses"
     },
     "count": "{count, plural, one {# book} other {# books}}",
     "noMatchesTitle": "Nothing matches that",
@@ -417,7 +424,8 @@
     "rating": {
       "legend": "Your rating",
       "stars": "{stars, plural, one {# star} other {# stars}}",
-      "clear": "Clear rating"
+      "clear": "Clear rating",
+      "outOfTen": "{rating} out of 10"
     },
     "errors": {
       "invalid": "That change could not be saved; check the details.",
@@ -426,7 +434,9 @@
       "dateOrder": "The end date comes before the start date. Check the dates.",
       "future": "Dates cannot be in the future.",
       "notYet": "Finish or set this read down first, then start a new one."
-    }
+    },
+    "customStatus": "Your status within {state}",
+    "noCustomStatus": "None"
   },
   "FinishMoment": {
     "finished": {
@@ -703,6 +713,18 @@
     "app": {
       "title": "Use Foldline as an app",
       "body": "Install Foldline to open it from your home screen or dock. It keeps working when the connection drops: recent pages stay readable and progress you log waits on your device until you are back online. You can also share a book link from another app straight into Foldline."
+    },
+    "ratings": {
+      "title": "Ratings",
+      "body": "Choose how ratings look, or turn them off. Ratings you already gave are kept either way."
+    },
+    "statuses": {
+      "title": "Your statuses",
+      "body": "Name the places a book can be, inside the usual states: \"Up next\" inside Planned, \"Book club\" inside Reading."
+    },
+    "fields": {
+      "title": "Your fields",
+      "body": "Add your own details to every book, like where you heard of it or whether it is signed."
     }
   },
   "Profile": {
@@ -835,12 +857,16 @@
     },
     "rating": {
       "average": "{stars} stars",
-      "caption": "{count, plural, one {Your rating, from # book} other {Average of your ratings, from # books}}"
+      "caption": "{count, plural, one {Your rating, from # book} other {Average of your ratings, from # books}}",
+      "averageTen": "{points} out of 10"
     },
     "authors": {
       "title": "Authors you finished most"
     },
-    "genresNote": "Genres will appear here once books can be tagged."
+    "tags": {
+      "title": "Tags on books you finished",
+      "note": "Tag your books (genres, moods, anything) and they will show here."
+    }
   },
   "Goals": {
     "metaTitle": "Your goals",
@@ -970,5 +996,204 @@
     "more": "Full",
     "byMonthToggle": "Days with reading, month by month",
     "monthDays": "{count, plural, =0 {none} one {# day} other {# days}}"
+  },
+  "Organise": {
+    "errors": {
+      "invalid": "That change could not be saved; check the details.",
+      "generic": "Something went wrong and nothing was changed. Please try again in a moment.",
+      "rateLimited": "That was a lot of changes at once. Please wait a little while, then try again.",
+      "duplicate": "You already have one with that name.",
+      "tooMany": "That is as many as Foldline keeps. Remove one to make room.",
+      "alreadyOut": "This copy is already out. Mark it returned first."
+    },
+    "book": {
+      "title": "Tags and shelves",
+      "tags": "Tags",
+      "tagsPlaceholder": "Add a tag, then press Enter",
+      "tagsFull": "That is plenty of tags",
+      "tagsHint": "Genres, moods, anything you like. Only you see them.",
+      "removeTag": "Remove the tag {name}",
+      "addTag": "Add the tag {name}",
+      "suggestions": "Tags you already use",
+      "saveTags": "Save tags",
+      "tagsSaved": "Saved",
+      "shelves": "On your shelves",
+      "noShelves": "You have no shelves of your own yet.",
+      "manage": "Make or manage shelves"
+    },
+    "metaTitle": "Shelves and tags",
+    "title": "Shelves and tags",
+    "intro": "Arrange your library your way. Only you can see any of it.",
+    "shelves": {
+      "title": "Your shelves",
+      "add": "New shelf",
+      "create": "Make shelf",
+      "save": "Save shelf",
+      "cancel": "Cancel",
+      "name": "Name",
+      "namePlaceholder": "Comfort reads",
+      "description": "A few words (optional)",
+      "empty": "No shelves yet. Make one, then place books on it from their page.",
+      "smartHint": "Smart shelves fill themselves: filter your library, then choose \"Save as a smart shelf\".",
+      "editShelf": "Edit the shelf {name}",
+      "count": "{count, plural, =0 {Empty for now} one {# book} other {# books}}",
+      "smart": "Smart shelf",
+      "matching": "\"{q}\"",
+      "delete": "Remove shelf",
+      "deleteConfirm": "Yes, remove it",
+      "deleteNote": "The shelf goes; every book on it stays in your library."
+    },
+    "tags": {
+      "title": "Your tags",
+      "empty": "No tags yet. Add them to a book from its page.",
+      "edit": "Edit the tag {name}",
+      "name": "Name",
+      "colour": "Colour",
+      "tones": {
+        "none": "Plain",
+        "amber": "Amber",
+        "coral": "Coral",
+        "rose": "Rose",
+        "teal": "Teal",
+        "lime": "Lime"
+      },
+      "save": "Save tag",
+      "cancel": "Cancel",
+      "delete": "Remove tag",
+      "deleteConfirm": "{count, plural, =0 {Yes, remove it} one {Remove it from # book} other {Remove it from # books}}"
+    },
+    "save": {
+      "open": "Save as a smart shelf",
+      "name": "Smart shelf name",
+      "save": "Save shelf",
+      "cancel": "Cancel",
+      "saved": "Saved \"{name}\". It will keep itself up to date.",
+      "see": "See your shelves"
+    }
+  },
+  "Custom": {
+    "book": {
+      "title": "Your fields",
+      "edit": "Edit",
+      "save": "Save",
+      "cancel": "Cancel",
+      "empty": "Nothing filled in yet.",
+      "unset": "Not set",
+      "yes": "Yes",
+      "no": "No",
+      "manage": "Manage your fields"
+    },
+    "cancel": "Cancel",
+    "ratings": {
+      "legend": "Rating scale",
+      "scales": {
+        "half-stars": "Half stars",
+        "stars": "Whole stars",
+        "ten": "Out of 10",
+        "off": "No ratings"
+      },
+      "hints": {
+        "half-stars": "Five stars, in halves.",
+        "stars": "Five whole stars. Half stars you gave earlier show rounded up.",
+        "ten": "A number from 1 to 10.",
+        "off": "Ratings are hidden everywhere. Turn them back on any time; nothing is lost."
+      }
+    },
+    "statuses": {
+      "list": "Your statuses",
+      "empty": "None yet. The usual states are always there.",
+      "inside": "inside {state}",
+      "edit": "Edit the status {name}",
+      "add": "Add a status",
+      "name": "Name",
+      "namePlaceholder": "Up next",
+      "state": "Inside which state",
+      "create": "Add status",
+      "save": "Save status",
+      "delete": "Remove status",
+      "deleteConfirm": "Yes, remove it"
+    },
+    "fields": {
+      "list": "Your fields",
+      "empty": "None yet.",
+      "edit": "Edit the field {name}",
+      "add": "Add a field",
+      "name": "Name",
+      "namePlaceholder": "Signed copy",
+      "kind": "Kind",
+      "kinds": {
+        "text": "Text",
+        "number": "Number",
+        "date": "Date",
+        "boolean": "Yes or no",
+        "choice": "A choice"
+      },
+      "options": "Choices",
+      "optionsPlaceholder": "Add a choice, then press Enter",
+      "optionsFull": "That is plenty of choices",
+      "removeOption": "Remove the choice {name}",
+      "kindChangeNote": "Values that do not fit the new kind will be hidden.",
+      "create": "Add field",
+      "save": "Save field",
+      "delete": "Remove field",
+      "deleteConfirm": "Yes, remove it"
+    }
+  },
+  "Copies": {
+    "title": "Copies",
+    "add": "Add a copy",
+    "empty": "Note the copies you have, where they live, and who has them.",
+    "ownership": {
+      "owned": "Mine",
+      "borrowed": "Borrowed",
+      "library": "From a library",
+      "subscription": "Subscription"
+    },
+    "acquired": "Since {date}",
+    "lentTo": "Lent to {person} on {date}.",
+    "borrowedFrom": "Borrowed from {person} on {date}.",
+    "due": "Back by {date}.",
+    "cameBack": "It came back",
+    "gaveBack": "I gave it back",
+    "lend": "Lend it",
+    "noteBorrowed": "Who lent it?",
+    "edit": "Edit",
+    "remove": "Remove copy",
+    "removeConfirm": "Remove this copy",
+    "keep": "Keep it",
+    "history": "{count, plural, one {# earlier loan} other {# earlier loans}}",
+    "pastLent": "Lent to {person}, {from} to {to}",
+    "pastBorrowed": "Borrowed from {person}, {from} to {to}",
+    "forgetLoan": "Forget the loan with {person}",
+    "form": {
+      "ownership": "How you have it",
+      "edition": "Edition",
+      "anyEdition": "Not specified",
+      "location": "Where it lives",
+      "locationPlaceholder": "Living room, top shelf",
+      "acquired": "Yours since",
+      "since": "Have it since",
+      "note": "Note",
+      "notePlaceholder": "Signed copy, a gift from Ma…",
+      "add": "Add copy",
+      "save": "Save copy",
+      "cancel": "Cancel"
+    },
+    "loan": {
+      "to": "Lent to",
+      "from": "Borrowed from",
+      "since": "Since",
+      "due": "Back by (optional)",
+      "saveLent": "Save loan",
+      "saveBorrowed": "Save"
+    },
+    "open": {
+      "title": "On loan",
+      "empty": "Nothing lent out or borrowed right now.",
+      "lent": "Lent out",
+      "borrowed": "Borrowed",
+      "line": "{person}, since {date}.",
+      "due": "Back by {date}."
+    }
   }
 }

@@ -22,6 +22,9 @@ function row(overrides: Partial<LibraryRow> & { id: string }): LibraryRow {
     finishedOn: null,
     createdAt: "2026-01-01T00:00:00Z",
     formats: ["paperback"],
+    tagIds: [],
+    shelfIds: [],
+    statusId: null,
     ...overrides,
   };
 }
@@ -170,6 +173,23 @@ describe("applyLibraryView", () => {
     expect(result.counts.reading).toBe(2);
   });
 
+  it("filters by tag, manual shelf and custom status", () => {
+    const tag = "11111111-1111-4111-8111-111111111111";
+    const shelf = "22222222-2222-4222-8222-222222222222";
+    const status = "33333333-3333-4333-8333-333333333333";
+    const tagged = [
+      row({ id: "t", tagIds: [tag] }),
+      row({ id: "s", shelfIds: [shelf], tagIds: [tag] }),
+      row({ id: "u", statusId: status, state: "reading" }),
+      row({ id: "none" }),
+    ];
+    expect(ids(view(tagged, { tag }).books).sort()).toEqual(["s", "t"]);
+    expect(ids(view(tagged, { tag, shelf }).books)).toEqual(["s"]);
+    const byStatus = view(tagged, { status });
+    expect(ids(byStatus.books)).toEqual(["u"]);
+    expect(byStatus.counts.reading).toBe(1);
+  });
+
   it("does not change the rows it is given", () => {
     const copy = [...rows];
     view(rows, { sort: "title" });
@@ -193,6 +213,15 @@ describe("countByState", () => {
 describe("likePattern", () => {
   it("escapes wildcard characters", () => {
     expect(likePattern("100%_a\\b")).toBe("%100\\%\\_a\\\\b%");
+  });
+});
+
+describe("parseLibraryParams (organising)", () => {
+  it("keeps valid ids and drops anything else", () => {
+    const id = "11111111-1111-4111-8111-111111111111";
+    expect(
+      parseLibraryParams({ tag: id, shelf: "nope", status: [id, "x"] }),
+    ).toMatchObject({ tag: id, shelf: undefined, status: id });
   });
 });
 

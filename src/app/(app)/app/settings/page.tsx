@@ -1,6 +1,9 @@
 import {
   ArrowRight,
   Download,
+  ListChecks,
+  SlidersHorizontal,
+  Star,
   ShieldCheck,
   Smartphone,
   Trash2,
@@ -12,6 +15,16 @@ import { getTranslations } from "next-intl/server";
 
 import { buttonVariants } from "@/components/ui/button";
 import { DeleteAccountForm } from "@/features/account/components/delete-account-form";
+import {
+  FieldsManager,
+  RatingScalePicker,
+  StatusesManager,
+} from "@/features/custom/components/library-setup";
+import {
+  getCustomFields,
+  getCustomStatuses,
+} from "@/features/custom/server/queries";
+import { getProfile } from "@/features/profile/server/queries";
 import { InstallApp } from "@/features/pwa/components/install-app";
 import { requireUser } from "@/lib/auth";
 import { cn } from "@/lib/utils";
@@ -24,17 +37,21 @@ export async function generateMetadata(): Promise<Metadata> {
 function Card({
   icon: Icon,
   title,
+  id,
   tone = "default",
   children,
 }: {
   icon: typeof UserRound;
   title: string;
+  /** A stable anchor (otherwise made from the title). */
+  id?: string;
   tone?: "default" | "danger";
   children: React.ReactNode;
 }) {
-  const titleId = `settings-${title.toLowerCase().replace(/\W+/g, "-")}`;
+  const titleId = id ?? `settings-${title.toLowerCase().replace(/\W+/g, "-")}`;
   return (
     <section
+      id={id ? `${id}-section` : undefined}
       aria-labelledby={titleId}
       className={cn(
         "flex flex-col gap-4 rounded-3xl border bg-card/60 p-6 backdrop-blur-sm sm:p-8",
@@ -65,6 +82,11 @@ function Card({
 export default async function SettingsPage() {
   const user = await requireUser();
   const t = await getTranslations("Settings");
+  const [profile, statuses, fields] = await Promise.all([
+    getProfile(),
+    getCustomStatuses(),
+    getCustomFields(),
+  ]);
 
   return (
     <div className="flex flex-1 flex-col gap-8">
@@ -98,6 +120,35 @@ export default async function SettingsPage() {
             <ArrowRight className="size-4" aria-hidden />
           </Link>
         </div>
+      </Card>
+
+      <Card icon={Star} title={t("ratings.title")} id="settings-ratings">
+        <p className="leading-relaxed text-muted-foreground">
+          {t("ratings.body")}
+        </p>
+        <RatingScalePicker scale={profile?.ratingScale ?? "half-stars"} />
+      </Card>
+
+      <Card
+        icon={ListChecks}
+        title={t("statuses.title")}
+        id="settings-custom-statuses"
+      >
+        <p className="leading-relaxed text-muted-foreground">
+          {t("statuses.body")}
+        </p>
+        <StatusesManager statuses={statuses} />
+      </Card>
+
+      <Card
+        icon={SlidersHorizontal}
+        title={t("fields.title")}
+        id="settings-custom-fields"
+      >
+        <p className="leading-relaxed text-muted-foreground">
+          {t("fields.body")}
+        </p>
+        <FieldsManager fields={fields} />
       </Card>
 
       <Card icon={Smartphone} title={t("app.title")}>

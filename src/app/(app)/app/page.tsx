@@ -10,18 +10,28 @@ import { LibraryToolbar } from "@/features/library/components/library-toolbar";
 import { ShelfGrid } from "@/features/library/components/shelf-grid";
 import { libraryHref, parseLibraryParams } from "@/features/library/query";
 import { getLibrary } from "@/features/library/server/queries";
+import { getCustomStatuses } from "@/features/custom/server/queries";
 import { getProfile } from "@/features/profile/server/queries";
+import { getShelves, getTags } from "@/features/shelves/server/queries";
 import { cn } from "@/lib/utils";
 
 export default async function LibraryPage({ searchParams }: PageProps<"/app">) {
   const t = await getTranslations("Library");
   const params = parseLibraryParams(await searchParams);
   const profile = await getProfile();
-  const [{ books, total, hasMore, counts, hasBooks }, { goals }] =
-    await Promise.all([
-      getLibrary(params),
-      getGoals(profile?.timezone ?? "UTC"),
-    ]);
+  const [
+    { books, total, hasMore, counts, hasBooks },
+    { goals },
+    tags,
+    shelves,
+    statuses,
+  ] = await Promise.all([
+    getLibrary(params),
+    getGoals(profile?.timezone ?? "UTC"),
+    getTags(),
+    getShelves(),
+    getCustomStatuses(),
+  ]);
 
   const addButton = (
     <Link
@@ -63,7 +73,13 @@ export default async function LibraryPage({ searchParams }: PageProps<"/app">) {
         {addButton}
       </div>
       <GoalsCard goals={goals} />
-      <LibraryToolbar params={params} counts={counts} />
+      <LibraryToolbar
+        params={params}
+        counts={counts}
+        tags={tags}
+        shelves={shelves.filter((shelf) => shelf.kind === "manual")}
+        statuses={statuses}
+      />
       {books.length > 0 ? (
         <>
           <ShelfGrid books={books} />

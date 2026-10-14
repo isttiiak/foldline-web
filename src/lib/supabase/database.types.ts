@@ -47,6 +47,123 @@ export type Database = {
         };
         Relationships: [];
       };
+      copies: {
+        Row: {
+          acquired_on: string | null;
+          created_at: string;
+          edition_id: string | null;
+          id: string;
+          location: string | null;
+          note: string | null;
+          ownership: Database["public"]["Enums"]["copy_ownership"];
+          updated_at: string;
+          user_id: string;
+          work_id: string;
+        };
+        Insert: {
+          acquired_on?: string | null;
+          created_at?: string;
+          edition_id?: string | null;
+          id?: string;
+          location?: string | null;
+          note?: string | null;
+          ownership?: Database["public"]["Enums"]["copy_ownership"];
+          updated_at?: string;
+          user_id?: string;
+          work_id: string;
+        };
+        Update: {
+          acquired_on?: string | null;
+          created_at?: string;
+          edition_id?: string | null;
+          id?: string;
+          location?: string | null;
+          note?: string | null;
+          ownership?: Database["public"]["Enums"]["copy_ownership"];
+          updated_at?: string;
+          user_id?: string;
+          work_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "copies_edition_id_work_id_user_id_fkey";
+            columns: ["edition_id", "work_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "editions";
+            referencedColumns: ["id", "work_id", "user_id"];
+          },
+          {
+            foreignKeyName: "copies_work_id_user_id_fkey";
+            columns: ["work_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "works";
+            referencedColumns: ["id", "user_id"];
+          },
+        ];
+      };
+      custom_fields: {
+        Row: {
+          created_at: string;
+          id: string;
+          kind: Database["public"]["Enums"]["custom_field_kind"];
+          name: string;
+          options: string[];
+          position: number;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          kind: Database["public"]["Enums"]["custom_field_kind"];
+          name: string;
+          options?: string[];
+          position?: number;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          kind?: Database["public"]["Enums"]["custom_field_kind"];
+          name?: string;
+          options?: string[];
+          position?: number;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      custom_statuses: {
+        Row: {
+          base_state: Database["public"]["Enums"]["read_state"];
+          created_at: string;
+          id: string;
+          name: string;
+          position: number;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          base_state: Database["public"]["Enums"]["read_state"];
+          created_at?: string;
+          id?: string;
+          name: string;
+          position?: number;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Update: {
+          base_state?: Database["public"]["Enums"]["read_state"];
+          created_at?: string;
+          id?: string;
+          name?: string;
+          position?: number;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       editions: {
         Row: {
           bought_from: string | null;
@@ -123,6 +240,56 @@ export type Database = {
             columns: ["work_id", "user_id"];
             isOneToOne: false;
             referencedRelation: "works";
+            referencedColumns: ["id", "user_id"];
+          },
+        ];
+      };
+      loans: {
+        Row: {
+          copy_id: string;
+          created_at: string;
+          direction: Database["public"]["Enums"]["loan_direction"];
+          due_on: string | null;
+          id: string;
+          note: string | null;
+          person: string;
+          returned_on: string | null;
+          started_on: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          copy_id: string;
+          created_at?: string;
+          direction: Database["public"]["Enums"]["loan_direction"];
+          due_on?: string | null;
+          id?: string;
+          note?: string | null;
+          person: string;
+          returned_on?: string | null;
+          started_on: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Update: {
+          copy_id?: string;
+          created_at?: string;
+          direction?: Database["public"]["Enums"]["loan_direction"];
+          due_on?: string | null;
+          id?: string;
+          note?: string | null;
+          person?: string;
+          returned_on?: string | null;
+          started_on?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "loans_copy_id_user_id_fkey";
+            columns: ["copy_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "copies";
             referencedColumns: ["id", "user_id"];
           },
         ];
@@ -246,6 +413,24 @@ export type Database = {
         };
         Relationships: [];
       };
+      rate_limits: {
+        Row: {
+          bucket: string;
+          hits: number;
+          window_start: string;
+        };
+        Insert: {
+          bucket: string;
+          hits?: number;
+          window_start: string;
+        };
+        Update: {
+          bucket?: string;
+          hits?: number;
+          window_start?: string;
+        };
+        Relationships: [];
+      };
       reading_goals: {
         Row: {
           celebrated_at: string | null;
@@ -294,6 +479,7 @@ export type Database = {
       reads: {
         Row: {
           created_at: string;
+          custom_status_id: string | null;
           edition_id: string | null;
           finished_on: string | null;
           id: string;
@@ -308,6 +494,7 @@ export type Database = {
         };
         Insert: {
           created_at?: string;
+          custom_status_id?: string | null;
           edition_id?: string | null;
           finished_on?: string | null;
           id?: string;
@@ -322,6 +509,7 @@ export type Database = {
         };
         Update: {
           created_at?: string;
+          custom_status_id?: string | null;
           edition_id?: string | null;
           finished_on?: string | null;
           id?: string;
@@ -349,23 +537,111 @@ export type Database = {
             referencedRelation: "works";
             referencedColumns: ["id", "user_id"];
           },
+          {
+            foreignKeyName: "reads_custom_status_id_user_id_fkey";
+            columns: ["custom_status_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "custom_statuses";
+            referencedColumns: ["id", "user_id"];
+          },
         ];
       };
-      rate_limits: {
+      shelf_items: {
         Row: {
-          bucket: string;
-          hits: number;
-          window_start: string;
+          created_at: string;
+          shelf_id: string;
+          user_id: string;
+          work_id: string;
         };
         Insert: {
-          bucket: string;
-          hits?: number;
-          window_start: string;
+          created_at?: string;
+          shelf_id: string;
+          user_id?: string;
+          work_id: string;
         };
         Update: {
-          bucket?: string;
-          hits?: number;
-          window_start?: string;
+          created_at?: string;
+          shelf_id?: string;
+          user_id?: string;
+          work_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "shelf_items_shelf_id_user_id_fkey";
+            columns: ["shelf_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "shelves";
+            referencedColumns: ["id", "user_id"];
+          },
+          {
+            foreignKeyName: "shelf_items_work_id_user_id_fkey";
+            columns: ["work_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "works";
+            referencedColumns: ["id", "user_id"];
+          },
+        ];
+      };
+      shelves: {
+        Row: {
+          created_at: string;
+          description: string | null;
+          id: string;
+          kind: Database["public"]["Enums"]["shelf_kind"];
+          name: string;
+          position: number;
+          query: Json | null;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          kind?: Database["public"]["Enums"]["shelf_kind"];
+          name: string;
+          position?: number;
+          query?: Json | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          kind?: Database["public"]["Enums"]["shelf_kind"];
+          name?: string;
+          position?: number;
+          query?: Json | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      tags: {
+        Row: {
+          created_at: string;
+          id: string;
+          name: string;
+          tone: string | null;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          name: string;
+          tone?: string | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          name?: string;
+          tone?: string | null;
+          updated_at?: string;
+          user_id?: string;
         };
         Relationships: [];
       };
@@ -417,9 +693,46 @@ export type Database = {
           },
         ];
       };
+      work_tags: {
+        Row: {
+          created_at: string;
+          tag_id: string;
+          user_id: string;
+          work_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          tag_id: string;
+          user_id?: string;
+          work_id: string;
+        };
+        Update: {
+          created_at?: string;
+          tag_id?: string;
+          user_id?: string;
+          work_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "work_tags_tag_id_user_id_fkey";
+            columns: ["tag_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "tags";
+            referencedColumns: ["id", "user_id"];
+          },
+          {
+            foreignKeyName: "work_tags_work_id_user_id_fkey";
+            columns: ["work_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "works";
+            referencedColumns: ["id", "user_id"];
+          },
+        ];
+      };
       works: {
         Row: {
           created_at: string;
+          custom_values: Json;
           description: string | null;
           field_locks: string[];
           id: string;
@@ -434,6 +747,7 @@ export type Database = {
         };
         Insert: {
           created_at?: string;
+          custom_values?: Json;
           description?: string | null;
           field_locks?: string[];
           id?: string;
@@ -448,6 +762,7 @@ export type Database = {
         };
         Update: {
           created_at?: string;
+          custom_values?: Json;
           description?: string | null;
           field_locks?: string[];
           id?: string;
@@ -477,6 +792,8 @@ export type Database = {
       };
     };
     Enums: {
+      copy_ownership: "owned" | "borrowed" | "library" | "subscription";
+      custom_field_kind: "text" | "number" | "date" | "boolean" | "choice";
       edition_format:
         | "paperback"
         | "hardcover"
@@ -485,6 +802,7 @@ export type Database = {
         | "other";
       goal_metric: "books" | "pages";
       goal_period: "year" | "month" | "custom";
+      loan_direction: "lent" | "borrowed";
       progress_source:
         | "manual"
         | "koreader"
@@ -503,6 +821,7 @@ export type Database = {
         | "resting"
         | "finished"
         | "dnf";
+      shelf_kind: "manual" | "smart";
       work_author_role:
         | "author"
         | "translator"
@@ -533,12 +852,16 @@ export type Enums<T extends keyof DefaultSchema["Enums"]> =
 export const Constants = {
   public: {
     Enums: {
+      copy_ownership: ["owned", "borrowed", "library", "subscription"],
+      custom_field_kind: ["text", "number", "date", "boolean", "choice"],
       edition_format: ["paperback", "hardcover", "ebook", "audiobook", "other"],
       goal_metric: ["books", "pages"],
       goal_period: ["year", "month", "custom"],
+      loan_direction: ["lent", "borrowed"],
       progress_source: ["manual", "koreader", "kindle", "import", "audiobookshelf"],
       progress_unit: ["pages", "percent", "location", "minutes", "chapter"],
       read_state: ["planned", "reading", "resting", "finished", "dnf"],
+      shelf_kind: ["manual", "smart"],
       work_author_role: ["author", "translator", "editor", "illustrator", "narrator"],
     },
   },

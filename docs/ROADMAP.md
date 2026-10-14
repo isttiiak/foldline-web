@@ -58,9 +58,9 @@ Tick items as they are completed. One item per Claude Code session.
 
 ## Phase 4: Management
 
-- [ ] Tags + manual shelves + smart shelves (saved queries)
-- [ ] Custom statuses, optional rating scales, custom fields
-- [ ] Copies & loans (ownership, location, lent to / borrowed from)
+- [x] Tags + manual shelves + smart shelves (saved queries)
+- [x] Custom statuses, optional rating scales, custom fields
+- [x] Copies & loans (ownership, location, lent to / borrowed from)
 - [ ] Bulk edit, duplicate/edition merge, undo
 - [ ] Full export (CSV, Markdown per book) on top of the Phase 1 JSON export
 - [ ] Import Goodreads + StoryGraph CSV

@@ -9,6 +9,9 @@ import { LibraryToolbar } from "./library-toolbar";
 
 const replace = vi.hoisted(() => vi.fn());
 vi.mock("next/navigation", () => ({ useRouter: () => ({ replace }) }));
+vi.mock("@/features/shelves/server/actions", () => ({
+  createSmartShelfAction: vi.fn(),
+}));
 
 const base: LibraryParams = { q: "", sort: "added", pages: 1 };
 const counts = countByState([]);
@@ -61,5 +64,32 @@ describe("LibraryToolbar search box", () => {
     render(ui({ ...base, q: "abc" }));
     fireEvent.keyDown(box(), { key: "Escape" });
     expect(box()).toHaveValue("");
+  });
+});
+
+describe("LibraryToolbar organising filters", () => {
+  const tag = { id: "11111111-1111-4111-8111-111111111111", name: "cosy" };
+
+  test("appear only when there is something to filter by", () => {
+    const { rerender } = render(ui(base));
+    expect(screen.queryByLabelText("Tag")).not.toBeInTheDocument();
+    rerender(
+      <NextIntlClientProvider locale="en" messages={messages}>
+        <LibraryToolbar params={base} counts={counts} tags={[tag]} />
+      </NextIntlClientProvider>,
+    );
+    expect(screen.getByLabelText("Tag")).toBeInTheDocument();
+    expect(screen.queryByLabelText("Shelf")).not.toBeInTheDocument();
+  });
+
+  test("offer to save a filtered view as a smart shelf", () => {
+    const { rerender } = render(ui(base));
+    expect(
+      screen.queryByRole("button", { name: "Save as a smart shelf" }),
+    ).not.toBeInTheDocument();
+    rerender(ui({ ...base, state: "planned" }));
+    expect(
+      screen.getByRole("button", { name: "Save as a smart shelf" }),
+    ).toBeInTheDocument();
   });
 });

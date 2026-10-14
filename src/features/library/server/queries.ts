@@ -13,6 +13,7 @@ import {
   type LibraryRow,
   type StateCounts,
 } from "@/features/library/query";
+import { getBookLinks } from "@/features/shelves/server/queries";
 import { createClient } from "@/lib/supabase/server";
 
 export type ShelfBook = {
@@ -69,6 +70,23 @@ async function searchWorkIds(
   return ids;
 }
 
+/** Each read's custom status. Read on its own so the library loads without it. */
+async function readStatuses(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+): Promise<Map<string, string>> {
+  const { data, error } = await supabase
+    .from("reads")
+    .select("id, custom_status_id")
+    .not("custom_status_id", "is", null)
+    .limit(FETCH_LIMIT * 4);
+  if (error) console.error(`[library] statuses read failed: ${error.message}`);
+  return new Map(
+    (data ?? []).flatMap((read) =>
+      read.custom_status_id ? [[read.id, read.custom_status_id]] : [],
+    ),
+  );
+}
+
 /**
  * The reader's books for the library page: searched, filtered and sorted. State
  * lives on a work's latest read, so filtering and sorting run here on the loaded
@@ -86,6 +104,8 @@ export async function getLibrary(params: LibraryParams): Promise<Library> {
   const matching = params.q ? await searchWorkIds(supabase, params.q) : null;
   if (params.q && matching === null) return empty;
 
+  const linksRead = getBookLinks(supabase);
+  const statusesRead = readStatuses(supabase);
   const { data, error } = await supabase
     .from("works")
     .select(
@@ -106,6 +126,11 @@ export async function getLibrary(params: LibraryParams): Promise<Library> {
     console.error(`[library] read failed: ${error.message}`);
     return empty;
   }
+
+  const [{ tagsByWork, shelvesByWork }, statuses] = await Promise.all([
+    linksRead,
+    statusesRead,
+  ]);
 
   const rows: LibraryRow[] = data.map((work) => {
     const latestRead = [...work.reads].sort(newestReadFirst)[0];
@@ -146,6 +171,9 @@ export async function getLibrary(params: LibraryParams): Promise<Library> {
       finishedOn: finished.length > 0 ? finished.sort().at(-1)! : null,
       createdAt: work.created_at,
       formats: [...new Set(editions.map((e) => e.format))],
+      tagIds: tagsByWork.get(work.id) ?? [],
+      shelfIds: shelvesByWork.get(work.id) ?? [],
+      statusId: latestRead ? (statuses.get(latestRead.id) ?? null) : null,
     };
   });
 
