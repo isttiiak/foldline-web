@@ -283,7 +283,8 @@
       "coverNotSaved": "The book is saved, but its cover photo was not. You can add it again later.",
       "seeShelf": "See your shelf",
       "another": "Add another"
-    }
+    },
+    "shared": "Shared from another app. Check the match below, then add it."
   },
   "BookDetail": {
     "back": "Your library",
@@ -467,7 +468,8 @@
       "logged": "Logged.",
       "loggedPercent": "Logged. You are {percent}% of the way through.",
       "wholeBook": "That is the whole book. Lovely.",
-      "markFinished": "Mark it finished"
+      "markFinished": "Mark it finished",
+      "queued": "Saved on this device. It will be added when you are back online."
     },
     "units": {
       "pages": "Pages",
@@ -481,7 +483,8 @@
       "generic": "Something went wrong and nothing was logged. Please try again in a moment.",
       "rateLimited": "That was a lot at once. Please wait a little while, then try again.",
       "pastTheEnd": "That is past the end of the book. Check the number or the total.",
-      "future": "That day has not happened yet."
+      "future": "That day has not happened yet.",
+      "notFound": "That book is no longer on your shelf, so nothing was logged."
     },
     "entry": {
       "pages": "Page {value}",
@@ -696,6 +699,10 @@
         "generic": "Something went wrong and nothing was deleted. Please try again in a moment.",
         "rateLimited": "Too many tries for now. Please wait a little while, then try again."
       }
+    },
+    "app": {
+      "title": "Use Foldline as an app",
+      "body": "Install Foldline to open it from your home screen or dock. It keeps working when the connection drops: recent pages stay readable and progress you log waits on your device until you are back online. You can also share a book link from another app straight into Foldline."
     }
   },
   "Profile": {
@@ -920,6 +927,34 @@
       "title": "You reached a goal",
       "body": "{name}: {progress}. Lovely. However it went, the reading was all yours.",
       "close": "Wonderful"
+    }
+  },
+  "Pwa": {
+    "manifest": {
+      "name": "Foldline",
+      "description": "A private reading tracker for paper, ebooks and audiobooks. Mark your place, quietly.",
+      "addBook": "Add a book",
+      "library": "Library"
+    },
+    "offline": {
+      "metaTitle": "Offline",
+      "title": "You are offline",
+      "body": "This page was not saved on your device yet. Pages you opened recently still work, so try going back.",
+      "progress": "Progress you log while offline is kept on this device and added once you are back online.",
+      "retry": "Open my library"
+    },
+    "status": {
+      "offline": "You are offline. Recent pages still work.",
+      "waiting": "{count, plural, one {# progress entry is} other {# progress entries are}} waiting on this device.",
+      "added": "Added {count, plural, one {# entry} other {# entries}} you logged offline.",
+      "rejected": "{count, plural, one {# entry} other {# entries}} could not be added because the book changed or was removed.",
+      "dismiss": "Dismiss"
+    },
+    "install": {
+      "installed": "Foldline is installed on this device.",
+      "button": "Install Foldline",
+      "ios": "On iPhone or iPad: tap Share in Safari, then Add to Home Screen.",
+      "other": "Look for Install or Add to Home screen in your browser's menu."
     }
   }
 }

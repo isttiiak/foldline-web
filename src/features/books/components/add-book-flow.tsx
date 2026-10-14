@@ -103,14 +103,17 @@ function Added({
 }
 
 /** Find → check and complete → added. */
-export function AddBookFlow() {
+export function AddBookFlow({ shared = null }: { shared?: string | null }) {
   const [step, setStep] = useState<Step>({ name: "find" });
+  // A shared book fills the box once; "Add another" starts empty.
+  const [initialText, setInitialText] = useState(shared ?? "");
 
   return (
     <AnimatePresence mode="wait" initial={false}>
       {step.name === "find" && (
         <motion.div key="find" {...stepMotion}>
           <FindBook
+            initialText={initialText}
             onPick={(candidate, isbn) =>
               setStep({ name: "form", candidate, isbn })
             }
@@ -134,7 +137,10 @@ export function AddBookFlow() {
           <Added
             result={step.result}
             candidate={step.candidate}
-            onAnother={() => setStep({ name: "find" })}
+            onAnother={() => {
+              setInitialText("");
+              setStep({ name: "find" });
+            }}
           />
         </motion.div>
       )}

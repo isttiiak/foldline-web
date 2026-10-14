@@ -22,8 +22,10 @@ session: tick what is done, add what is next.
 - [x] `0004_profile_details.sql` and `supabase/dev-seeds/sample_library.sql` run on dev
       (2026-10-01): profile e2e passes, izhaaannn account has 12 sample books
 - [x] `0005_book_covers.sql` run on dev (2026-10-01): cover upload e2e passes
-- [ ] Optional: create GitHub Releases from the pushed tags (notes are in `CHANGELOG.md`); only
-      `v0.1.0` has one
+- [ ] Optional: create GitHub Releases for older tags (notes are in `CHANGELOG.md`); `v0.1.0` and
+      `v0.9.0` have one
+- [ ] Optional (Claude settings): allow GitHub commands without prompts in `.claude/settings.json`
+      (Claude may not edit its own permissions; see the snippet in the v0.9.0 session)
 
 ## Claude
 
@@ -110,7 +112,14 @@ remove. Small card on the library page for current goals. Migration `0007_readin
 dev and prod (2026-10-15, full e2e green). Released as v0.8.0.
 The spark burst moved to `src/components/motion/sparks.tsx` (shared by both moments).
 
-Next: Phase 3 "Reading rhythm view".
+Done on 2026-10-15 (v0.9.0): Phase 5 "PWA & offline". Serwist service worker (`src/worker/sw.ts`, served
+at `/serwist/sw.js`, production only), manifest + icons, `/offline` fallback, offline progress queue in
+IndexedDB with Background Sync and `POST /api/progress` (idempotent by `entryId`), "Use Foldline as an app"
+card in Settings, Web Share Target into `/app/add`. Sign out and `/goodbye` clear the device's caches and
+queue. No migration. Versioning policy and the v1.0.0 checklist are now at the top of `docs/ROADMAP.md`.
+To try the service worker locally: `pnpm build`, then the `foldline-prod` launch config (`pnpm start`).
+
+Next: Phase 3 "Reading rhythm view" (then Phase 4, which gates v1.0.0).
 
 Later (owner deferred, needs more effort): **Bengali-aware search**. Design agreed 2026-10-03:
 `src/features/search/` with `romanize.ts` (Bangla script to Latin), `phonetic.ts` (coarse key: vowel length,

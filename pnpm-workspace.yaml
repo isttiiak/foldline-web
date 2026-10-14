@@ -5,6 +5,7 @@ ignoredBuiltDependencies:
 
 onlyBuiltDependencies:
   - "@swc/core"
+  - esbuild
   - supabase
 
 overrides:

@@ -5,6 +5,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { MotionProvider } from "@/components/motion-provider";
 import { HashSessionHandler } from "@/features/auth/components/hash-session-handler";
+import { ServiceWorker } from "@/features/pwa/components/service-worker";
 import { siteUrl } from "@/lib/site";
 
 import "./globals.css";
@@ -25,6 +26,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: siteUrl(),
     applicationName: t("title"),
+    appleWebApp: {
+      capable: true,
+      title: t("title"),
+      statusBarStyle: "black-translucent",
+    },
     title: { default: t("title"), template: `%s · ${t("title")}` },
     description: t("description"),
     openGraph: {
@@ -65,7 +71,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         </noscript>
         <NextIntlClientProvider>
           <HashSessionHandler />
-          <MotionProvider>{children}</MotionProvider>
+          <ServiceWorker>
+            <MotionProvider>{children}</MotionProvider>
+          </ServiceWorker>
         </NextIntlClientProvider>
       </body>
     </html>

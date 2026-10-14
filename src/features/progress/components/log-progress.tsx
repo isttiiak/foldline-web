@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, PartyPopper } from "lucide-react";
+import { CloudOff, Loader2, PartyPopper } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useId, useState, useTransition } from "react";
@@ -9,6 +9,8 @@ import { ChoiceChips } from "@/components/choice-chips";
 import { fieldClass } from "@/components/form-field";
 import { Button } from "@/components/ui/button";
 import type { EditionFormat } from "@/features/books/schemas";
+import { queueChanged } from "@/features/offline/device";
+import { enqueueProgress } from "@/features/offline/queue";
 import { localToday, occurredAtFor } from "@/lib/dates";
 import { springs } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -22,7 +24,39 @@ import {
   type ProgressUnit,
   totalFor,
 } from "../fraction";
+import type { LogProgressInput } from "../schemas";
 import { logProgressAction, type LogProgressResult } from "../server/actions";
+
+/** Logged for real, or kept on this device until the connection is back. */
+type Outcome = LogProgressResult | { status: "queued" };
+
+/**
+ * Save on the server, or, with no connection, on this device to send later.
+ * The entry id travels with it, so a save that did reach the server before the
+ * connection dropped is not stored twice.
+ */
+async function logOrQueue(entry: LogProgressInput): Promise<Outcome> {
+  const queue = async (): Promise<Outcome> => {
+    try {
+      await enqueueProgress({
+        ...entry,
+        entryId: entry.entryId!,
+        queuedAt: Date.now(),
+      });
+      queueChanged();
+      return { status: "queued" };
+    } catch {
+      return { status: "error", reason: "generic" };
+    }
+  };
+  if (!navigator.onLine) return queue();
+  try {
+    return await logProgressAction(entry);
+  } catch {
+    // The request never got an answer: most likely the connection dropped.
+    return queue();
+  }
+}
 
 type LastEntry = { unit: ProgressUnit; value: number; fraction: number | null };
 
@@ -64,7 +98,7 @@ export function LogProgress({
       : "",
   );
   const [day, setDay] = useState(localToday);
-  const [result, setResult] = useState<LogProgressResult | null>(null);
+  const [result, setResult] = useState<Outcome | null>(null);
   const [pending, startTransition] = useTransition();
 
   const knownTotal = totalFor(unit, { pageCount, durationMinutes });
@@ -89,20 +123,22 @@ export function LogProgress({
     }
     const of = typedTotal && total.trim() ? Number(total) : null;
     startTransition(async () => {
-      const next = await logProgressAction({
+      const next = await logOrQueue({
         readId,
         unit,
         value: amount,
         total: of,
         occurredAt: occurredAtFor(day),
         today: localToday(),
+        entryId: crypto.randomUUID(),
       });
       setResult(next);
-      if (next.status === "logged") setValue("");
+      if (next.status !== "error") setValue("");
     });
   }
 
   const logged = result?.status === "logged" ? result : null;
+  const queued = result?.status === "queued";
   const error = result?.status === "error" ? result.reason : null;
   const valueLabel = t(`value.${unit}`);
 
@@ -210,6 +246,12 @@ export function LogProgress({
           {error && (
             <p role="alert" className="text-destructive">
               {tErrors(error)}
+            </p>
+          )}
+          {queued && (
+            <p className="flex items-center gap-2 text-amber">
+              <CloudOff className="size-4" aria-hidden />
+              {t("queued")}
             </p>
           )}
           {logged && (

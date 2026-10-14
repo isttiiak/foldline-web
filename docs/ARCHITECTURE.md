@@ -3,7 +3,7 @@
 ## Overview
 
 - Next.js App Router. `(marketing)` route group = public, server-rendered pages.
-  `(app)` route group under `/app` = authenticated, client-heavy shell (works offline later).
+  `(app)` route group under `/app` = authenticated, client-heavy shell (works offline: see "PWA and offline").
 - Supabase Postgres is the source of truth. Client reads/writes go through `supabase-js`
   protected by RLS. Privileged work (enrichment, imports, KOReader sync) runs in route
   handlers / server actions with the secret key.
@@ -204,6 +204,34 @@ only, per-user limit `metadata-lookup`.
   it from value / fraction of the last entry). Unknown totals keep `fraction` null. Logging
   a planned or resting read moves it to reading. Deleting a book removes its cover files
   and any author rows no longer credited on another book.
+
+## PWA and offline
+
+- Serwist with Turbopack (`@serwist/turbopack`): the worker source is `src/worker/sw.ts` (own
+  `tsconfig.json` with the `webworker` lib, checked by `pnpm typecheck`), bundled by esbuild in the
+  route `src/app/serwist/[path]/route.ts` and served at `/serwist/sw.js` with scope `/`. Registered by
+  `ServiceWorker` in the root layout, production only (dev requests always reach the dev server).
+- Caching: Next's static chunks and `/offline` are precached (revision = commit SHA). Pages are
+  `NetworkFirst` from Serwist's `defaultCache`, so recently opened pages work offline; anything else
+  falls back to `/offline`. Never cached: `/auth/*`, `/api/*`, `/serwist/*`, the data export, and
+  Supabase auth/REST calls (signed Storage links may be).
+- Privacy on shared devices: sign out first sends any queued progress, then `clearDeviceData()`
+  empties the queue and every runtime cache (the precache holds only app code). `/goodbye` does the
+  same after an account is deleted.
+- Offline progress: `LogProgress` sends a browser-made `entryId` (uuid). With no connection (or a
+  request that never gets an answer) the entry goes to IndexedDB (`src/features/offline/queue.ts`,
+  db `foldline-offline`) instead. `OfflineStatus` (app shell) sends the queue on open, on `online`
+  and when the tab becomes visible; the worker also sends it on the Background Sync tag
+  `foldline-progress` (Chromium). Both use `flushProgressQueue`, guarded by a Web Lock, which posts
+  batches of up to 50 to `POST /api/progress`. The server stores each entry with its `entryId` as
+  the row id, so a duplicate (`23505`) counts as already stored. Server trouble is retried later; a
+  read that is gone or a number that no longer fits is dropped and reported once, calmly.
+- Installable: `src/app/manifest.ts` (copy in `Pwa.manifest`), icons from
+  `src/app/icons/[name]/route.tsx` (192, 512, maskable 512). Settings has "Use Foldline as an app"
+  (the browser's own prompt where offered, Add to Home Screen steps on iOS). No install nagging.
+- Web Share Target: the manifest's `share_target` sends `GET /app/add?title&text&url`.
+  `sharedFindText` (`src/features/pwa/shared.ts`) picks a link or ISBN that names the book, else
+  the shared words as a search, and the Add book page starts with it in the find box.
 
 ## Environment variables (`.env.example`)
 

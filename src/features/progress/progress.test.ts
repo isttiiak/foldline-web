@@ -126,3 +126,23 @@ describe("logProgressSchema", () => {
     ).toBe(false);
   });
 });
+
+describe("logProgressSchema entry ids", () => {
+  const base = { readId, unit: "pages", value: 10, today: "2026-10-15" };
+
+  test("accepts an entry id picked by the browser, and none at all", () => {
+    expect(
+      logProgressSchema.safeParse({
+        ...base,
+        entryId: "0b7f0e8c-3b0a-4c1e-8d2f-5a6b7c8d9e0f",
+      }).success,
+    ).toBe(true);
+    expect(logProgressSchema.safeParse(base).success).toBe(true);
+  });
+
+  test("rejects an entry id that is not a uuid", () => {
+    expect(
+      logProgressSchema.safeParse({ ...base, entryId: "nope" }).success,
+    ).toBe(false);
+  });
+});

@@ -42,13 +42,16 @@ function failureOf(error: unknown): MetadataFailure | null {
 /** One box for a title, an author, an ISBN or a book link; then pick a match. */
 export function FindBook({
   onPick,
+  initialText = "",
 }: {
   /** `isbn` is what the reader typed when no catalogue knew it. */
   onPick: (candidate: BookCandidate | null, isbn?: string) => void;
+  /** Starts the box filled in, e.g. with a book shared from another app. */
+  initialText?: string;
 }) {
   const t = useTranslations("AddBook.find");
   const id = useId();
-  const [text, setText] = useState("");
+  const [text, setText] = useState(initialText);
   const intent = parseFindInput(useDebounced(text, 350));
 
   const search = useQuery({

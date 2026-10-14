@@ -29,6 +29,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { signOutAction } from "@/features/auth/server/actions";
+import { OfflineStatus } from "@/features/offline/components/offline-status";
+import { clearDeviceData } from "@/features/offline/device";
+import { flushProgressQueue } from "@/features/offline/queue";
 import { CommandPalette } from "@/features/palette/components/command-palette";
 import { UserAvatar } from "@/features/profile/components/user-avatar";
 import { springs } from "@/lib/motion";
@@ -179,7 +182,7 @@ function AccountFooter({
           )}
         </span>
       </Link>
-      <form action={signOutAction}>
+      <form action={signOut}>
         <button
           type="submit"
           className="group flex w-full press items-center gap-3 rounded-xl px-3 py-2.5 font-medium text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
@@ -193,6 +196,16 @@ function AccountFooter({
       </form>
     </div>
   );
+}
+
+/**
+ * Send anything still waiting, then forget this device's copy of the reader's
+ * pages and queue before signing out (a shared phone shows nothing of them).
+ */
+async function signOut() {
+  await flushProgressQueue().catch(() => null);
+  await clearDeviceData().catch(() => undefined);
+  await signOutAction();
 }
 
 export function AppShell({
@@ -296,6 +309,7 @@ export function AppShell({
           {children}
         </main>
       </div>
+      <OfflineStatus />
     </div>
   );
 }
