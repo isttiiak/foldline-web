@@ -4,6 +4,27 @@ All notable changes to Foldline. Versions follow [SemVer](https://semver.org); w
 version is `0.x`, anything may still change. Each release is an annotated git tag
 (`vX.Y.Z`) with `package.json` at the same version.
 
+## v0.9.1 (2026-10-15)
+
+Checked on the smallest current iPhone screen (iPhone SE, 375 x 667).
+
+### Fixed
+
+- The time zone picker on your profile was squashed to a thin strip on phones.
+- Small cover thumbnails (the editions list) now scale their title and author instead of overlapping.
+- The installed iPhone app no longer draws under the status bar.
+
+### Changed
+
+- A little more room for content on phones (narrower side margins in the app).
+- Larger tap areas for the Privacy and Terms links in the footer.
+- A new end-to-end check keeps every app page, sheet and menu inside an iPhone SE screen, with no form
+  field small enough to make iOS zoom in.
+
+### Database migrations
+
+None.
+
 ## v0.9.0 (2026-10-15)
 
 Foldline as an app, with or without a connection.
