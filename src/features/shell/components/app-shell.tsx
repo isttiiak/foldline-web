@@ -304,7 +304,7 @@ export function AppShell({
         <main
           id="main"
           tabIndex={-1}
-          className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-6 py-10 outline-none"
+          className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-8 outline-none sm:px-6 sm:py-10"
         >
           {children}
         </main>

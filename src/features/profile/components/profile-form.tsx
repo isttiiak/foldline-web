@@ -139,7 +139,7 @@ export function ProfileForm({
             value={timezone}
             onChange={(event) => setTimezone(event.target.value)}
             aria-describedby={`${id}-tz-hint`}
-            className={cn(fieldClass, "h-11 min-w-0 flex-1 appearance-auto")}
+            className={cn(fieldClass, "h-11 min-w-0 appearance-auto sm:flex-1")}
           >
             {zones.map((zone) => (
               <option key={zone} value={zone}>

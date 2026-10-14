@@ -50,12 +50,12 @@ export default function MarketingLayout({ children }: LayoutProps<"/">) {
       <footer className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
         <p>{t("note")}</p>
         <nav aria-label={t("legalLabel")}>
-          <ul className="flex gap-5">
+          <ul className="-my-2 flex gap-3">
             {(["privacy", "terms"] as const).map((key) => (
               <li key={key}>
                 <Link
                   href={`/${key}`}
-                  className="rounded-sm underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
+                  className="inline-block rounded-sm px-1 py-2 underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
                 >
                   {t(key)}
                 </Link>

@@ -68,14 +68,17 @@ export function BookCover({
           className="object-cover"
         />
       ) : (
-        <div aria-hidden className="relative size-full">
+        <div aria-hidden className="@container relative size-full">
           <CoverArt design={designOrDefault(design, title)} />
-          <div className="relative flex size-full flex-col justify-between p-3 text-[#f3ead9] [text-shadow:0_1px_3px_rgb(0_0_0/0.55)]">
-            <span className="line-clamp-5 text-sm leading-snug font-semibold break-words">
+          {/* Type scales with the cover, so a small thumbnail stays readable. */}
+          <div className="relative flex size-full flex-col justify-between gap-1 p-[clamp(0.25rem,7cqw,0.75rem)] text-[#f3ead9] [text-shadow:0_1px_3px_rgb(0_0_0/0.55)]">
+            <span className="line-clamp-5 min-h-0 text-[clamp(0.5rem,9cqw,0.875rem)] leading-snug font-semibold break-words">
               {title}
             </span>
             {author && (
-              <span className="line-clamp-2 text-xs opacity-90">{author}</span>
+              <span className="line-clamp-2 shrink-0 text-[clamp(0.4375rem,7.5cqw,0.75rem)] opacity-90">
+                {author}
+              </span>
             )}
           </div>
         </div>

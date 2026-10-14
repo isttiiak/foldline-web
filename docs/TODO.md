@@ -119,6 +119,9 @@ card in Settings, Web Share Target into `/app/add`. Sign out and `/goodbye` clea
 queue. No migration. Versioning policy and the v1.0.0 checklist are now at the top of `docs/ROADMAP.md`.
 To try the service worker locally: `pnpm build`, then the `foldline-prod` launch config (`pnpm start`).
 
+Also 2026-10-15 (v0.9.1): iPhone SE (375 x 667) pass; `tests/e2e/responsive.authed.spec.ts` guards every app
+page against sideways overflow and sub-16px fields (set `RESPONSIVE_SHOTS=<dir>` to save screenshots).
+
 Next: Phase 3 "Reading rhythm view" (then Phase 4, which gates v1.0.0).
 
 Later (owner deferred, needs more effort): **Bengali-aware search**. Design agreed 2026-10-03:
