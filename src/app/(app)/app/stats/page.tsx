@@ -5,14 +5,18 @@ import { getTranslations } from "next-intl/server";
 import { getProfile } from "@/features/profile/server/queries";
 import { HideStatsButton } from "@/features/stats/components/hide-toggle";
 import { StatsView } from "@/features/stats/components/stats-view";
-import { getStats } from "@/features/stats/server/queries";
+import { RhythmCalendar } from "@/features/rhythm/components/rhythm-calendar";
+import { getRhythm } from "@/features/rhythm/server/queries";
+import { getStats, todayIn } from "@/features/stats/server/queries";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Stats");
   return { title: t("metaTitle") };
 }
 
-export default async function StatsPage() {
+export default async function StatsPage({
+  searchParams,
+}: PageProps<"/app/stats">) {
   const t = await getTranslations("Stats");
   const profile = await getProfile();
 
@@ -35,7 +39,18 @@ export default async function StatsPage() {
     );
   }
 
-  const stats = await getStats(profile?.timezone ?? "UTC");
+  const timeZone = profile?.timezone ?? "UTC";
+  const today = todayIn(timeZone);
+  const thisYear = Number(today.slice(0, 4));
+  const asked = Number((await searchParams).year);
+  const year =
+    Number.isInteger(asked) && asked >= 1900 && asked <= thisYear
+      ? asked
+      : thisYear;
+  const [stats, rhythm] = await Promise.all([
+    getStats(timeZone),
+    getRhythm(year, timeZone, today),
+  ]);
   return (
     <div className="flex flex-1 flex-col gap-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
@@ -47,7 +62,16 @@ export default async function StatsPage() {
         </div>
         <HideStatsButton hidden={false} />
       </div>
-      <StatsView stats={stats} />
+      <StatsView
+        stats={stats}
+        rhythm={
+          <RhythmCalendar
+            rhythm={rhythm.rhythm}
+            years={rhythm.years.filter((y) => y <= thisYear)}
+            path="/app/stats"
+          />
+        }
+      />
     </div>
   );
 }

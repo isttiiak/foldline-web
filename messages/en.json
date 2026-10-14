@@ -956,5 +956,19 @@
       "ios": "On iPhone or iPad: tap Share in Safari, then Add to Home Screen.",
       "other": "Look for Install or Add to Home screen in your browser's menu."
     }
+  },
+  "Rhythm": {
+    "title": "Reading rhythm",
+    "intro": "The days you read or logged something. Quiet days are part of reading too.",
+    "years": "Choose a year",
+    "calendarLabel": "Calendar of {year}: {count, plural, =0 {no days with reading logged yet} one {reading on # day} other {reading on # days}}",
+    "dayCount": "{count, plural, =0 {nothing logged} one {# thing logged} other {# things logged}}",
+    "summary": "{count, plural, one {Reading on # day in {year}.} other {Reading on # days in {year}.}}",
+    "quietYear": "Nothing logged in {year} yet. It will fill in as you go.",
+    "usualDay": "You often read on {weekday}s.",
+    "less": "Quiet",
+    "more": "Full",
+    "byMonthToggle": "Days with reading, month by month",
+    "monthDays": "{count, plural, =0 {none} one {# day} other {# days}}"
   }
 }

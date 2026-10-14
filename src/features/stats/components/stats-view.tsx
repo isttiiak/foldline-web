@@ -86,7 +86,14 @@ function BarList({
 }
 
 /** The reader's own numbers: descriptive, private, and never a score. */
-export function StatsView({ stats }: { stats: Stats }) {
+export function StatsView({
+  stats,
+  rhythm,
+}: {
+  stats: Stats;
+  /** The reading rhythm calendar, placed after the monthly finishes. */
+  rhythm?: React.ReactNode;
+}) {
   const t = useTranslations("Stats");
   const tStates = useTranslations("AddBook.states");
   const tFormats = useTranslations("AddBook.formats");
@@ -177,6 +184,8 @@ export function StatsView({ stats }: { stats: Stats }) {
           </ol>
         </Card>
       )}
+
+      {rhythm}
 
       {(stats.pages.books > 0 || stats.listening.books > 0) && (
         <Card id="stats-volume" title={t("volume.title")}>

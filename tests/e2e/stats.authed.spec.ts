@@ -44,6 +44,17 @@ test("stats describe the shelf, and can be hidden and shown again", async ({
   await expect(page.getByText("400")).toBeVisible(); // pages from the two books
   await expect(page.getByText("Ursula K. Le Guin")).toBeVisible();
 
+  // The reading rhythm: a calendar of days, never a streak.
+  const rhythm = page.getByRole("region", { name: "Reading rhythm" });
+  await expect(rhythm).toBeVisible();
+  await expect(rhythm.getByRole("img")).toHaveAccessibleName(
+    /^Calendar of \d{4}: reading on \d+ days?$/,
+  );
+  await expect(
+    rhythm.getByText(/Reading on \d+ days? in \d{4}\./),
+  ).toBeVisible();
+  await expect(page.getByText(/streak/i)).toHaveCount(0);
+
   await page.getByRole("button", { name: "Hide my stats" }).click();
   await expect(
     page.getByRole("heading", { name: "Your stats are hidden" }),
