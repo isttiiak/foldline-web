@@ -69,6 +69,10 @@ Common columns: `id uuid pk default gen_random_uuid()`, `created_at timestamptz 
 - `progress_events`: read_id, occurred_at, unit enum ('pages','percent','location','minutes','chapter'),
   value numeric, fraction numeric check (0..1), source enum
   ('manual','koreader','kindle','import','audiobookshelf'), device text.
+- `reading_goals` (opt-in, migration 0007): metric enum ('books','pages'), period enum
+  ('year','month','custom', how the range was picked), starts_on, ends_on (both always stored,
+  at most ~3 years apart), target int (books <= 10 000, pages <= 10 000 000), label (<= 80),
+  hidden boolean, celebrated_at (the "goal reached" moment plays once).
 - `rate_limits` (global, server-only like `provider_cache`): bucket (`policy:kind:subject`,
   where IPs and emails are HMAC-hashed), window_start, hits. `rate_limit_hit(bucket, limit,
 window_seconds)` counts atomically and cleans up; only `service_role` may call it. Policies
@@ -185,6 +189,16 @@ only, per-user limit `metadata-lookup`.
   languages, median days to finish (shown from 3 dated reads), rating average and top authors. Descriptive
   only. Hiding is `profiles.settings.hide_stats` (`setStatsHiddenAction`): the page then calculates nothing and
   the sidebar link and palette entry disappear (`showStats`). Genres wait for tags (Phase 4).
+- Goals (`/app/goals`, `src/features/goals/`): nothing exists until the reader sets one; several may run at
+  once. `getGoals(timeZone)` loads the goals and, only if there are any, every read (with its edition's
+  page count) and progress entry up to the latest goal end (paged past PostgREST's 1000-row cap). Pure
+  `compute.ts`: a books goal counts finished reads with `finished_on` in range (rereads count again); a pages
+  goal counts pages logged in range: each entry becomes a page position (`pages` value, else
+  `fraction * page_count`), dated by the reader's time zone, only forward movement past the furthest point
+  counts, and a finish adds the rest of the book on `finished_on`. Progress is shown plainly ("18 of 24
+  books"), never as pace or "behind". A reached, visible goal opens `GoalMoment` once (on the goals page or
+  the library card) and closing it sets `celebrated_at`; editing a goal clears it. Hidden goals stay on the
+  goals page under "Folded away" and leave the library card (`GoalsCard`, current visible goals only).
 - Progress: `fraction` = pages / `page_count`, minutes / `duration_minutes`, percent / 100,
   or location/chapter / a total typed in the log form (not stored; the next form prefills
   it from value / fraction of the last entry). Unknown totals keep `fraction` null. Logging

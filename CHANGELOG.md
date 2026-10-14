@@ -4,6 +4,20 @@ All notable changes to Foldline. Versions follow [SemVer](https://semver.org); w
 version is `0.x`, anything may still change. Each release is an annotated git tag
 (`vX.Y.Z`) with `package.json` at the same version.
 
+## Unreleased
+
+### Added
+
+- Opt-in reading goals: books finished or pages read over a year, a month or dates you pick. Set as many
+  as you like, or none at all. Progress is shown plainly, never as "behind".
+- Pages goals count the pages you log in that time, and finishing a book counts the rest of it.
+- A warm moment, once, when you reach a goal. Fold a goal away or remove it any time.
+- A small card with your current goals on the library page, and Goals in the sidebar and search palette.
+
+### Database migrations
+
+- `0007_reading_goals.sql`: the `reading_goals` table (private to each reader).
+
 ## v0.7.0 (2026-10-03)
 
 A quiet page about your own reading.

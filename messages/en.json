@@ -140,7 +140,8 @@
     "signOut": "Sign out",
     "settings": "Settings",
     "yourProfile": "Your profile",
-    "stats": "Stats"
+    "stats": "Stats",
+    "goals": "Goals"
   },
   "Palette": {
     "title": "Search and actions",
@@ -833,5 +834,92 @@
       "title": "Authors you finished most"
     },
     "genresNote": "Genres will appear here once books can be tagged."
+  },
+  "Goals": {
+    "metaTitle": "Your goals",
+    "title": "Your goals",
+    "intro": "Entirely optional. Set one if it helps, change it or remove it whenever you like.",
+    "emptyTitle": "No goals, and that is perfectly fine",
+    "emptyBody": "Reading needs no target. If a gentle one would help, set a goal for a year, a month or any stretch of days.",
+    "new": "Set a goal",
+    "groups": {
+      "current": "Now",
+      "upcoming": "Coming up",
+      "past": "Earlier",
+      "hidden": "Folded away"
+    },
+    "hiddenNote": "Folded-away goals stay here, off your library page, until you bring them back.",
+    "name": {
+      "year": "{metric, select, books {Books} other {Pages}} in {year}",
+      "month": "{metric, select, books {Books} other {Pages}} in {month}",
+      "custom": "{metric, select, books {Books} other {Pages}}, {from} to {to}"
+    },
+    "dates": "{from} to {to}",
+    "startsOn": "Starts {date}",
+    "progress": {
+      "books": "{done, number} of {target, plural, one {# book} other {# books}}",
+      "pages": "{done, number} of {target, plural, one {# page} other {# pages}}"
+    },
+    "reached": "Reached",
+    "actions": {
+      "menu": "Goal options for {name}",
+      "edit": "Edit",
+      "hide": "Fold away",
+      "show": "Bring back",
+      "remove": "Remove"
+    },
+    "remove": {
+      "title": "Remove this goal?",
+      "body": "It goes away for good. Your books and progress stay exactly as they are.",
+      "keep": "Keep it",
+      "confirm": "Remove goal"
+    },
+    "form": {
+      "newTitle": "Set a goal",
+      "editTitle": "Edit goal",
+      "description": "Count books you finish or pages you read, over the stretch of time you pick.",
+      "metric": "What to count",
+      "metrics": {
+        "books": "Books finished",
+        "pages": "Pages read"
+      },
+      "period": "When",
+      "periods": {
+        "year": "A year",
+        "month": "A month",
+        "custom": "Pick dates"
+      },
+      "year": "Year",
+      "month": "Month",
+      "startsOn": "From",
+      "endsOn": "To",
+      "target": {
+        "books": "How many books",
+        "pages": "How many pages"
+      },
+      "label": "A name (optional)",
+      "labelPlaceholder": "For example: summer of short books",
+      "pagesHint": "Pages count as you log progress, and finishing a book counts the rest of it. Books without a page count add nothing here.",
+      "booksHint": "Every book you finish in this time counts, rereads included.",
+      "save": "Save goal",
+      "cancel": "Cancel"
+    },
+    "errors": {
+      "invalid": "That goal could not be saved; check the details.",
+      "generic": "Something went wrong and nothing was changed. Please try again in a moment.",
+      "rateLimited": "That was a lot of changes at once. Please wait a little while, then try again.",
+      "range": "Pick an end date on or after the start, within about three years.",
+      "target": "Type a whole number, at least 1.",
+      "tooBig": "That number is larger than Foldline can count for a goal."
+    },
+    "card": {
+      "title": "Your goals",
+      "all": "All goals"
+    },
+    "moment": {
+      "title": "You reached a goal",
+      "body": "{name}: {progress}. Lovely. However it went, the reading was all yours.",
+      "close": "Wonderful"
+    }
   }
 }

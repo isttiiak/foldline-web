@@ -3,17 +3,25 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { buttonVariants } from "@/components/ui/button";
+import { GoalsCard } from "@/features/goals/components/goals-card";
+import { getGoals } from "@/features/goals/server/queries";
 import { EmptyShelf } from "@/features/library/components/empty-shelf";
 import { LibraryToolbar } from "@/features/library/components/library-toolbar";
 import { ShelfGrid } from "@/features/library/components/shelf-grid";
 import { libraryHref, parseLibraryParams } from "@/features/library/query";
 import { getLibrary } from "@/features/library/server/queries";
+import { getProfile } from "@/features/profile/server/queries";
 import { cn } from "@/lib/utils";
 
 export default async function LibraryPage({ searchParams }: PageProps<"/app">) {
   const t = await getTranslations("Library");
   const params = parseLibraryParams(await searchParams);
-  const { books, total, hasMore, counts, hasBooks } = await getLibrary(params);
+  const profile = await getProfile();
+  const [{ books, total, hasMore, counts, hasBooks }, { goals }] =
+    await Promise.all([
+      getLibrary(params),
+      getGoals(profile?.timezone ?? "UTC"),
+    ]);
 
   const addButton = (
     <Link
@@ -54,6 +62,7 @@ export default async function LibraryPage({ searchParams }: PageProps<"/app">) {
         </div>
         {addButton}
       </div>
+      <GoalsCard goals={goals} />
       <LibraryToolbar params={params} counts={counts} />
       {books.length > 0 ? (
         <>
