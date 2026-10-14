@@ -4,6 +4,35 @@ All notable changes to Foldline. Versions follow [SemVer](https://semver.org); w
 version is `0.x`, anything may still change. Each release is an annotated git tag
 (`vX.Y.Z`) with `package.json` at the same version.
 
+## v0.9.0 (2026-10-15)
+
+Foldline as an app, with or without a connection.
+
+### Added
+
+- Install Foldline on your phone or computer: it opens in its own window from the home screen or
+  dock. Settings has a "Use Foldline as an app" card with the steps for your browser.
+- Works offline: pages you opened recently stay readable, and anything else shows a calm offline
+  page instead of an error.
+- Log progress without a connection. It is kept on your device and added by itself once you are back
+  online (in the background on Chrome and Android), never twice. A small note tells you what is waiting.
+- Share a book from another app (a shop page, Open Library, a message with an ISBN) straight into
+  Foldline: Add book opens with it already in the search box.
+
+### Changed
+
+- Signing out clears what this device kept for you (cached pages and anything waiting to be sent),
+  so the next person on a shared device sees nothing.
+
+### Database migrations
+
+None.
+
+### Road to v1.0.0
+
+Phase 5 is done. Still to come before v1.0.0: the reading rhythm view (Phase 3), the management
+phase with imports and the full export (Phase 4), and the license decision (see `docs/ROADMAP.md`).
+
 ## v0.8.0 (2026-10-15)
 
 Goals, only if you want them.
