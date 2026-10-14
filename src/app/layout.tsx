@@ -29,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
     appleWebApp: {
       capable: true,
       title: t("title"),
-      statusBarStyle: "black-translucent",
+      statusBarStyle: "black",
     },
     title: { default: t("title"), template: `%s · ${t("title")}` },
     description: t("description"),
