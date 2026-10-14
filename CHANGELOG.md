@@ -4,7 +4,9 @@ All notable changes to Foldline. Versions follow [SemVer](https://semver.org); w
 version is `0.x`, anything may still change. Each release is an annotated git tag
 (`vX.Y.Z`) with `package.json` at the same version.
 
-## Unreleased
+## v0.8.0 (2026-10-15)
+
+Goals, only if you want them.
 
 ### Added
 

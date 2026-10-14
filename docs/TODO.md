@@ -107,10 +107,10 @@ hidden). No migration.
 Done on 2026-10-14: opt-in reading goals (`/app/goals`, `src/features/goals/`): books or pages over a year,
 a month or picked dates, several at once, plain progress, a one-time "goal reached" moment, fold away or
 remove. Small card on the library page for current goals. Migration `0007_reading_goals.sql` applied to
-dev (2026-10-15, full e2e green); run it on prod before deploying (export reads every table).
+dev and prod (2026-10-15, full e2e green). Released as v0.8.0.
 The spark burst moved to `src/components/motion/sparks.tsx` (shared by both moments).
 
-Next: release v0.8.0 (0007 on prod first), then Phase 3 "Reading rhythm view".
+Next: Phase 3 "Reading rhythm view".
 
 Later (owner deferred, needs more effort): **Bengali-aware search**. Design agreed 2026-10-03:
 `src/features/search/` with `romanize.ts` (Bangla script to Latin), `phonetic.ts` (coarse key: vowel length,
