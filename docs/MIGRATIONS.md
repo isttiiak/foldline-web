@@ -25,3 +25,4 @@ migration history does not know about SQL Editor runs.
 | 4   | `0004_profile_details.sql`         | profile photo, bio, reading preferences; private `avatars` Storage bucket                | [x] | [x]  |
 | 5   | `0005_book_covers.sql`             | private `covers` Storage bucket for readers' own cover photos                            | [x] | [x]  |
 | 6   | `0006_cover_design_and_source.sql` | `editions.cover_design` (designed cover id) and `bought_from` (where the copy came from) | [x] | [x]  |
+| 7   | `0007_reading_goals.sql`           | `reading_goals` (opt-in books or pages goals between two dates, RLS)                     | [ ] | [ ]  |

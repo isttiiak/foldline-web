@@ -104,7 +104,13 @@ by-hand form, new favicon. Migration `0006` (owner runs it on dev and prod befor
 Done on 2026-10-03 (v0.7.0): personal stats dashboard `/app/stats` (hideable, nothing calculated while
 hidden). No migration.
 
-Next: Phase 3 "Opt-in reading goals", then "Reading rhythm view".
+Done on 2026-10-14: opt-in reading goals (`/app/goals`, `src/features/goals/`): books or pages over a year,
+a month or picked dates, several at once, plain progress, a one-time "goal reached" moment, fold away or
+remove. Small card on the library page for current goals. Migration `0007_reading_goals.sql` (pending:
+owner runs it on dev, then `goals.authed.spec.ts` and the export e2e can run; then prod before deploying).
+The spark burst moved to `src/components/motion/sparks.tsx` (shared by both moments).
+
+Next: release v0.8.0 once 0007 is applied and e2e is green, then Phase 3 "Reading rhythm view".
 
 Later (owner deferred, needs more effort): **Bengali-aware search**. Design agreed 2026-10-03:
 `src/features/search/` with `romanize.ts` (Bangla script to Latin), `phonetic.ts` (coarse key: vowel length,

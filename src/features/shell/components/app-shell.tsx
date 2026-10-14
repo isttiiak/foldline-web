@@ -3,6 +3,7 @@
 import {
   BarChart3,
   BookPlus,
+  Flag,
   Library,
   LogOut,
   Menu,
@@ -33,13 +34,14 @@ import { UserAvatar } from "@/features/profile/components/user-avatar";
 import { springs } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
-type NavKey = "library" | "stats" | "add" | "profile" | "settings";
+type NavKey = "library" | "stats" | "goals" | "add" | "profile" | "settings";
 type NavItem = { key: NavKey; href: string; icon: LucideIcon };
 
 // Add items here as their routes land (shelves, highlights, import).
 const NAV_ITEMS: NavItem[] = [
   { key: "library", href: "/app", icon: Library },
   { key: "stats", href: "/app/stats", icon: BarChart3 },
+  { key: "goals", href: "/app/goals", icon: Flag },
   { key: "add", href: "/app/add", icon: BookPlus },
   { key: "profile", href: "/app/profile", icon: UserRound },
   { key: "settings", href: "/app/settings", icon: Settings },

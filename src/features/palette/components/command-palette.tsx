@@ -6,6 +6,7 @@ import {
   BarChart3,
   BookPlus,
   BookOpen,
+  Flag,
   Library,
   ListChecks,
   Settings,
@@ -41,6 +42,7 @@ const DESTINATIONS: Destination[] = [
   { key: "add", href: "/app/add", icon: BookPlus },
   { key: "library", href: "/app", icon: Library },
   { key: "stats", href: "/app/stats", icon: BarChart3 },
+  { key: "goals", href: "/app/goals", icon: Flag },
   { key: "profile", href: "/app/profile", icon: UserRound },
   { key: "settings", href: "/app/settings", icon: Settings },
 ];
@@ -95,7 +97,10 @@ export function CommandPalette({
       (showStats || key !== "stats") &&
       (folded === "" ||
         fold(
-          tNav(key as "add" | "library" | "stats" | "profile" | "settings"),
+          tNav(
+            key as
+              "add" | "library" | "stats" | "goals" | "profile" | "settings",
+          ),
         ).includes(folded)),
   );
   const showLogAction =
@@ -152,7 +157,11 @@ export function CommandPalette({
                           : t("goTo", {
                               place: tNav(
                                 key as
-                                  "library" | "stats" | "profile" | "settings",
+                                  | "library"
+                                  | "stats"
+                                  | "goals"
+                                  | "profile"
+                                  | "settings",
                               ),
                             })}
                       </CommandItem>

@@ -44,6 +44,7 @@ test("download my data returns the user's rows as JSON", async ({ page }) => {
     "editions",
     "reads",
     "progress_events",
+    "reading_goals",
   ]) {
     expect(Array.isArray(file.tables[table]), table).toBe(true);
   }

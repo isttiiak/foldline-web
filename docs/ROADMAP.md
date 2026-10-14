@@ -36,7 +36,7 @@ Tick items as they are completed. One item per Claude Code session.
 ## Phase 3: Motivation & personal stats
 
 - [x] Warm, animated finish moment + optional reflection prompt (finish and DNF)
-- [ ] Opt-in reading goals (books or pages per year, month or custom range), neutral progress, celebration on reaching a goal, easy to hide or remove
+- [x] Opt-in reading goals (books or pages per year, month or custom range), neutral progress, celebration on reaching a goal, easy to hide or remove
 - [x] Personal stats dashboard (pages, time, formats, genres, pace), hideable
 - [ ] Reading rhythm view (calendar density, no streak counter, no broken state)
 

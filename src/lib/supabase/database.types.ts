@@ -246,6 +246,51 @@ export type Database = {
         };
         Relationships: [];
       };
+      reading_goals: {
+        Row: {
+          celebrated_at: string | null;
+          created_at: string;
+          ends_on: string;
+          hidden: boolean;
+          id: string;
+          label: string | null;
+          metric: Database["public"]["Enums"]["goal_metric"];
+          period: Database["public"]["Enums"]["goal_period"];
+          starts_on: string;
+          target: number;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          celebrated_at?: string | null;
+          created_at?: string;
+          ends_on: string;
+          hidden?: boolean;
+          id?: string;
+          label?: string | null;
+          metric: Database["public"]["Enums"]["goal_metric"];
+          period: Database["public"]["Enums"]["goal_period"];
+          starts_on: string;
+          target: number;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Update: {
+          celebrated_at?: string | null;
+          created_at?: string;
+          ends_on?: string;
+          hidden?: boolean;
+          id?: string;
+          label?: string | null;
+          metric?: Database["public"]["Enums"]["goal_metric"];
+          period?: Database["public"]["Enums"]["goal_period"];
+          starts_on?: string;
+          target?: number;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       reads: {
         Row: {
           created_at: string;
@@ -438,6 +483,8 @@ export type Database = {
         | "ebook"
         | "audiobook"
         | "other";
+      goal_metric: "books" | "pages";
+      goal_period: "year" | "month" | "custom";
       progress_source:
         | "manual"
         | "koreader"
@@ -487,6 +534,8 @@ export const Constants = {
   public: {
     Enums: {
       edition_format: ["paperback", "hardcover", "ebook", "audiobook", "other"],
+      goal_metric: ["books", "pages"],
+      goal_period: ["year", "month", "custom"],
       progress_source: ["manual", "koreader", "kindle", "import", "audiobookshelf"],
       progress_unit: ["pages", "percent", "location", "minutes", "chapter"],
       read_state: ["planned", "reading", "resting", "finished", "dnf"],
