@@ -2,6 +2,22 @@
 
 Tick items as they are completed. One item per Claude Code session.
 
+## Versioning and the road to v1.0.0
+
+- While on `0.x`: each shipped roadmap item (or phase) is a **minor** release (`v0.9.0`, `v0.10.0`, ...);
+  fixes only are a **patch** (`v0.9.1`). Releases are annotated tags plus a GitHub Release with the
+  `CHANGELOG.md` notes.
+- **v1.0.0** is cut when a reader can rely on Foldline as their one reading tracker and can always
+  leave with their data. All of these must be done:
+  1. Phase 3 complete (the reading rhythm view is the last item).
+  2. Phase 4 complete, especially Goodreads + StoryGraph import and the full CSV / Markdown export
+     (moving in and out is the promise behind "your data").
+  3. Phase 5 complete (done in v0.9.0).
+  4. The license is decided (Phase 9) and the data model has had no breaking change for one release.
+- After v1.0.0: features are minor releases, fixes are patches, and a major bump means a breaking
+  change to exported data, the API or tokens (Phase 6 onwards).
+- Check this list at every release and say in the release notes how far v1.0.0 is.
+
 ## Phase 0: Foundation
 
 - [x] Tooling: scripts (typecheck, lint, test, test:e2e, db:types), Prettier, Vitest, Playwright
@@ -51,9 +67,9 @@ Tick items as they are completed. One item per Claude Code session.
 
 ## Phase 5: PWA & offline
 
-- [ ] Serwist service worker, installable app, offline app shell
-- [ ] Offline progress-logging queue (IndexedDB) with background sync
-- [ ] Web Share Target (share a book link into the app)
+- [x] Serwist service worker, installable app, offline app shell
+- [x] Offline progress-logging queue (IndexedDB) with background sync
+- [x] Web Share Target (share a book link into the app)
 
 ## Phase 6: Automation
 

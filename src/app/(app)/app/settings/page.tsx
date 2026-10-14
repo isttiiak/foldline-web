@@ -2,6 +2,7 @@ import {
   ArrowRight,
   Download,
   ShieldCheck,
+  Smartphone,
   Trash2,
   UserRound,
 } from "lucide-react";
@@ -11,6 +12,7 @@ import { getTranslations } from "next-intl/server";
 
 import { buttonVariants } from "@/components/ui/button";
 import { DeleteAccountForm } from "@/features/account/components/delete-account-form";
+import { InstallApp } from "@/features/pwa/components/install-app";
 import { requireUser } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
@@ -96,6 +98,11 @@ export default async function SettingsPage() {
             <ArrowRight className="size-4" aria-hidden />
           </Link>
         </div>
+      </Card>
+
+      <Card icon={Smartphone} title={t("app.title")}>
+        <p className="leading-relaxed text-muted-foreground">{t("app.body")}</p>
+        <InstallApp />
       </Card>
 
       <Card icon={Download} title={t("data.title")}>

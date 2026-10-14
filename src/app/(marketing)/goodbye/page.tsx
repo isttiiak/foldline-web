@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
 import { FoldMark } from "@/components/brand/fold-mark";
+import { ForgetDeviceData } from "@/features/offline/components/forget-device-data";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Goodbye");
@@ -17,6 +18,7 @@ export default function GoodbyePage() {
 
   return (
     <section className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-6 py-12">
+      <ForgetDeviceData />
       <div className="flex flex-col items-center gap-6 rounded-[2rem] border bg-card/70 p-8 text-center backdrop-blur-md sm:p-10">
         <FoldMark label={b("markLabel")} animated className="size-14" />
         <h1 className="text-3xl font-semibold tracking-tight">

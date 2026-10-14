@@ -15,5 +15,6 @@ export const config = {
     "/login",
     "/auth/:path*",
     "/api/metadata/:path*",
+    "/api/progress",
   ],
 };
