@@ -23,13 +23,27 @@
       "Bash(git diff *)",
       "Bash(git log *)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(gh *)",
+      "Bash(git push *)",
+      "Bash(git fetch *)",
+      "Bash(git pull *)",
+      "Bash(git switch *)",
+      "Bash(git checkout *)",
+      "Bash(git branch *)",
+      "Bash(git merge *)",
+      "Bash(git tag *)"
     ],
     "ask": [
-      "Bash(git push *)",
       "Bash(pnpm supabase link *)",
       "Bash(pnpm supabase db push *)",
-      "Bash(pnpm supabase db reset --linked *)"
+      "Bash(pnpm supabase db reset --linked *)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(gh repo delete*)",
+      "Bash(gh release delete*)",
+      "Bash(gh secret *)",
+      "Bash(gh auth *)"
     ],
     "deny": ["Read(./.env)", "Read(./.env.*)"],
     "defaultMode": "plan"
