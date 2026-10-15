@@ -720,7 +720,7 @@
     },
     "statuses": {
       "title": "Your statuses",
-      "body": "Name the places a book can be, inside the usual states: \"Up next\" inside Planned, \"Book club\" inside Reading."
+      "body": "Name the places a book can be, inside the usual states: \"Up next\" inside Want to read, \"Book club\" inside Reading."
     },
     "fields": {
       "title": "Your fields",

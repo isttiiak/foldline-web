@@ -26,6 +26,6 @@ migration history does not know about SQL Editor runs.
 | 5   | `0005_book_covers.sql`             | private `covers` Storage bucket for readers' own cover photos                             | [x] | [x]  |
 | 6   | `0006_cover_design_and_source.sql` | `editions.cover_design` (designed cover id) and `bought_from` (where the copy came from)  | [x] | [x]  |
 | 7   | `0007_reading_goals.sql`           | `reading_goals` (opt-in books or pages goals between two dates, RLS)                      | [x] | [x]  |
-| 8   | `0008_tags_and_shelves.sql`        | `tags`, `work_tags`, `shelves` (manual and smart), `shelf_items` (RLS)                    | [ ] | [ ]  |
-| 9   | `0009_statuses_and_fields.sql`     | `custom_statuses` (+ `reads.custom_status_id`), `custom_fields` (+ `works.custom_values`) | [ ] | [ ]  |
-| 10  | `0010_copies_and_loans.sql`        | `copies` (ownership, location) and `loans` (lent to / borrowed from) (RLS)                | [ ] | [ ]  |
+| 8   | `0008_tags_and_shelves.sql`        | `tags`, `work_tags`, `shelves` (manual and smart), `shelf_items` (RLS)                    | [x] | [x]  |
+| 9   | `0009_statuses_and_fields.sql`     | `custom_statuses` (+ `reads.custom_status_id`), `custom_fields` (+ `works.custom_values`) | [x] | [x]  |
+| 10  | `0010_copies_and_loans.sql`        | `copies` (ownership, location) and `loans` (lent to / borrowed from) (RLS)                | [x] | [x]  |

@@ -13,14 +13,14 @@ version is `0.x`, anything may still change. Each release is an annotated git ta
 - Tags on books, your own shelves, and smart shelves that save a library view and keep themselves up
   to date. A new Shelves page lists shelves, tags and books out on loan. The library filters by tag,
   shelf and your own status.
-- Your own statuses inside the usual states (for example "Up next" inside Planned), a choice of
+- Your own statuses inside the usual states (for example "Up next" inside Want to read), a choice of
   rating scale (half stars, whole stars, out of 10, or no ratings), and your own fields on every book.
 - Copies and loans: note the copies you have, where they live, who you lent one to or borrowed it from.
 - The stats page shows the tags on books you finished.
 
 ### Database migrations
 
-Run in order on dev, then prod: `0008_tags_and_shelves.sql`, `0009_statuses_and_fields.sql`,
+Applied on dev and prod: `0008_tags_and_shelves.sql`, `0009_statuses_and_fields.sql`,
 `0010_copies_and_loans.sql`.
 
 ## v0.9.1 (2026-10-15)

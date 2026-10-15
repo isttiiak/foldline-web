@@ -25,9 +25,7 @@ session: tick what is done, add what is next.
 - [ ] Optional: create GitHub Releases for older tags (notes are in `CHANGELOG.md`); `v0.1.0` and
       `v0.9.0` have one
 - [x] Claude settings: GitHub and routine git commands allowed in `.claude/settings.json` (2026-10-15)
-- [ ] Run `0008_tags_and_shelves.sql`, `0009_statuses_and_fields.sql`, `0010_copies_and_loans.sql`
-      (in order) on dev, then run the full e2e suite (`organise.authed.spec.ts` and the settings
-      export test need them), then prod before deploying. Mark them in `docs/MIGRATIONS.md`.
+- [x] `0008`, `0009`, `0010` applied to dev and prod by the owner (2026-10-15); full e2e green
 
 ## Claude
 

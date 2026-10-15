@@ -5,7 +5,7 @@ import { signInAsNewUser } from "./auth-file";
 // Phase 4 management: tags and shelves, custom statuses / ratings / fields, copies
 // and loans. Each test is a reader of their own; saves are round trips to the dev
 // project (migrations 0008-0010 must be applied there).
-test.describe.configure({ timeout: 240_000 });
+test.describe.configure({ timeout: 420_000 });
 test.use({ storageState: { cookies: [], origins: [] } });
 const SAVE = { timeout: 45_000 };
 
@@ -120,7 +120,7 @@ test("custom statuses, rating scale and custom fields", async ({ page }) => {
   await statuses.getByRole("button", { name: "Add a status" }).click();
   await statuses.getByLabel("Name", { exact: true }).fill("Up next");
   await statuses.getByRole("button", { name: "Add status" }).click();
-  await expect(statuses.getByText("inside Planned")).toBeVisible(SAVE);
+  await expect(statuses.getByText("inside Want to read")).toBeVisible(SAVE);
 
   // A yes/no field.
   const fields = page.getByRole("region", { name: "Your fields" });
