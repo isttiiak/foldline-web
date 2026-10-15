@@ -126,7 +126,7 @@ Done on 2026-10-15: Phase 3 "Reading rhythm view" (`src/features/rhythm/`, a cal
 `/app/stats`, `?year=`; counts progress entries and read start/finish/stop days in the reader's time
 zone; no streaks). Phase 3 is complete.
 
-Done on 2026-10-15 (not released yet, migrations pending): the first three Phase 4 items.
+Done on 2026-10-15 (v0.10.0): the first three Phase 4 items.
 
 - Tags and shelves (`src/features/shelves/`): book page "Tags and shelves" section, `/app/shelves`
   page (shelves, tags, open loans), library filters `?tag&shelf&status`, "Save as a smart shelf" in
@@ -136,7 +136,6 @@ Done on 2026-10-15 (not released yet, migrations pending): the first three Phase
   layout; `RatingStars`/`StarsDisplay` follow the scale (and hide when off).
 - Copies and loans (`src/features/copies/`): "Copies" section on the book page, "On loan" card.
 - New rate limit policy `library-edit`. All new tables are in the JSON export.
-- After the migrations are applied and e2e is green, release as v0.10.0.
 
 Next: Phase 4 "Bulk edit, duplicate/edition merge, undo", then the full export and the Goodreads +
 StoryGraph import (both gate v1.0.0).

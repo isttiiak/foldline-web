@@ -4,7 +4,9 @@ All notable changes to Foldline. Versions follow [SemVer](https://semver.org); w
 version is `0.x`, anything may still change. Each release is an annotated git tag
 (`vX.Y.Z`) with `package.json` at the same version.
 
-## Unreleased
+## v0.10.0 (2026-10-15)
+
+A calm reading rhythm, and your library arranged your way.
 
 ### Added
 
@@ -22,6 +24,12 @@ version is `0.x`, anything may still change. Each release is an annotated git ta
 
 Applied on dev and prod: `0008_tags_and_shelves.sql`, `0009_statuses_and_fields.sql`,
 `0010_copies_and_loans.sql`.
+
+### Road to v1.0.0
+
+Phase 3 is done, and so are the first three Phase 4 items. Still to come before v1.0.0: bulk edit,
+merge and undo, the full CSV / Markdown export, the Goodreads + StoryGraph import (the rest of
+Phase 4), and the license decision (see `docs/ROADMAP.md`).
 
 ## v0.9.1 (2026-10-15)
 
