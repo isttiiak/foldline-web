@@ -194,7 +194,8 @@
     "count": "{count, plural, one {# book} other {# books}}",
     "noMatchesTitle": "Nothing matches that",
     "noMatchesBody": "Try a different word, or loosen a filter. Your books are all still here.",
-    "showMore": "Show more books"
+    "showMore": "Show more books",
+    "import": "Bring books from Goodreads or StoryGraph"
   },
   "Shelf": {
     "label": "Your books",
@@ -690,6 +691,11 @@
       "signedInAs": "Signed in as",
       "provider": "You sign in with Google. Foldline never sees your password.",
       "editProfile": "Edit your profile"
+    },
+    "import": {
+      "title": "Move in",
+      "body": "Coming from Goodreads or StoryGraph? Bring your books, shelves, dates, ratings and reviews along in one go.",
+      "open": "Import a CSV export"
     },
     "data": {
       "title": "Your data",
@@ -1309,6 +1315,61 @@
       "progressAt": "{count, plural, one {# progress entry} other {# progress entries}}, last at {percent}%",
       "indexTitle": "My Foldline library",
       "indexIntro": "Exported on {date}. One note per book, in the order you added them."
+    }
+  },
+  "Import": {
+    "metaTitle": "Import",
+    "title": "Move in",
+    "intro": "Bring your books from Goodreads or StoryGraph: states, dates, ratings, reviews, shelves as tags, and copies you own. Nothing is sent anywhere else, and you can undo the whole import for a day.",
+    "sources": {
+      "goodreads": "Goodreads",
+      "storygraph": "StoryGraph"
+    },
+    "undoLabel": "Your {source} import",
+    "pick": {
+      "title": "Pick your export file",
+      "goodreads": "On Goodreads: My Books, then Import and export, then Export library. Download the CSV when it is ready.",
+      "storygraph": "On StoryGraph: your profile, Manage account, then Export StoryGraph library. The CSV arrives by email.",
+      "then": "Choose that file here. You will see what is in it before anything is added.",
+      "label": "Your Goodreads or StoryGraph CSV",
+      "button": "Choose a CSV file",
+      "privacy": "The file is read in your browser. Only the books you choose to bring in are saved, to your private shelf."
+    },
+    "preview": {
+      "title": "Your {source} library",
+      "found": "{count, plural, one {book found} other {books found}}",
+      "repeats": "{count, plural, one {already on your shelf} other {already on your shelf}}",
+      "unreadable": "{count, plural, one {row without a title} other {rows without a title}}",
+      "sample": "A first look",
+      "options": "Import options",
+      "skipRepeats": "Leave out books already on my shelf",
+      "moods": "Also bring StoryGraph moods, as tags",
+      "start": "{count, plural, =0 {Nothing new to bring} one {Bring in # book} other {Bring in # books}}",
+      "another": "Choose a different file"
+    },
+    "sending": {
+      "title": "Moving your books in",
+      "progress": "{sent} of {total} books"
+    },
+    "done": {
+      "title": "Moved in. Welcome home.",
+      "nothingTitle": "Nothing new this time",
+      "body": "{added, plural, =0 {No books were added.} one {# book is on your shelf now.} other {# books are on your shelf now.}}",
+      "alreadyThere": "{count, plural, one {# was already there and stayed as it was.} other {# were already there and stayed as they were.}}",
+      "failed": "Part of the import did not go through. The books listed above are in; try the file again later for the rest.",
+      "covers": "Covers and details for books with an ISBN fill in over the next few minutes. The rest get a designed cover, and you can refresh any book from its page.",
+      "library": "See your library",
+      "undo": "Undo import"
+    },
+    "undone": {
+      "title": "Import undone",
+      "body": "The imported books are gone again. Your shelf is as it was before."
+    },
+    "errors": {
+      "tooBig": "That file is larger than 5 MB. Export again, or split it into smaller files.",
+      "unknown": "That does not look like a Goodreads or StoryGraph export. Check you picked the CSV file they sent.",
+      "empty": "That file has no books in it.",
+      "tooMany": "That file has more than 5,000 books. Split it into smaller files and import them one after another."
     }
   }
 }

@@ -1,4 +1,4 @@
-import { BookPlus } from "lucide-react";
+import { BookPlus, FileUp } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
@@ -53,7 +53,19 @@ export default async function LibraryPage({ searchParams }: PageProps<"/app">) {
           <span className="text-sunrise">{t("title")}</span>
         </h1>
         <EmptyShelf title={t("emptyTitle")} body={t("emptyBody")}>
-          {addButton}
+          <div className="flex flex-wrap justify-center gap-2">
+            {addButton}
+            <Link
+              href="/app/import"
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "h-11 gap-2 rounded-xl px-5",
+              )}
+            >
+              <FileUp className="size-4" aria-hidden />
+              {t("import")}
+            </Link>
+          </div>
         </EmptyShelf>
       </div>
     );

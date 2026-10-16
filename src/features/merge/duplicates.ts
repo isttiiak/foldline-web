@@ -29,6 +29,15 @@ function authorKey(name: string | undefined): string {
   return name ? fold(name).replace(/[^\p{L}\p{M}\p{N}]+/gu, "") : "";
 }
 
+/** The key two copies of one book share: title key and first author. Empty for no title. */
+export function bookKey(
+  title: string,
+  firstAuthor: string | undefined,
+): string {
+  const key = titleKey(title);
+  return key ? `${key}|${authorKey(firstAuthor)}` : "";
+}
+
 /**
  * Books that look like the same book: a shared ISBN, or the same title and first
  * author. Each book appears in at most one group; ISBN matches win.
@@ -58,9 +67,6 @@ export function findDuplicates(books: DuplicateCandidate[]): DuplicateGroup[] {
   };
 
   collect("isbn", (book) => book.isbns);
-  collect("title", (book) => {
-    const title = titleKey(book.title);
-    return title ? [`${title}|${authorKey(book.authors[0])}`] : [];
-  });
+  collect("title", (book) => [bookKey(book.title, book.authors[0])]);
   return groups;
 }

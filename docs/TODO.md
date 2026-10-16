@@ -151,7 +151,12 @@ library CSV and a zip of Markdown notes (`src/features/export/{books,csv,markdow
 `/app/settings/export?format=`). The JSON export now pages past the API's 1000-row cap. Adds `fflate`.
 No migration.
 
-Next: the Goodreads + StoryGraph import (gates v1.0.0).
+Done on 2026-10-17 (v0.13.0): Phase 4 "Import Goodreads + StoryGraph CSV" (`src/features/importers/`,
+`/app/import`): read in the browser, preview with repeats left out, batches of 50, one "Undo import". Rate
+limit `import-books`. No migration (undo uses 0011). Phase 4 is complete.
+
+Next for v1.0.0: decide the license (Phase 9) and keep the data model stable for one release. Then
+Phase 6 (KOReader sync first).
 
 Later (owner deferred, needs more effort): **Bengali-aware search**. Design agreed 2026-10-03:
 `src/features/search/` with `romanize.ts` (Bangla script to Latin), `phonetic.ts` (coarse key: vowel length,

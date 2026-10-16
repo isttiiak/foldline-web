@@ -260,6 +260,26 @@ only, per-user limit `metadata-lookup`.
   reflections, description, fields and copies, zipped by `fflate` with an `index.md`. File names are slugs
   that keep Bangla letters; repeats get `-2`, `-3`. Wording comes from `Export.markdown` in the messages.
 
+## Import (Goodreads, StoryGraph)
+
+- `/app/import` (linked from Settings and the empty library). The CSV (at most 5 MB, 5 000 rows) is read in
+  the browser: `parseCsv` (RFC 4180), `detectSource` by columns, then `mapGoodreads` / `mapStoryGraph`
+  (`src/features/importers/`) turn rows into `ImportBook`s checked by `importBookSchema`. Rows that do not
+  fit are counted, not sent. `getImportKeysAction` returns the shelf's ISBN-13s and `bookKey`s (title key +
+  first author, shared with the duplicate finder) so the preview can leave out repeats.
+- Mapping: Goodreads exclusive shelves `read`/`currently-reading`/`to-read` (and custom ones named like
+  dnf or paused) become states, other shelves tags; `="..."` ISBNs unwrapped; "Title: Sub (Series, #2)"
+  split; 1-5 stars to 2-10; review plus private notes become the reflection; Read Count adds undated
+  earlier finishes; Owned Copies makes an owned copy; Date Added becomes `works.created_at`. StoryGraph
+  statuses map one to one (paused to resting); quarter stars round to half; each "Dates Read" range is a
+  read; translators come from Contributors; moods become tags only when the reader asks.
+- `importBooksAction` takes batches of 50 (rate limit `import-books`), drops books whose ISBN-13 is already
+  on the shelf, and `insertBatch` writes works, credits, editions, reads (oldest first, a second apart so
+  the newest is current), tags and copies in one insert each with ids made on the server, removing the
+  batch again if a step fails. Fields from the file are locked like typed ones. All batches of one import
+  share one `import` undo entry ("Undo import"). Up to 10 editions with an ISBN per batch are enriched in
+  `after()`; the rest keep designed covers until refreshed.
+
 ## PWA and offline
 
 - Serwist with Turbopack (`@serwist/turbopack`): the worker source is `src/worker/sw.ts` (own

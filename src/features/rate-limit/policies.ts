@@ -91,6 +91,13 @@ export const RATE_LIMITS = {
     limit: 60,
     windowSeconds: 600,
   },
+  // Moving in from Goodreads or StoryGraph: one call per batch of 50 books.
+  importBooks: {
+    name: "import-books",
+    per: "user",
+    limit: 150,
+    windowSeconds: 600,
+  },
   // Creating, changing, hiding and removing reading goals.
   goalEdit: {
     name: "goal-edit",

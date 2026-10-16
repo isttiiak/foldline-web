@@ -1,6 +1,7 @@
 import {
   ArrowRight,
   Download,
+  FileUp,
   ListChecks,
   SlidersHorizontal,
   Star,
@@ -154,6 +155,24 @@ export default async function SettingsPage() {
       <Card icon={Smartphone} title={t("app.title")}>
         <p className="leading-relaxed text-muted-foreground">{t("app.body")}</p>
         <InstallApp />
+      </Card>
+
+      <Card icon={FileUp} title={t("import.title")}>
+        <p className="leading-relaxed text-muted-foreground">
+          {t("import.body")}
+        </p>
+        <div>
+          <Link
+            href="/app/import"
+            className={cn(
+              buttonVariants({ variant: "outline", size: "lg" }),
+              "h-11 gap-2 rounded-xl px-4",
+            )}
+          >
+            <FileUp className="size-4" aria-hidden />
+            {t("import.open")}
+          </Link>
+        </div>
       </Card>
 
       <Card icon={Download} title={t("data.title")}>

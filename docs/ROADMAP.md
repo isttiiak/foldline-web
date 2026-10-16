@@ -63,7 +63,7 @@ Tick items as they are completed. One item per Claude Code session.
 - [x] Copies & loans (ownership, location, lent to / borrowed from)
 - [x] Bulk edit, duplicate/edition merge, undo
 - [x] Full export (CSV, Markdown per book) on top of the Phase 1 JSON export
-- [ ] Import Goodreads + StoryGraph CSV
+- [x] Import Goodreads + StoryGraph CSV
 
 ## Phase 5: PWA & offline
 
