@@ -75,6 +75,8 @@ export async function collectUserData(): Promise<
         query = query.order(column);
       }
       const { data, error } = await query.range(from, from + PAGE - 1);
+      // PGRST205: the table is not there yet (its migration is not applied), so it holds nothing.
+      if (error?.code === "PGRST205") break;
       if (error) return { ok: false, error: `${table}: ${error.message}` };
       rows.push(...data);
       if (data.length < PAGE) break;
