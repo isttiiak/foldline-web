@@ -27,6 +27,29 @@ Tidy a whole shelf at once, and take any of it back.
 Still to come: the full CSV / Markdown export, the Goodreads + StoryGraph import, and the license
 decision.
 
+## v0.12.0 (2026-10-17)
+
+Your library, in the shapes you need.
+
+### Added
+
+- Settings, "Your data" now offers three downloads: everything as JSON, your library as a spreadsheet
+  (CSV, one row per book with a column for each of your own fields), and a zip of Markdown notes, one
+  per book with your reads and reflections, ready for Obsidian or any notes app.
+
+### Fixed
+
+- The JSON export now includes every row of a large library (it stopped at 1,000 rows per table).
+- The export no longer fails while a new table's migration is still pending.
+
+### Database migrations
+
+None.
+
+### Road to v1.0.0
+
+Still to come: the Goodreads + StoryGraph import, and the license decision.
+
 ## v0.10.0 (2026-10-15)
 
 A calm reading rhythm, and your library arranged your way.
