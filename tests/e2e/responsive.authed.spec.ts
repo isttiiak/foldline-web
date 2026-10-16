@@ -91,6 +91,10 @@ test("every app page fits an iPhone SE screen", async ({ page }) => {
 
   await page.goto("/app");
   await fits(page, "library");
+  await page.getByRole("button", { name: "Select books" }).click();
+  await page.getByRole("button", { name: title }).click();
+  await fits(page, "library-selecting");
+  await page.getByRole("button", { name: "Done" }).click();
   await page
     .getByRole("list", { name: "Your books" })
     .getByRole("link")
@@ -123,7 +127,14 @@ test("every app page fits an iPhone SE screen", async ({ page }) => {
   await fits(page, "palette");
   await page.keyboard.press("Escape");
 
-  for (const path of ["stats", "shelves", "goals", "profile", "settings"]) {
+  for (const path of [
+    "stats",
+    "shelves",
+    "goals",
+    "profile",
+    "settings",
+    "import",
+  ]) {
     await page.goto(`/app/${path}`);
     await fits(page, path);
   }

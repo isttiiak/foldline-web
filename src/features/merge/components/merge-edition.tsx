@@ -52,7 +52,7 @@ export function MergeEdition({
         onChange={(event) => setTarget(event.target.value)}
         className={cn(
           fieldClass,
-          "h-9 w-auto max-w-56 appearance-auto py-0 pr-8 text-sm",
+          "h-9 w-auto max-w-56 appearance-auto py-0 pr-8",
         )}
       >
         {others.map((other) => (

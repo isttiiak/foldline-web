@@ -107,7 +107,7 @@ export function BulkShelf({
 
   const selectClass = cn(
     fieldClass,
-    "h-10 w-auto max-w-44 appearance-auto py-0 pr-8 text-sm",
+    "h-10 w-auto max-w-44 appearance-auto py-0 pr-8",
   );
   const none = chosen.length === 0 || pending;
 
