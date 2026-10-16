@@ -26,6 +26,7 @@ session: tick what is done, add what is next.
       `v0.9.0` have one
 - [x] Claude settings: GitHub and routine git commands allowed in `.claude/settings.json` (2026-10-15)
 - [x] `0008`, `0009`, `0010` applied to dev and prod by the owner (2026-10-15); full e2e green
+- [x] `0011_undo_entries.sql` applied to dev and prod by the owner (2026-10-17); full e2e green
 
 ## Claude
 

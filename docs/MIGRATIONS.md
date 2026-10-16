@@ -29,4 +29,4 @@ migration history does not know about SQL Editor runs.
 | 8   | `0008_tags_and_shelves.sql`        | `tags`, `work_tags`, `shelves` (manual and smart), `shelf_items` (RLS)                    | [x] | [x]  |
 | 9   | `0009_statuses_and_fields.sql`     | `custom_statuses` (+ `reads.custom_status_id`), `custom_fields` (+ `works.custom_values`) | [x] | [x]  |
 | 10  | `0010_copies_and_loans.sql`        | `copies` (ownership, location) and `loans` (lent to / borrowed from) (RLS)                | [x] | [x]  |
-| 11  | `0011_undo_entries.sql`            | `undo_entries` (day-long snapshots for undoing bulk edits, merges and imports) (RLS)      | [x] | [ ]  |
+| 11  | `0011_undo_entries.sql`            | `undo_entries` (day-long snapshots for undoing bulk edits, merges and imports) (RLS)      | [x] | [x]  |
