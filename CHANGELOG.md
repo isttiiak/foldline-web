@@ -74,6 +74,30 @@ None new (`0011_undo_entries.sql` from v0.11.0 is needed for undo).
 Phases 3, 4 and 5 are done. Left before v1.0.0: decide the license (Phase 9) and keep the data model
 free of breaking changes for one release.
 
+## v1.0.0 (2026-10-17)
+
+Foldline 1.0: one place for all your reading, and always free to leave with your data.
+
+Everything a reader needs to rely on Foldline as their only reading tracker is here: a private library
+for paper, ebooks and audiobooks, progress in any unit, warm finish moments, opt-in goals, personal stats
+and a reading rhythm without streaks, tags, shelves and your own fields, copies and loans, bulk edit,
+merge and undo, an installable app that works offline, moving in from Goodreads and StoryGraph, and
+moving out as JSON, CSV or Markdown.
+
+### Added
+
+- Foldline is now free software under the GNU AGPL-3.0 (or any later version). The public footer and
+  Settings link to the source code.
+
+### Database migrations
+
+None. The data model is unchanged since v0.11.0.
+
+### What 1.0 means
+
+From here, features are minor releases and fixes are patches. A major version is reserved for a
+breaking change to exported data, the API or tokens. Next up: Phase 6, starting with KOReader sync.
+
 ## v0.10.0 (2026-10-15)
 
 A calm reading rhythm, and your library arranged your way.

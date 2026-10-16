@@ -156,8 +156,12 @@ Done on 2026-10-17 (v0.13.0): Phase 4 "Import Goodreads + StoryGraph CSV" (`src/
 `/app/import`): read in the browser, preview with repeats left out, batches of 50, one "Undo import". Rate
 limit `import-books`. No migration (undo uses 0011). Phase 4 is complete.
 
-Next for v1.0.0: decide the license (Phase 9) and keep the data model stable for one release. Then
-Phase 6 (KOReader sync first).
+Done on 2026-10-17 (v1.0.0): license decided by the owner, GNU AGPL-3.0-or-later (`LICENSE`, `package.json`
+`license`, README section, "Source code" link in the public footer and at the bottom of Settings via
+`SOURCE_URL` in `src/lib/site.ts`). Data model unchanged since v0.11.0. v1.0.0 released.
+
+Next: Phase 6 "Automation", starting with KOReader sync (`docs/ROADMAP.md`). After 1.0, a breaking change
+to exported data, the API or tokens needs a major version.
 
 Later (owner deferred, needs more effort): **Bengali-aware search**. Design agreed 2026-10-03:
 `src/features/search/` with `romanize.ts` (Bangla script to Latin), `phonetic.ts` (coarse key: vowel length,
