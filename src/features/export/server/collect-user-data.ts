@@ -27,6 +27,7 @@ export const EXPORTED_TABLES = [
   "custom_fields",
   "copies",
   "loans",
+  "undo_entries",
 ] as const satisfies TableName[];
 
 /** Tables with a `user_id` column: all of them must be exported. */

@@ -1195,5 +1195,89 @@
       "line": "{person}, since {date}.",
       "due": "Back by {date}."
     }
+  },
+  "Bulk": {
+    "select": "Select books",
+    "selectAll": "Select all shown",
+    "done": "Done",
+    "barLabel": "Change the chosen books",
+    "chosen": "{count, plural, =0 {Tap books to choose them} one {# book chosen} other {# books chosen}}",
+    "state": "Move to",
+    "tag": "Tag",
+    "addTag": "Add a tag",
+    "removeTag": "Take a tag off",
+    "newTag": "New tag…",
+    "newTagLabel": "Name the new tag",
+    "addNewTag": "Add tag",
+    "shelf": "Shelf",
+    "addShelf": "Put on a shelf",
+    "removeShelf": "Take off a shelf",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "keep": "Keep them",
+    "deleteTitle": "{count, plural, one {Delete this book?} other {Delete these # books?}}",
+    "deleteBody": "Their editions, reads, progress, copies and cover photos go too. This one cannot be undone.",
+    "deleteConfirm": "{count, plural, one {Delete the book} other {Delete # books}}",
+    "nothingChanged": "Those books already looked like that, so nothing changed.",
+    "errors": {
+      "invalid": "That did not look right. Try choosing again.",
+      "generic": "Something went wrong. Your books are as they were.",
+      "rateLimited": "That was a lot of changes at once. Give it a few minutes.",
+      "duplicate": "A tag with that name already exists."
+    },
+    "undo": {
+      "state": "{count, plural, one {Moved # book} other {Moved # books}}",
+      "tagged": "{count, plural, one {Tagged # book} other {Tagged # books}}",
+      "untagged": "{count, plural, one {Took the tag off # book} other {Took the tag off # books}}",
+      "shelved": "{count, plural, one {Put # book on the shelf} other {Put # books on the shelf}}",
+      "unshelved": "{count, plural, one {Took # book off the shelf} other {Took # books off the shelf}}"
+    }
+  },
+  "Undo": {
+    "undo": "Undo",
+    "dismiss": "Dismiss",
+    "done": "Put back as it was.",
+    "gone": "That can no longer be undone."
+  },
+  "Merge": {
+    "open": "Merge with another book",
+    "title": "Merge two books into one",
+    "body": "For when the same book is on your shelf twice. Editions, reads, progress, copies, tags and shelves all move to the book that stays, and it fills its empty details from the other. You can undo it for a day.",
+    "search": "Find the other book",
+    "noResults": "No other book matches that.",
+    "whichStays": "Which one stays?",
+    "pickAnother": "Pick a different book",
+    "cancel": "Cancel",
+    "confirm": "Merge them",
+    "edition": {
+      "open": "Merge into…",
+      "into": "Edition to merge into",
+      "confirm": "Merge",
+      "cancel": "Cancel"
+    },
+    "duplicates": {
+      "title": "Possibly on your shelf twice",
+      "intro": "These look like the same book. Merge them if they are, or leave them be if they are not.",
+      "reason": {
+        "isbn": "Same ISBN",
+        "title": "Same title and author"
+      },
+      "whichStays": "Which one stays?",
+      "keepLabel": "Keep {title}",
+      "stays": "Stays",
+      "merge": "Merge into the one that stays",
+      "counts": "{editions, plural, one {# edition} other {# editions}}, {reads, plural, one {# read} other {# reads}}"
+    },
+    "errors": {
+      "invalid": "That did not look right. Try again.",
+      "generic": "Something went wrong, so nothing was merged.",
+      "rateLimited": "That was a lot of changes at once. Give it a few minutes.",
+      "same": "Those editions belong to different books.",
+      "notFound": "One of those is no longer on your shelf."
+    },
+    "undo": {
+      "works": "Merged into {title}",
+      "editions": "Merged the two editions"
+    }
   }
 }

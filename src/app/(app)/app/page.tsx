@@ -3,11 +3,11 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { buttonVariants } from "@/components/ui/button";
+import { BulkShelf } from "@/features/bulk/components/bulk-shelf";
 import { GoalsCard } from "@/features/goals/components/goals-card";
 import { getGoals } from "@/features/goals/server/queries";
 import { EmptyShelf } from "@/features/library/components/empty-shelf";
 import { LibraryToolbar } from "@/features/library/components/library-toolbar";
-import { ShelfGrid } from "@/features/library/components/shelf-grid";
 import { libraryHref, parseLibraryParams } from "@/features/library/query";
 import { getLibrary } from "@/features/library/server/queries";
 import { getCustomStatuses } from "@/features/custom/server/queries";
@@ -82,7 +82,11 @@ export default async function LibraryPage({ searchParams }: PageProps<"/app">) {
       />
       {books.length > 0 ? (
         <>
-          <ShelfGrid books={books} />
+          <BulkShelf
+            books={books}
+            tags={tags}
+            shelves={shelves.filter((shelf) => shelf.kind === "manual")}
+          />
           {hasMore && (
             <Link
               href={libraryHref({ ...params, pages: params.pages + 1 })}

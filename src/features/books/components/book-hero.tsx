@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { MergeBookDialog } from "@/features/merge/components/merge-book-dialog";
 import { springs } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -174,6 +175,11 @@ export function BookHero({
               <Pencil className="size-4" aria-hidden />
               {t("edit")}
             </Button>
+            <MergeBookDialog
+              workId={book.id}
+              title={book.title}
+              authors={book.authors}
+            />
             <DeleteBookDialog workId={book.id} title={book.title} />
           </div>
         </div>

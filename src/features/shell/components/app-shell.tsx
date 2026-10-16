@@ -34,6 +34,7 @@ import { OfflineStatus } from "@/features/offline/components/offline-status";
 import { clearDeviceData } from "@/features/offline/device";
 import { flushProgressQueue } from "@/features/offline/queue";
 import { CommandPalette } from "@/features/palette/components/command-palette";
+import { UndoProvider } from "@/features/undo/components/undo-toast";
 import { UserAvatar } from "@/features/profile/components/user-avatar";
 import { springs } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -309,7 +310,7 @@ export function AppShell({
           tabIndex={-1}
           className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-8 outline-none sm:px-6 sm:py-10"
         >
-          {children}
+          <UndoProvider>{children}</UndoProvider>
         </main>
       </div>
       <OfflineStatus />

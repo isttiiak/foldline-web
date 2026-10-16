@@ -21,6 +21,7 @@ import {
 } from "../schemas";
 import { creditedAuthorIds, pruneAuthors, setCredits } from "./authors";
 import { coverFile, removeCoverFiles, uploadCover } from "./covers";
+import { deleteWorks } from "./delete";
 import { refreshLibrary, signedInClient, type Supabase } from "./guard";
 
 export type SaveResult = ActionResult<
@@ -381,25 +382,7 @@ export async function deleteBookAction(
   if (!session) return rateLimited;
   const id = idSchema.safeParse(workId);
   if (!id.success) return { status: "error", reason: "invalid" };
-  const { supabase } = session;
-
-  const { data: editions, error: readError } = await supabase
-    .from("editions")
-    .select("cover_storage_path")
-    .eq("work_id", id.data);
-  if (readError) return generic;
-  const authors = await creditedAuthorIds(supabase, id.data);
-
-  const { error } = await supabase.from("works").delete().eq("id", id.data);
-  if (error) {
-    console.error(`[books] delete failed: ${error.message}`);
-    return generic;
-  }
-  await removeCoverFiles(
-    supabase,
-    editions.map((edition) => edition.cover_storage_path),
-  );
-  await pruneAuthors(supabase, authors);
+  if (!(await deleteWorks(session.supabase, [id.data]))) return generic;
 
   refreshLibrary();
   redirect("/app");

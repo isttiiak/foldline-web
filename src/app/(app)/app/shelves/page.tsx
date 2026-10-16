@@ -4,6 +4,8 @@ import { getTranslations } from "next-intl/server";
 import { OpenLoans } from "@/features/copies/components/open-loans";
 import { getOpenLoans } from "@/features/copies/server/queries";
 import { getCustomStatuses } from "@/features/custom/server/queries";
+import { DuplicatesCard } from "@/features/merge/components/duplicates-card";
+import { getDuplicateSets } from "@/features/merge/server/queries";
 import {
   ShelvesList,
   TagsManager,
@@ -17,11 +19,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ShelvesPage() {
   const t = await getTranslations("Organise");
-  const [shelves, tags, statuses, loans] = await Promise.all([
+  const [shelves, tags, statuses, loans, duplicates] = await Promise.all([
     getShelves(),
     getTags(),
     getCustomStatuses(),
     getOpenLoans(),
+    getDuplicateSets(),
   ]);
 
   return (
@@ -35,6 +38,7 @@ export default async function ShelvesPage() {
       <ShelvesList shelves={shelves} tags={tags} statuses={statuses} />
       <TagsManager tags={tags} />
       <OpenLoans loans={loans} />
+      <DuplicatesCard sets={duplicates} />
     </div>
   );
 }

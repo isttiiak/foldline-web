@@ -84,6 +84,13 @@ export const RATE_LIMITS = {
     limit: 200,
     windowSeconds: 600,
   },
+  // Changing many books at once, merging books or editions, and undoing those.
+  bulkEdit: {
+    name: "bulk-edit",
+    per: "user",
+    limit: 60,
+    windowSeconds: 600,
+  },
   // Creating, changing, hiding and removing reading goals.
   goalEdit: {
     name: "goal-edit",

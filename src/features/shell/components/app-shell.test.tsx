@@ -18,6 +18,7 @@ vi.mock("@/features/progress/server/actions", () => ({
   logProgressAction: vi.fn(),
 }));
 vi.mock("@/features/auth/server/actions", () => ({ signOutAction: vi.fn() }));
+vi.mock("@/features/undo/server/actions", () => ({ undoAction: vi.fn() }));
 
 const user = {
   email: "reader@example.test",

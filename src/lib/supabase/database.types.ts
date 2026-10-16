@@ -645,6 +645,36 @@ export type Database = {
         };
         Relationships: [];
       };
+      undo_entries: {
+        Row: {
+          created_at: string;
+          expires_at: string;
+          id: string;
+          kind: string;
+          label: string;
+          payload: Json;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          expires_at?: string;
+          id?: string;
+          kind: string;
+          label: string;
+          payload: Json;
+          user_id?: string;
+        };
+        Update: {
+          created_at?: string;
+          expires_at?: string;
+          id?: string;
+          kind?: string;
+          label?: string;
+          payload?: Json;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       work_authors: {
         Row: {
           author_id: string;

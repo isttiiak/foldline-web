@@ -137,8 +137,16 @@ Done on 2026-10-15 (v0.10.0): the first three Phase 4 items.
 - Copies and loans (`src/features/copies/`): "Copies" section on the book page, "On loan" card.
 - New rate limit policy `library-edit`. All new tables are in the JSON export.
 
-Next: Phase 4 "Bulk edit, duplicate/edition merge, undo", then the full export and the Goodreads +
-StoryGraph import (both gate v1.0.0).
+Done on 2026-10-17 (v0.11.0): Phase 4 "Bulk edit, duplicate/edition merge, undo".
+
+- "Select books" on the library (`src/features/bulk/`): move to a state, add/remove a tag (new names make
+  tags), put on/take off a shelf, delete (asked first, not undoable). Rate limit `bulk-edit`.
+- Merge (`src/features/merge/`): "Possibly on your shelf twice" card on `/app/shelves`, "Merge with another
+  book" on the book page, "Merge into…" on each edition card.
+- Undo (`src/features/undo/`): one calm toast; snapshots live a day in `undo_entries` (migration
+  `0011_undo_entries.sql`, owner applies on dev and prod before the push).
+
+Next: the full CSV / Markdown export, then the Goodreads + StoryGraph import (both gate v1.0.0).
 
 Later (owner deferred, needs more effort): **Bengali-aware search**. Design agreed 2026-10-03:
 `src/features/search/` with `romanize.ts` (Bangla script to Latin), `phonetic.ts` (coarse key: vowel length,

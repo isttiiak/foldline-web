@@ -1,5 +1,6 @@
 "use client";
 
+import { Check } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -11,8 +12,20 @@ import { cn } from "@/lib/utils";
 
 import type { ShelfBook } from "../server/queries";
 
+/** Choosing books for a bulk change: cards become toggles instead of links. */
+export type ShelfSelection = {
+  selected: Set<string>;
+  toggle: (id: string) => void;
+};
+
 /** The reader's books as a calm grid: cover, title, author, where it sits. */
-export function ShelfGrid({ books }: { books: ShelfBook[] }) {
+export function ShelfGrid({
+  books,
+  selection,
+}: {
+  books: ShelfBook[];
+  selection?: ShelfSelection;
+}) {
   const t = useTranslations("Shelf");
   const tStates = useTranslations("AddBook.states");
 
@@ -32,10 +45,7 @@ export function ShelfGrid({ books }: { books: ShelfBook[] }) {
             } as React.CSSProperties
           }
         >
-          <Link
-            href={`/app/books/${book.id}`}
-            className="flex flex-col gap-2 rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:ring-offset-4 focus-visible:ring-offset-background"
-          >
+          <CardLink id={book.id} title={book.title} selection={selection}>
             <motion.div
               whileHover={{ y: -6, rotate: -1 }}
               transition={springs.snappy}
@@ -47,6 +57,21 @@ export function ShelfGrid({ books }: { books: ShelfBook[] }) {
                 title={book.title}
                 author={book.authors[0]}
               />
+              {selection && (
+                <span
+                  aria-hidden
+                  className={cn(
+                    "absolute top-2 right-2 grid size-7 place-items-center rounded-full border-2 shadow-md transition-colors",
+                    selection.selected.has(book.id)
+                      ? "border-amber bg-amber text-background"
+                      : "border-white/70 bg-black/40",
+                  )}
+                >
+                  {selection.selected.has(book.id) && (
+                    <Check className="size-4" strokeWidth={3} />
+                  )}
+                </span>
+              )}
               {book.state === "reading" && book.fraction !== null && (
                 <span
                   role="progressbar"
@@ -83,9 +108,45 @@ export function ShelfGrid({ books }: { books: ShelfBook[] }) {
                 </span>
               )}
             </div>
-          </Link>
+          </CardLink>
         </li>
       ))}
     </ul>
+  );
+}
+
+const cardClass =
+  "flex w-full flex-col gap-2 rounded-xl text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:ring-offset-4 focus-visible:ring-offset-background";
+
+/** A link to the book, or a toggle while books are being chosen. */
+function CardLink({
+  id,
+  title,
+  selection,
+  children,
+}: {
+  id: string;
+  title: string;
+  selection?: ShelfSelection;
+  children: React.ReactNode;
+}) {
+  if (!selection) {
+    return (
+      <Link href={`/app/books/${id}`} className={cardClass}>
+        {children}
+      </Link>
+    );
+  }
+  const chosen = selection.selected.has(id);
+  return (
+    <button
+      type="button"
+      aria-pressed={chosen}
+      aria-label={title}
+      onClick={() => selection.toggle(id)}
+      className={cardClass}
+    >
+      {children}
+    </button>
   );
 }

@@ -14,6 +14,7 @@ import { useTranslations } from "next-intl";
 import { useRef, useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
+import { MergeEdition } from "@/features/merge/components/merge-edition";
 import { resizeCover } from "@/lib/images";
 
 import { useLanguageName } from "../languages";
@@ -293,6 +294,17 @@ function EditionCard({
             {t("refresh")}
           </Button>
         )}
+        <MergeEdition
+          editionId={edition.id}
+          others={book.editions
+            .filter((other) => other.id !== edition.id)
+            .map((other) => ({
+              id: other.id,
+              label: [tFormats(other.format), other.title, other.isbn13]
+                .filter(Boolean)
+                .join(" · "),
+            }))}
+        />
         {canRemove &&
           (confirmRemove ? (
             <span className="flex items-center gap-1.5">

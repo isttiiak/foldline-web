@@ -18,7 +18,7 @@ src/
     (marketing)/            landing, about, privacy
     (app)/app/              library, book/[id], shelves, highlights, settings, import
     api/
-      kosync/               KOReader sync protocol endpoints (Phase 4)
+      kosync/               KOReader sync protocol endpoints (Phase 6)
       metadata/             search + enrich proxy
   features/
     library/ books/ reads/ progress/ shelves/ tags/ highlights/
@@ -106,13 +106,35 @@ Library tables grant only select/insert/update/delete to `authenticated`, nothin
 - The library, book page and stats read these tables in separate queries that fail soft, so the
   app still loads (without these features) on a project where the migrations are not yet applied.
 
+### Bulk edit, merge and undo (migration 0011)
+
+- `undo_entries` (kind 'bulk'|'merge-works'|'merge-editions'|'import', label, payload jsonb, expires_at
+  = a day later): a snapshot of a library-wide change. `recordUndo` (`src/features/undo/server/undo.ts`)
+  saves it and sweeps expired entries (and the cover files only they still held), so no cron job is
+  needed. `replayUndo` claims the entry (delete first, so a double click cannot replay twice), checks the
+  payload with Zod (`undo/schemas.ts`) and puts the rows back, using upserts so a half-done change can be
+  rolled back the same way. `UndoProvider` (in the app shell) shows one calm toast with "Undo".
+- Bulk edit (`src/features/bulk/`): "Select books" on the library turns the grid into toggles and opens a
+  sticky bar: move to a state (the current read, dates by `datesForState`; a book with no read gets one),
+  add or remove a tag (a new name makes a tag), put on or take off a manual shelf, delete (asked first,
+  not undoable; `deleteWorks` in `books/server/delete.ts` also removes cover files and unused authors).
+  Up to 200 books per change, rate limit `bulk-edit`.
+- Merge (`src/features/merge/`): `findDuplicates` (pure) groups books by a shared ISBN or the same title
+  key (case, accents, punctuation, articles and a subtitle ignored) and first author; the Shelves page
+  lists them. The book page has "Merge with another book"; each edition card has "Merge into…".
+  `mergeWorksAction` moves the dropped book's editions (their reads and copies follow by `on update
+cascade`), its edition-less reads and copies, credits, tags and shelves to the kept book, fills the kept
+  book's empty unlocked fields (`fillGaps`) and custom values, then deletes the dropped book.
+  `mergeEditionsAction` repoints reads and copies, deletes the dropped edition, then fills gaps (so an ISBN
+  can move). Each writes its undo snapshot first and rolls back from it if a write fails.
+
 ### Later phases
 
 - Later: `people`, `imports`.
-- Phase 4: `kosync_credentials` (username unique, key_hash), `kosync_documents`
+- Phase 6: `kosync_credentials` (username unique, key_hash), `kosync_documents`
   (document_hash, edition_id null, progress, percentage, device, device_id),
   `automation_rules` (trigger, conditions jsonb, action jsonb, enabled).
-- Phase 5: `highlights` (read_id/work_id, kind 'highlight'|'note'|'bookmark', text, note,
+- Phase 6/7: `highlights` (read_id/work_id, kind 'highlight'|'note'|'bookmark', text, note,
   location, chapter, source, source_hash; unique(user_id, source_hash)).
 
 ### Indexes
