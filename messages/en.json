@@ -693,8 +693,25 @@
     },
     "data": {
       "title": "Your data",
-      "body": "Download everything Foldline keeps about you as one JSON file. Take it anywhere, anytime.",
-      "download": "Download my data"
+      "body": "Everything you keep in Foldline is yours. Take it anywhere, anytime, in whichever shape suits you.",
+      "download": "Download my data",
+      "formats": {
+        "json": {
+          "title": "Everything, as JSON",
+          "body": "Every row Foldline keeps about you, in one file. The most complete copy.",
+          "download": "Download my data"
+        },
+        "csv": {
+          "title": "Library spreadsheet (CSV)",
+          "body": "One row per book: details, dates, ratings, tags, shelves and your own fields. Opens in Excel, Numbers or Google Sheets.",
+          "download": "Download CSV"
+        },
+        "markdown": {
+          "title": "Notes, one per book (Markdown)",
+          "body": "A zip of plain-text notes with your reads and reflections, ready for Obsidian or any notes app.",
+          "download": "Download notes"
+        }
+      }
     },
     "delete": {
       "title": "Delete account",
@@ -1278,6 +1295,20 @@
     "undo": {
       "works": "Merged into {title}",
       "editions": "Merged the two editions"
+    }
+  },
+  "Export": {
+    "markdown": {
+      "by": "by {authors}",
+      "reads": "Reads",
+      "about": "About",
+      "fields": "Your fields",
+      "copies": "Copies",
+      "stars": "{stars} of 5 stars",
+      "progress": "{count, plural, one {# progress entry} other {# progress entries}}",
+      "progressAt": "{count, plural, one {# progress entry} other {# progress entries}}, last at {percent}%",
+      "indexTitle": "My Foldline library",
+      "indexIntro": "Exported on {date}. One note per book, in the order you added them."
     }
   }
 }

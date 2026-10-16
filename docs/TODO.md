@@ -146,7 +146,12 @@ Done on 2026-10-17 (v0.11.0): Phase 4 "Bulk edit, duplicate/edition merge, undo"
 - Undo (`src/features/undo/`): one calm toast; snapshots live a day in `undo_entries` (migration
   `0011_undo_entries.sql`, owner applies on dev and prod before the push).
 
-Next: the full CSV / Markdown export, then the Goodreads + StoryGraph import (both gate v1.0.0).
+Done on 2026-10-17 (v0.12.0): Phase 4 "Full export". Settings "Your data" offers JSON (everything), a
+library CSV and a zip of Markdown notes (`src/features/export/{books,csv,markdown}.ts`, route
+`/app/settings/export?format=`). The JSON export now pages past the API's 1000-row cap. Adds `fflate`.
+No migration.
+
+Next: the Goodreads + StoryGraph import (gates v1.0.0).
 
 Later (owner deferred, needs more effort): **Bengali-aware search**. Design agreed 2026-10-03:
 `src/features/search/` with `romanize.ts` (Bangla script to Latin), `phonetic.ts` (coarse key: vowel length,

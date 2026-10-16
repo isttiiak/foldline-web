@@ -51,6 +51,32 @@ test("download my data returns the user's rows as JSON", async ({ page }) => {
   expect(file.tables.provider_cache).toBeUndefined();
 });
 
+test("the library downloads as a CSV and as Markdown notes", async ({
+  page,
+}) => {
+  await page.goto("/app/settings");
+  const [csv] = await Promise.all([
+    page.waitForEvent("download"),
+    page.getByRole("link", { name: "Download CSV" }).click(),
+  ]);
+  expect(csv.suggestedFilename()).toMatch(
+    /^foldline-library-\d{4}-\d{2}-\d{2}\.csv$/,
+  );
+  const text = await readFile(await csv.path(), "utf8");
+  expect(text.startsWith("\uFEFFTitle,Subtitle,Authors,")).toBe(true);
+
+  const [notes] = await Promise.all([
+    page.waitForEvent("download"),
+    page.getByRole("link", { name: "Download notes" }).click(),
+  ]);
+  expect(notes.suggestedFilename()).toMatch(
+    /^foldline-notes-\d{4}-\d{2}-\d{2}\.zip$/,
+  );
+  const zip = await readFile(await notes.path());
+  // A zip file starts with "PK".
+  expect(zip.subarray(0, 2).toString("latin1")).toBe("PK");
+});
+
 test.describe("deleting the account", () => {
   // Deletion removes the user, so use one of its own.
   test.use({ storageState: { cookies: [], origins: [] } });

@@ -160,20 +160,41 @@ export default async function SettingsPage() {
         <p className="leading-relaxed text-muted-foreground">
           {t("data.body")}
         </p>
-        <div>
-          {/* A plain link: the route answers with a file download. */}
-          <a
-            href="/app/settings/export"
-            download
-            className={cn(
-              buttonVariants({ variant: "outline", size: "lg" }),
-              "h-11 gap-2 rounded-xl px-4",
-            )}
-          >
-            <Download className="size-4" aria-hidden />
-            {t("data.download")}
-          </a>
-        </div>
+        {/* Plain links: the route answers with a file download. */}
+        <ul className="flex flex-col gap-3">
+          {(
+            [
+              ["json", "/app/settings/export"],
+              ["csv", "/app/settings/export?format=csv"],
+              ["markdown", "/app/settings/export?format=markdown"],
+            ] as const
+          ).map(([format, href]) => (
+            <li
+              key={format}
+              className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/70 bg-background/40 p-4"
+            >
+              <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                <span className="font-medium">
+                  {t(`data.formats.${format}.title`)}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {t(`data.formats.${format}.body`)}
+                </span>
+              </div>
+              <a
+                href={href}
+                download
+                className={cn(
+                  buttonVariants({ variant: "outline" }),
+                  "h-10 gap-2 rounded-xl px-4",
+                )}
+              >
+                <Download className="size-4" aria-hidden />
+                {t(`data.formats.${format}.download`)}
+              </a>
+            </li>
+          ))}
+        </ul>
       </Card>
 
       <Card icon={Trash2} title={t("delete.title")} tone="danger">

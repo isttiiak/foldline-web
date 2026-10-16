@@ -245,6 +245,21 @@ only, per-user limit `metadata-lookup`.
   a planned or resting read moves it to reading. Deleting a book removes its cover files
   and any author rows no longer credited on another book.
 
+## Export
+
+- `GET /app/settings/export?format=json|csv|markdown` (JSON is the default, rate limit `export-data`).
+  `collectUserData` reads every table in `EXPORTED_TABLES` with the reader's own client, in pages of 1000
+  (the API's row cap) ordered by primary key.
+- JSON (`build-export.ts`): every row, one key per table, `format: "foldline-export"`, `version: 1`.
+- `buildBooks` (`export/books.ts`, pure) turns the rows into one flat book each: current read (by
+  `newestReadFirst`) and its edition, every read with its progress count, tags, manual shelves, copies and
+  the reader's fields in their order.
+- CSV (`csv.ts`): a row per book, a column per detail and one `Field: <name>` column per own field; UTF-8
+  with a BOM and CRLF; text starting with `= + - @` or a tab gets a leading apostrophe (no formulas).
+- Markdown (`markdown.ts`): one note per book with YAML front matter (JSON-quoted values), reads with
+  reflections, description, fields and copies, zipped by `fflate` with an `index.md`. File names are slugs
+  that keep Bangla letters; repeats get `-2`, `-3`. Wording comes from `Export.markdown` in the messages.
+
 ## PWA and offline
 
 - Serwist with Turbopack (`@serwist/turbopack`): the worker source is `src/worker/sw.ts` (own

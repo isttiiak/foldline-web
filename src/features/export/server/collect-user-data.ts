@@ -48,6 +48,15 @@ const exportsEveryUserTable: Exclude<
   : false = true;
 void exportsEveryUserTable;
 
+/** A stable order for paging: the primary key (link tables have no id column). */
+const ORDER: Partial<Record<(typeof EXPORTED_TABLES)[number], string[]>> = {
+  work_tags: ["work_id", "tag_id"],
+  shelf_items: ["shelf_id", "work_id"],
+};
+
+/** The API returns at most this many rows per request, so tables are read in pages. */
+const PAGE = 1000;
+
 /**
  * Read all of the signed-in user's rows. Uses the user's own client, so RLS
  * guarantees only their rows come back.
@@ -59,9 +68,18 @@ export async function collectUserData(): Promise<
   const tables: ExportTables = {};
 
   for (const table of EXPORTED_TABLES) {
-    const { data, error } = await supabase.from(table).select("*");
-    if (error) return { ok: false, error: `${table}: ${error.message}` };
-    tables[table] = data;
+    const rows: unknown[] = [];
+    for (let from = 0; ; from += PAGE) {
+      let query = supabase.from(table).select("*");
+      for (const column of ORDER[table] ?? ["id"]) {
+        query = query.order(column);
+      }
+      const { data, error } = await query.range(from, from + PAGE - 1);
+      if (error) return { ok: false, error: `${table}: ${error.message}` };
+      rows.push(...data);
+      if (data.length < PAGE) break;
+    }
+    tables[table] = rows;
   }
   return { ok: true, tables };
 }
