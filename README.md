@@ -28,3 +28,16 @@ pnpm dev
 Copy `.env.example` to `.env.local` and fill in the values. See [docs/SETUP.md](docs/SETUP.md) for where each key comes from.
 
 Docs: [architecture](docs/ARCHITECTURE.md) · [roadmap](docs/ROADMAP.md)
+
+## License
+
+Copyright (C) 2026 isttiiak.
+
+Foldline is free software: you can redistribute it and/or modify it under the terms of the
+[GNU Affero General Public License](LICENSE) as published by the Free Software Foundation, either
+version 3 of the License, or (at your option) any later version. If you run a modified version for
+others over a network, you must offer them its source code too.
+
+Foldline is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the license for
+details.

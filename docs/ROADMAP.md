@@ -97,5 +97,5 @@ Tick items as they are completed. One item per Claude Code session.
 - [ ] Bangla translation: `messages/bn.json`, locale switcher, Bangla-capable font stack
 - [ ] Move Supabase to Pro when usage needs it; remove keep-alive
 - [ ] Donation link
-- [ ] Decide license (AGPL-3.0 vs MIT)
+- [x] Decide license: AGPL-3.0-or-later (owner, 2026-10-17)
 - [ ] Register foldline domain + GitHub org; trademark check

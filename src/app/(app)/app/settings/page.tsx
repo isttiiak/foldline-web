@@ -28,6 +28,7 @@ import {
 import { getProfile } from "@/features/profile/server/queries";
 import { InstallApp } from "@/features/pwa/components/install-app";
 import { requireUser } from "@/lib/auth";
+import { SOURCE_URL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -222,6 +223,20 @@ export default async function SettingsPage() {
         </p>
         <DeleteAccountForm email={user.email} />
       </Card>
+
+      <p className="text-center text-sm text-muted-foreground">
+        {t.rich("source", {
+          link: (chunks) => (
+            <a
+              href={SOURCE_URL}
+              rel="noopener noreferrer"
+              className="rounded-sm text-amber underline-offset-4 hover:underline focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
+            >
+              {chunks}
+            </a>
+          ),
+        })}
+      </p>
     </div>
   );
 }

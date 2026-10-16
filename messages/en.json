@@ -130,7 +130,8 @@
     "note": "Made for slow evenings and good books.",
     "privacy": "Privacy",
     "terms": "Terms",
-    "legalLabel": "Legal"
+    "legalLabel": "Legal",
+    "source": "Source code"
   },
   "AppNav": {
     "label": "Main",
@@ -748,7 +749,8 @@
     "fields": {
       "title": "Your fields",
       "body": "Add your own details to every book, like where you heard of it or whether it is signed."
-    }
+    },
+    "source": "Foldline is free software under the GNU AGPL-3.0. <link>Read the source code</link>."
   },
   "Profile": {
     "metaTitle": "Profile",

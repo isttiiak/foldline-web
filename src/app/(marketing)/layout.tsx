@@ -5,6 +5,7 @@ import { AmbientGlow } from "@/components/ambient-glow";
 import { HeaderSignIn } from "@/components/header-sign-in";
 import { SkipLink } from "@/components/skip-link";
 import { Wordmark } from "@/components/brand/wordmark";
+import { SOURCE_URL } from "@/lib/site";
 
 export default function MarketingLayout({ children }: LayoutProps<"/">) {
   const t = useTranslations("Footer");
@@ -61,6 +62,15 @@ export default function MarketingLayout({ children }: LayoutProps<"/">) {
                 </Link>
               </li>
             ))}
+            <li>
+              <a
+                href={SOURCE_URL}
+                rel="noopener noreferrer"
+                className="inline-block rounded-sm px-1 py-2 underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
+              >
+                {t("source")}
+              </a>
+            </li>
           </ul>
         </nav>
       </footer>

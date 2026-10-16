@@ -23,6 +23,15 @@ test("footer links lead to the privacy policy and terms", async ({ page }) => {
   ).toBeVisible();
 });
 
+test("the footer links to the source code (AGPL)", async ({ page }) => {
+  await page.goto("/");
+  await expect(
+    page.getByRole("navigation", { name: "Legal" }).getByRole("link", {
+      name: "Source code",
+    }),
+  ).toHaveAttribute("href", "https://github.com/isttiiak/foldline-web");
+});
+
 test("the login page links to the terms and privacy policy", async ({
   page,
 }) => {
