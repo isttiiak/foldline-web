@@ -4,6 +4,29 @@ All notable changes to Foldline. Versions follow [SemVer](https://semver.org); w
 version is `0.x`, anything may still change. Each release is an annotated git tag
 (`vX.Y.Z`) with `package.json` at the same version.
 
+## v0.11.0 (2026-10-17)
+
+Tidy a whole shelf at once, and take any of it back.
+
+### Added
+
+- Select several books on the library and change them together: move them to a state, add or take
+  off a tag (a new name makes a new tag), put them on or take them off a shelf, or delete them (asked
+  first).
+- Merge a book that is on your shelf twice: the Shelves page lists books that look the same, and every
+  book page has "Merge with another book". Editions, reads, progress, copies, tags and shelves all move
+  to the book that stays. Two editions of one book can be merged as well.
+- Undo: bulk changes and merges can be taken back for a day, from a calm toast.
+
+### Database migrations
+
+`0011_undo_entries.sql` (applied on dev; run it on prod before this deploys).
+
+### Road to v1.0.0
+
+Still to come: the full CSV / Markdown export, the Goodreads + StoryGraph import, and the license
+decision.
+
 ## v0.10.0 (2026-10-15)
 
 A calm reading rhythm, and your library arranged your way.
