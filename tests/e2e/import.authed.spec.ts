@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 import { signInAsNewUser } from "./auth-file";
 
@@ -15,6 +15,24 @@ const GOODREADS = [
   "3,,,,,,,,,,,,,,,,,,,,,,,",
 ].join("\n");
 
+/**
+ * Pick the file the way a reader does. The button opens the file chooser only once
+ * the page is hydrated, so retry until it does (a file set earlier would be lost).
+ */
+async function upload(page: Page) {
+  await expect(async () => {
+    const chooser = page.waitForEvent("filechooser", { timeout: 2000 });
+    await page.getByRole("button", { name: "Choose a CSV file" }).click();
+    await (
+      await chooser
+    ).setFiles({
+      name: "goodreads_library_export.csv",
+      mimeType: "text/csv",
+      buffer: Buffer.from(GOODREADS),
+    });
+  }).toPass(SAVE);
+}
+
 test("import a Goodreads export, look it over, then undo it", async ({
   page,
 }) => {
@@ -27,11 +45,7 @@ test("import a Goodreads export, look it over, then undo it", async ({
     page.getByRole("heading", { level: 1, name: "Move in" }),
   ).toBeVisible();
 
-  await page.getByLabel("Your Goodreads or StoryGraph CSV").setInputFiles({
-    name: "goodreads_library_export.csv",
-    mimeType: "text/csv",
-    buffer: Buffer.from(GOODREADS),
-  });
+  await upload(page);
   await expect(
     page.getByRole("heading", { name: "Your Goodreads library" }),
   ).toBeVisible(SAVE);
@@ -59,11 +73,7 @@ test("import a Goodreads export, look it over, then undo it", async ({
 
   // Undo from the import page's summary: run it again, then undo.
   await page.goto("/app/import");
-  await page.getByLabel("Your Goodreads or StoryGraph CSV").setInputFiles({
-    name: "goodreads_library_export.csv",
-    mimeType: "text/csv",
-    buffer: Buffer.from(GOODREADS),
-  });
+  await upload(page);
   await expect(page.getByText("already on your shelf")).toBeVisible(SAVE);
   await expect(
     page.getByRole("button", { name: "Nothing new to bring" }),

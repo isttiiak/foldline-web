@@ -120,7 +120,10 @@ test("custom statuses, rating scale and custom fields", async ({ page }) => {
   await statuses.getByRole("button", { name: "Add a status" }).click();
   await statuses.getByLabel("Name", { exact: true }).fill("Up next");
   await statuses.getByRole("button", { name: "Add status" }).click();
-  await expect(statuses.getByText("inside Want to read")).toBeVisible(SAVE);
+  // Wait for the saved status in the list (the card's own help text also says "inside").
+  await expect(
+    statuses.getByRole("listitem").filter({ hasText: "Up next" }),
+  ).toContainText("inside Want to read", SAVE);
 
   // A yes/no field.
   const fields = page.getByRole("region", { name: "Your fields" });

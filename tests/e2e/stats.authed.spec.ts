@@ -41,7 +41,8 @@ test("stats describe the shelf, and can be hidden and shown again", async ({
 
   const finished = page.getByRole("region", { name: "Finished", exact: true });
   await expect(finished.locator("p span").first()).toHaveText("2");
-  await expect(page.getByText("400")).toBeVisible(); // pages from the two books
+  // Exact: the random test user id may contain "400" too.
+  await expect(page.getByText("400", { exact: true })).toBeVisible(); // pages from the two books
   await expect(page.getByText("Ursula K. Le Guin")).toBeVisible();
 
   // The reading rhythm: a calendar of days, never a streak.
