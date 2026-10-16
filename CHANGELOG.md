@@ -50,6 +50,30 @@ None.
 
 Still to come: the Goodreads + StoryGraph import, and the license decision.
 
+## v0.13.0 (2026-10-17)
+
+Move in from Goodreads or StoryGraph. Phase 4 is complete.
+
+### Added
+
+- A new Import page (from Settings or an empty library) reads a Goodreads or StoryGraph CSV export in
+  your browser, shows what is in it, and leaves out books already on your shelf. Books arrive with their
+  states, dates, ratings, reviews, shelves as tags (StoryGraph moods if you like), series, translators and
+  owned copies. The whole import can be undone for a day.
+
+### Fixed
+
+- Dropdowns in the selection bar and edition merge are 16px, so phones do not zoom in when tapped.
+
+### Database migrations
+
+None new (`0011_undo_entries.sql` from v0.11.0 is needed for undo).
+
+### Road to v1.0.0
+
+Phases 3, 4 and 5 are done. Left before v1.0.0: decide the license (Phase 9) and keep the data model
+free of breaking changes for one release.
+
 ## v0.10.0 (2026-10-15)
 
 A calm reading rhythm, and your library arranged your way.
