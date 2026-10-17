@@ -71,3 +71,15 @@ test.describe("with reduced motion", () => {
     expect(["none", "matrix(1, 0, 0, 1, 0, 0)"]).toContain(transform);
   });
 });
+
+test("footer names Bustandeen without sending a referrer", async ({ page }) => {
+  await page.goto("/");
+  const link = page
+    .getByRole("contentinfo")
+    .getByRole("link", { name: "Bustandeen" });
+  await expect(link).toHaveAttribute("href", "https://bustandeen.com");
+  await expect(link).toHaveAttribute("rel", /noreferrer/);
+  await expect(page.getByRole("contentinfo")).toContainText(
+    "A Bustandeen service",
+  );
+});

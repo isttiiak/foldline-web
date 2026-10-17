@@ -214,6 +214,12 @@ into Phase 7, KOReader sync deferred, AI on-device only (no Groq). Phase 8 gains
 opt-in shared catalogue for Bengali books the providers lack. Phase 9 plans the move to
 `foldline.bustandeen.com` (steps in `docs/SETUP.md` section 7), which then makes free email sign-in possible.
 
+Done on 2026-10-17 (v1.1.0): queue item 1, code side. The app was already address-agnostic (`siteUrl()`
+reads `NEXT_PUBLIC_SITE_URL`, auth redirects use the request origin, manifest paths are relative, cookies
+host-only). Added "A Bustandeen service" footer line (`BUSTANDEEN_URL` in `src/lib/site.ts`), a privacy
+sentence, and the smoke test in `docs/SETUP.md` section 7. Queue item 1 is ticked once the owner's dashboard
+steps and the smoke test pass.
+
 Next: the first unchecked item in "Priority queue" at the top of this file. After 1.0, a breaking change
 to exported data, the API or tokens needs a major version.
 

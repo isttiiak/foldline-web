@@ -98,6 +98,26 @@ None. The data model is unchanged since v0.11.0.
 From here, features are minor releases and fixes are patches. A major version is reserved for a
 breaking change to exported data, the API or tokens. Next up: Phase 6, starting with KOReader sync.
 
+## v1.1.0 (2026-10-17)
+
+A new home address: Foldline moves to `foldline.bustandeen.com`.
+
+### Added
+
+- The public footer says Foldline is a Bustandeen service, with a plain link (no referrer sent).
+- The privacy policy now says where Foldline lives and that nothing from bustandeen.com runs on
+  Foldline or sets cookies here.
+
+### Changed
+
+- `docs/SETUP.md` section 7 walks through the move, with a smoke test at the end. The old
+  `myfoldline.vercel.app` address keeps working and forwards to the new one. An installed app belongs
+  to the address it came from: reinstall it from the new one (your library is safe on the server).
+
+### Database migrations
+
+None.
+
 ## v0.10.0 (2026-10-15)
 
 A calm reading rhythm, and your library arranged your way.

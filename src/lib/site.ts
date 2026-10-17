@@ -21,3 +21,6 @@ export const PUBLIC_PAGES = [
 
 /** Foldline is free software (AGPL-3.0): the code anyone using it can read and run. */
 export const SOURCE_URL = "https://github.com/isttiiak/foldline-web";
+
+/** Foldline lives on a Bustandeen subdomain; this links home, and nothing from there runs here. */
+export const BUSTANDEEN_URL = "https://bustandeen.com";

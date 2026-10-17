@@ -131,7 +131,8 @@
     "privacy": "Privacy",
     "terms": "Terms",
     "legalLabel": "Legal",
-    "source": "Source code"
+    "source": "Source code",
+    "bustandeen": "A <link>Bustandeen</link> service"
   },
   "AppNav": {
     "label": "Main",
@@ -589,7 +590,8 @@
       "cookies": {
         "title": "Cookies",
         "body": [
-          "Foldline sets only the cookies it needs to keep you signed in. There are no advertising or tracking cookies, so there is no cookie banner to click through."
+          "Foldline sets only the cookies it needs to keep you signed in. There are no advertising or tracking cookies, so there is no cookie banner to click through.",
+          "Foldline lives at foldline.bustandeen.com, as a Bustandeen service. Nothing from bustandeen.com runs on Foldline, reads your data or sets cookies here; Foldline's cookies belong to Foldline's own address only."
         ]
       },
       "where": {

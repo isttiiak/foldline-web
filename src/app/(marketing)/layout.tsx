@@ -5,7 +5,7 @@ import { AmbientGlow } from "@/components/ambient-glow";
 import { HeaderSignIn } from "@/components/header-sign-in";
 import { SkipLink } from "@/components/skip-link";
 import { Wordmark } from "@/components/brand/wordmark";
-import { SOURCE_URL } from "@/lib/site";
+import { BUSTANDEEN_URL, SOURCE_URL } from "@/lib/site";
 
 export default function MarketingLayout({ children }: LayoutProps<"/">) {
   const t = useTranslations("Footer");
@@ -49,7 +49,22 @@ export default function MarketingLayout({ children }: LayoutProps<"/">) {
         {children}
       </main>
       <footer className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <p>{t("note")}</p>
+        <div className="flex flex-col gap-1">
+          <p>{t("note")}</p>
+          <p className="text-xs">
+            {t.rich("bustandeen", {
+              link: (chunks) => (
+                <a
+                  href={BUSTANDEEN_URL}
+                  rel="noopener noreferrer"
+                  className="rounded-sm underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
+                >
+                  {chunks}
+                </a>
+              ),
+            })}
+          </p>
+        </div>
         <nav aria-label={t("legalLabel")}>
           <ul className="-my-2 flex gap-3">
             {(["privacy", "terms"] as const).map((key) => (

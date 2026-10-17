@@ -152,10 +152,10 @@ Then run both workflows once from the **Actions** tab to confirm they pass. (Kee
 only covers prod; the dev project may pause after a week idle. Resume it from the
 dashboard when needed.)
 
-## 7. Move to `foldline.bustandeen.com` (Phase 9)
+## 7. Move to `foldline.bustandeen.com`
 
 Foldline keeps its own Vercel project, Supabase projects and accounts; only the address
-changes. Do the steps in this order, then smoke test as in section 3, step 8.
+changes. Do the steps in this order; step 9 is the smoke test.
 
 1. **Vercel → Project → Settings → Domains → Add** `foldline.bustandeen.com`, set it as the
    production domain. Vercel shows a CNAME record (usually `cname.vercel-dns.com`).
@@ -174,9 +174,18 @@ changes. Do the steps in this order, then smoke test as in section 3, step 8.
    The OAuth redirect URI still points at Supabase, so Credentials need no change.
 7. **Privacy**: nothing from bustandeen.com may run on or reach Foldline. Analytics on the main
    site must keep its cookies on its own host (Ihsan's GA4 pins `cookie_domain` to the exact
-   hostname, which is right); never set a cookie for `.bustandeen.com`.
+   hostname, which is right); never set a cookie for `.bustandeen.com`. Checked on 2026-10-17: the Bustandeen
+   site (`~/projects/ihsan/frontend/index.html`) pins `cookie_domain: location.hostname` and loads
+   nothing from Foldline; Foldline's Supabase cookies set no `domain`, so they stay host-only.
 8. Installed copies of the app (PWA) belong to the old address: readers reinstall from the new
    one. Their data is safe on the server; only the offline queue on that device is left behind.
+9. **Smoke test** in a private window:
+   - `https://foldline.bustandeen.com` shows the landing page with "A Bustandeen service" in the footer.
+   - `https://myfoldline.vercel.app/privacy` lands on `https://foldline.bustandeen.com/privacy`.
+   - `/sitemap.xml` and `/robots.txt` list `https://foldline.bustandeen.com` URLs.
+   - **Get started with Google** returns to `https://foldline.bustandeen.com/app` signed in.
+   - Install the app from the new address; it opens on your library.
+10. Once that passes, remove the old `myfoldline.vercel.app` entry from Supabase Redirect URLs.
 
 ## Optional: Docker
 
