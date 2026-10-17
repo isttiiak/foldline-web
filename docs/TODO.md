@@ -16,7 +16,7 @@ This queue overrides the `docs/ROADMAP.md` order. How to work:
   and prod BEFORE pushing.
 - At the end, tick the item here and name the next one.
 
-1. [ ] Domain `foldline.bustandeen.com`. `docs/SETUP.md` section 7 has the dashboard steps (owner
+1. [x] Domain `foldline.bustandeen.com` (done 2026-10-17, v1.1.0). `docs/SETUP.md` section 7 has the dashboard steps (owner
        does those, walked through one step at a time). Code side: check for a hard-coded URL, set
        up `NEXT_PUBLIC_SITE_URL` handling, PWA manifest/scope, an optional soft "a Bustandeen
        service" footer line (ask first). Bustandeen (code at `~/projects/ihsan`) must never run
@@ -69,7 +69,9 @@ This queue overrides the `docs/ROADMAP.md` order. How to work:
 - [x] `0004_profile_details.sql` and `supabase/dev-seeds/sample_library.sql` run on dev
       (2026-10-01): profile e2e passes, izhaaannn account has 12 sample books
 - [x] `0005_book_covers.sql` run on dev (2026-10-01): cover upload e2e passes
-- [ ] Optional, any time: move to `foldline.bustandeen.com` (`docs/SETUP.md` section 7; earlier is easier)
+- [x] Moved to `foldline.bustandeen.com` (2026-10-17): Vercel domain, Porkbun CNAME, 308 from
+      `myfoldline.vercel.app`, `NEXT_PUBLIC_SITE_URL`, Supabase URLs, Google branding; Google sign-in
+      checked from a private window. Left: remove the old `myfoldline.vercel.app/**` Supabase redirect entry
 - [ ] Optional: create GitHub Releases for older tags (notes are in `CHANGELOG.md`); `v0.1.0` and
       `v0.9.0` have one
 - [x] Claude settings: GitHub and routine git commands allowed in `.claude/settings.json` (2026-10-15)
@@ -217,8 +219,11 @@ opt-in shared catalogue for Bengali books the providers lack. Phase 9 plans the 
 Done on 2026-10-17 (v1.1.0): queue item 1, code side. The app was already address-agnostic (`siteUrl()`
 reads `NEXT_PUBLIC_SITE_URL`, auth redirects use the request origin, manifest paths are relative, cookies
 host-only). Added "A Bustandeen service" footer line (`BUSTANDEEN_URL` in `src/lib/site.ts`), a privacy
-sentence, and the smoke test in `docs/SETUP.md` section 7. Queue item 1 is ticked once the owner's dashboard
-steps and the smoke test pass.
+sentence, and the smoke test in `docs/SETUP.md` section 7. The owner did the dashboard steps the same day;
+the smoke test passed (the in-app browser pane trips on Google's own `SetSID` step, so test sign-in in a
+real private window). The live site uses Supabase project `ugfyxuhuxyzxxeckqgcx`.
+
+Next: queue item 2, Bengali books part 1 (richer add-by-hand form).
 
 Next: the first unchecked item in "Priority queue" at the top of this file. After 1.0, a breaking change
 to exported data, the API or tokens needs a major version.

@@ -109,7 +109,7 @@ hosted "free tier" AI APIs (e.g. Groq): they rate-limit, and some train on what 
 
 ## Phase 9: Growth & operations (free only)
 
-- [ ] Move to `foldline.bustandeen.com` (owner's existing domain, free; steps in `docs/SETUP.md`
+- [x] Move to `foldline.bustandeen.com` (done 2026-10-17, v1.1.0) (owner's existing domain, free; steps in `docs/SETUP.md`
       section 7). Do it early: installs, links and Google sign-in are tied to the address. Foldline
       keeps its own Supabase project and accounts; "a Bustandeen service" at most as a footer line
 - [ ] Bangla translation: `messages/bn.json`, locale switcher, Bangla-capable font stack
