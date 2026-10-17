@@ -3,6 +3,53 @@
 Read this first in every new session, then `docs/ROADMAP.md`. Update it at the end of a
 session: tick what is done, add what is next.
 
+## Priority queue (owner, 2026-10-17)
+
+This queue overrides the `docs/ROADMAP.md` order. How to work:
+
+- Take the FIRST unchecked item only. Plan mode first: read the relevant code (and
+  `docs/ARCHITECTURE.md` if it touches data), present the plan, wait for approval.
+- If an item needs another feature that is not built yet or earlier in this queue, stop before
+  planning and ask the owner with a short brief (what, why, cost, effort), "Confirm" / "Defer".
+- Definition of done as in CLAUDE.md (verify, migration handoff if any, roadmap and TODO updated,
+  release commit + annotated tag, push main and the tag). Migrations: name the file to run on dev
+  and prod BEFORE pushing.
+- At the end, tick the item here and name the next one.
+
+1. [ ] Domain `foldline.bustandeen.com`. `docs/SETUP.md` section 7 has the dashboard steps (owner
+       does those, walked through one step at a time). Code side: check for a hard-coded URL, set
+       up `NEXT_PUBLIC_SITE_URL` handling, PWA manifest/scope, an optional soft "a Bustandeen
+       service" footer line (ask first). Bustandeen (code at `~/projects/ihsan`) must never run
+       anything on or set cookies for Foldline.
+2. [ ] Bengali books, part 1: richer add-by-hand form for books the catalogues lack. Capture as
+       much as possible: title in Bangla script, romanised title, original title, subtitle,
+       authors and translators, publisher, edition/printing, year (accept Bangla numerals), pages,
+       ISBN (optional), language, cover photo. Check which fields exist on works/editions first; a
+       migration only if needed.
+3. [ ] Bengali books, part 2: Bengali-aware search, design from "Later" below (`romanize.ts`,
+       `phonetic.ts`, `match.ts` in `src/features/search/`; library page and palette; romanised
+       query variants for Open Library). Test with real titles (adarsha/adarsh/আদর্শ,
+       productive/প্রোডাক্টিভ). (Shared Bengali catalogue + admin panel: DEFERRED to its own
+       research session.)
+4. [ ] Highlights & notes hub: `highlights` table (+ pgTAP RLS test), add by hand on the book page
+       (quote, page/location, note, tags), `/app/highlights` with search and filters, in
+       JSON/CSV/Markdown exports. (Kindle import: DEFERRED.)
+5. [ ] Private year-end letter: warm summary of a year (books, pages, formats, reflections,
+       favourite highlights), shown in the app and downloadable as Markdown. Private only.
+6. [ ] ISBN barcode scan on `/app/add`: `BarcodeDetector` + free polyfill, camera permission asked
+       only on tap, falls back to typing.
+7. [ ] Scan the copyright page: photo → in-browser OCR (Tesseract.js, eng + ben models, loaded
+       only when used) → parse ISBN, title, authors, publisher, year → prefill the form from item
+       2 for the reader to correct. No paid vision API.
+8. [ ] Photocards: shareable images, not public links. (a) Book card: cover, title, author,
+       optional rating/finish date. (b) Quote card: a line from a highlight (item 4) with book and
+       author. Several designed styles each (warm gradients, no violet), Bangla font (Noto Sans
+       Bengali or Hind Siliguri) so Bengali text renders. Download PNG + Web Share API. Nothing
+       leaves the device unless the reader shares.
+9. [ ] Rules engine: user-made rules (e.g. "when I finish a book tagged X, put it on shelf Y"),
+       `automation_rules` table + pg_cron nightly evaluator (Supabase free), logic in TypeScript
+       where possible. No notifications.
+
 ## Owner (needs your accounts or keys)
 
 - [x] GitHub secrets set to the **prod** project (`SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`,
@@ -167,7 +214,7 @@ into Phase 7, KOReader sync deferred, AI on-device only (no Groq). Phase 8 gains
 opt-in shared catalogue for Bengali books the providers lack. Phase 9 plans the move to
 `foldline.bustandeen.com` (steps in `docs/SETUP.md` section 7), which then makes free email sign-in possible.
 
-Next: Phase 7 "Highlights & notes hub" (`docs/ROADMAP.md`). After 1.0, a breaking change
+Next: the first unchecked item in "Priority queue" at the top of this file. After 1.0, a breaking change
 to exported data, the API or tokens needs a major version.
 
 Later (owner deferred, needs more effort): **Bengali-aware search**. Design agreed 2026-10-03:
