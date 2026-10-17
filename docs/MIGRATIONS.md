@@ -30,4 +30,4 @@ migration history does not know about SQL Editor runs.
 | 9   | `0009_statuses_and_fields.sql`     | `custom_statuses` (+ `reads.custom_status_id`), `custom_fields` (+ `works.custom_values`)  | [x] | [x]  |
 | 10  | `0010_copies_and_loans.sql`        | `copies` (ownership, location) and `loans` (lent to / borrowed from) (RLS)                 | [x] | [x]  |
 | 11  | `0011_undo_entries.sql`            | `undo_entries` (day-long snapshots for undoing bulk edits, merges and imports) (RLS)       | [x] | [x]  |
-| 12  | `0012_bengali_book_details.sql`    | `works.title_romanized` and `editions.edition_statement` (details for books added by hand) | [x] | [ ]  |
+| 12  | `0012_bengali_book_details.sql`    | `works.title_romanized` and `editions.edition_statement` (details for books added by hand) | [x] | [x]  |

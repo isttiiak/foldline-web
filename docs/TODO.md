@@ -228,7 +228,7 @@ romanised title, several translators (TagInput), the original title and language
 added, or via "It's a translation"), edition/printing, and Bengali digits in pages, minutes, year and ISBN
 (stored as 0-9). Migration `0012_bengali_book_details.sql` adds `works.title_romanized` and
 `editions.edition_statement`; the work and edition sheets edit them, the hero shows the romanised title,
-merge fills them, and the CSV/Markdown exports include them. Applied to dev by the owner.
+merge fills them, and the CSV/Markdown exports include them. Applied to dev and prod by the owner (2026-10-17).
 
 Next: queue item 3, Bengali books part 2 (Bengali-aware search). Also search `title_romanized` there.
 
