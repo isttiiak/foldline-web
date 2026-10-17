@@ -80,7 +80,7 @@ export async function updateWorkAction(input: unknown): Promise<SaveResult> {
       fields: invalidFields(parsed.error),
     };
   }
-  const { workId, authors, translator, unlock, ...columns } = parsed.data;
+  const { workId, authors, translators, unlock, ...columns } = parsed.data;
   const { supabase } = session;
 
   const { data: work } = await supabase
@@ -104,7 +104,7 @@ export async function updateWorkAction(input: unknown): Promise<SaveResult> {
   }
 
   const before = await creditedAuthorIds(supabase, workId);
-  if (!(await setCredits(supabase, workId, authors, translator))) {
+  if (!(await setCredits(supabase, workId, authors, translators))) {
     console.error("[books] credits update failed");
     return generic;
   }

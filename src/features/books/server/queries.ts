@@ -23,6 +23,7 @@ export type BookEdition = {
   isbn13: string | null;
   isbn10: string | null;
   publisher: string | null;
+  editionStatement: string | null;
   publishedDate: string | null;
   pageCount: number | null;
   durationMinutes: number | null;
@@ -65,6 +66,7 @@ export type BookRead = {
 export type BookDetail = {
   id: string;
   title: string;
+  titleRomanized: string | null;
   subtitle: string | null;
   description: string | null;
   seriesName: string | null;
@@ -73,7 +75,7 @@ export type BookDetail = {
   originalLanguage: string | null;
   locks: string[];
   authors: string[];
-  translator: string | null;
+  translators: string[];
   /** Oldest first: the first edition added leads. */
   editions: BookEdition[];
   /** Newest first: the first one is the current read. */
@@ -133,6 +135,7 @@ export const getBook = cache(async function getBook(
   return {
     id: work.id,
     title: work.title,
+    titleRomanized: work.title_romanized,
     subtitle: work.subtitle,
     description: work.description,
     seriesName: work.series_name,
@@ -141,7 +144,7 @@ export const getBook = cache(async function getBook(
     originalLanguage: work.original_language,
     locks: work.field_locks,
     authors: named("author"),
-    translator: named("translator")[0] ?? null,
+    translators: named("translator"),
     editions: editions.map((edition) => ({
       id: edition.id,
       format: edition.format,
@@ -150,6 +153,7 @@ export const getBook = cache(async function getBook(
       isbn13: edition.isbn_13,
       isbn10: edition.isbn_10,
       publisher: edition.publisher,
+      editionStatement: edition.edition_statement,
       publishedDate: edition.published_date,
       pageCount: edition.page_count,
       durationMinutes: edition.duration_minutes,

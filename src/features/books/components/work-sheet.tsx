@@ -7,6 +7,7 @@ import { useId, useState, useTransition } from "react";
 import { Field, fieldClass } from "@/components/form-field";
 import { TagInput } from "@/components/tag-input";
 import { Button } from "@/components/ui/button";
+import { toAsciiDigits } from "@/lib/text";
 import { cn } from "@/lib/utils";
 
 import { languageOptions, useLanguageName } from "../languages";
@@ -51,6 +52,7 @@ function WorkForm({ book, onDone }: { book: BookDetail; onDone: () => void }) {
   const id = useId();
   const languageName = useLanguageName();
   const [authors, setAuthors] = useState(book.authors);
+  const [translators, setTranslators] = useState(book.translators);
   const [result, setResult] = useState<SaveResult | null>(null);
   const [pending, startTransition] = useTransition();
   const unlocks = useUnlocks<WorkField>();
@@ -69,13 +71,14 @@ function WorkForm({ book, onDone }: { book: BookDetail; onDone: () => void }) {
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
-    const position = text(form, "series_position").trim();
+    const position = toAsciiDigits(text(form, "series_position").trim());
     const input: WorkEditInput = {
       workId: book.id,
       title: text(form, "title"),
+      title_romanized: text(form, "title_romanized"),
       subtitle: text(form, "subtitle"),
       authors,
-      translator: text(form, "translator"),
+      translators,
       series_name: text(form, "series_name"),
       series_position: position === "" ? null : Number(position),
       original_title: text(form, "original_title"),
@@ -114,6 +117,22 @@ function WorkForm({ book, onDone }: { book: BookDetail; onDone: () => void }) {
         />
       </Field>
       <Field
+        id={`${id}-romanized`}
+        label={tForm("titleRomanized")}
+        hint={tForm("titleRomanizedHint")}
+        action={lock("title_romanized", tForm("titleRomanized"))}
+      >
+        <input
+          id={`${id}-romanized`}
+          name="title_romanized"
+          lang="en"
+          maxLength={BOOK_LIMITS.title}
+          defaultValue={book.titleRomanized ?? ""}
+          aria-describedby={`${id}-romanized-hint`}
+          className={cn(fieldClass, "h-11")}
+        />
+      </Field>
+      <Field
         id={`${id}-subtitle`}
         label={tForm("subtitle")}
         action={lock("subtitle", tForm("subtitle"))}
@@ -146,13 +165,22 @@ function WorkForm({ book, onDone }: { book: BookDetail; onDone: () => void }) {
           chipClassName="bg-coral/15 text-coral hover:[&_button]:bg-coral/20"
         />
       </Field>
-      <Field id={`${id}-translator`} label={tForm("translator")}>
-        <input
-          id={`${id}-translator`}
-          name="translator"
+      <Field
+        id={`${id}-translators`}
+        label={tForm("translators")}
+        error={invalid("translators") ? tForm("errors.translators") : undefined}
+      >
+        <TagInput
+          id={`${id}-translators`}
+          values={translators}
+          onChange={setTranslators}
+          max={BOOK_LIMITS.authors}
           maxLength={BOOK_LIMITS.author}
-          defaultValue={book.translator ?? ""}
-          className={cn(fieldClass, "h-11")}
+          placeholder={tForm("translatorPlaceholder")}
+          fullPlaceholder={tForm("authorsFull")}
+          removeLabel={(name) => tForm("removeTranslator", { name })}
+          invalid={invalid("translators")}
+          chipClassName="bg-teal/15 text-teal hover:[&_button]:bg-teal/20"
         />
       </Field>
       <div className="grid gap-5 sm:grid-cols-[minmax(0,1fr)_8rem]">
@@ -178,10 +206,7 @@ function WorkForm({ book, onDone }: { book: BookDetail; onDone: () => void }) {
           <input
             id={`${id}-position`}
             name="series_position"
-            type="number"
             inputMode="decimal"
-            min={0}
-            step="any"
             defaultValue={book.seriesPosition ?? ""}
             aria-invalid={invalid("series_position") || undefined}
             className={cn(fieldClass, "h-11")}

@@ -21,6 +21,7 @@ function tables(): LibraryTables {
         ...base,
         id: "w1",
         title: "আদর্শ হিন্দু হোটেল",
+        title_romanized: "Adarsha Hindu Hotel",
         subtitle: null,
         description: "A hotel, a cook, a dream.",
         series_name: null,
@@ -35,6 +36,7 @@ function tables(): LibraryTables {
         id: "w2",
         created_at: "2026-02-01T00:00:00Z",
         title: '=HYPERLINK("x")',
+        title_romanized: null,
         subtitle: null,
         description: null,
         series_name: "Saga",
@@ -75,6 +77,7 @@ function tables(): LibraryTables {
         title: null,
         subtitle: null,
         publisher: "Mitra",
+        edition_statement: "৫ম মুদ্রণ",
         published_date: "1940",
         page_count: 200,
         duration_minutes: null,
@@ -201,7 +204,9 @@ describe("csv", () => {
     expect(text.startsWith("﻿Title,")).toBe(true);
     const [header, row] = text.split("\r\n");
     expect(header).toContain("Field: Signed");
-    expect(row).toContain("আদর্শ হিন্দু হোটেল");
+    expect(row).toContain("আদর্শ হিন্দু হোটেল,Adarsha Hindu Hotel,");
+    expect(header).toContain("Publisher,Edition,Published");
+    expect(row).toContain("Mitra,৫ম মুদ্রণ,1940");
     expect(row).toContain(",9,4.5,1,cosy,");
     expect(text).toContain(`"'=HYPERLINK(""x"")"`);
   });
@@ -224,7 +229,10 @@ describe("markdown", () => {
 
   it("writes front matter, reads with reflections, and fields", () => {
     const note = bookMarkdown(buildBooks(tables())[0]!, labels);
-    expect(note).toContain('---\ntitle: "আদর্শ হিন্দু হোটেল"');
+    expect(note).toContain(
+      '---\ntitle: "আদর্শ হিন্দু হোটেল"\ntitle_romanized: "Adarsha Hindu Hotel"',
+    );
+    expect(note).toContain('edition: "৫ম মুদ্রণ"');
     expect(note).toContain('tags: ["cosy"]');
     expect(note).toContain("rating: 4.5");
     expect(note).toContain(

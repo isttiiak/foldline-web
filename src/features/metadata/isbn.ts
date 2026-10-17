@@ -1,10 +1,12 @@
+import { toAsciiDigits } from "@/lib/text";
+
 /*
  * ISBN helpers. Editions store ISBNs normalised: digits only, ISBN-10 may end in X.
  */
 
-/** Strip spaces, hyphens and a leading "ISBN" label; uppercase a trailing x. */
+/** Strip spaces, hyphens and a leading "ISBN" label; uppercase a trailing x. Bengali digits count. */
 export function normalizeIsbn(text: string): string {
-  return text
+  return toAsciiDigits(text)
     .trim()
     .replace(/^isbn(?:-1[03])?:?\s*/i, "")
     .replace(/[\s-]/g, "")

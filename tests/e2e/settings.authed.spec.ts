@@ -63,7 +63,11 @@ test("the library downloads as a CSV and as Markdown notes", async ({
     /^foldline-library-\d{4}-\d{2}-\d{2}\.csv$/,
   );
   const text = await readFile(await csv.path(), "utf8");
-  expect(text.startsWith("\uFEFFTitle,Subtitle,Authors,")).toBe(true);
+  expect(
+    text.startsWith(
+      "\uFEFFTitle,Title in English letters,Subtitle,Original title,",
+    ),
+  ).toBe(true);
 
   const [notes] = await Promise.all([
     page.waitForEvent("download"),

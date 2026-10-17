@@ -53,13 +53,15 @@ Common columns: `id uuid pk default gen_random_uuid()`, `created_at timestamptz 
   (rating_scale, hide_stats, …). Created by a trigger on signup (name and Google photo).
   Private: there are no public profiles. Account deletion removes the user's Storage files
   first (they do not cascade).
-- `works`: title, subtitle, original_title, original_language, description,
+- `works`: title (any script), title_romanized (Latin spelling, 0012), subtitle, original_title,
+  original_language, description,
   series_name, series_position numeric, field_locks text[] default '{}'.
 - `authors`: name, sort_name, provider_ids jsonb.
 - `work_authors`: work_id, author_id, role ('author'|'translator'|'editor'|'illustrator'|'narrator'), position.
 - `editions`: work_id, title/subtitle (nullable overrides of the work's, e.g. translations),
   format enum ('paperback','hardcover','ebook','audiobook','other'), isbn_10, isbn_13
-  (normalised digits, unique per user), publisher, published_date text (free text),
+  (normalised digits, unique per user), publisher, edition_statement (edition or printing as
+  printed, 0012), published_date text (free text, Bengali digits stored as 0-9),
   page_count int, duration_minutes int, language, cover_url (https only),
   cover_storage_path, provider_ids jsonb, field_locks text[].
 - `reads` (one reading attempt; rereads = more rows): work_id, edition_id null,
@@ -189,7 +191,9 @@ only, per-user limit `metadata-lookup`.
   Enrichment overwrites only unlocked fields with non-empty values; ISBNs are only filled
   while empty; edition title/subtitle are never set by providers.
   Many Bangla/local editions will have no provider data. Manual entry + cover photo is a
-  first-class path, not an error state.
+  first-class path, not an error state. The by-hand form also takes a romanised title, several
+  translators, the original title and language, and edition/printing; counts, years and ISBNs
+  accept Bengali digits (`toAsciiDigits` / `parseCount` in `src/lib/text.ts`).
 - Book page (`/app/books/[id]`, work id): `getBook` (`src/features/books/server/queries.ts`)
   loads the work, credits, editions (signed cover URLs) and reads with their latest 200
   progress entries in one request. The current read is the newest (`newestReadFirst` in

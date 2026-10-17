@@ -41,7 +41,11 @@ export type ExportRead = {
 export type ExportBook = {
   id: string;
   title: string;
+  /** The title in Latin letters, for a title in another script. */
+  titleRomanized: string | null;
   subtitle: string | null;
+  originalTitle: string | null;
+  originalLanguage: string | null;
   authors: string[];
   translators: string[];
   seriesName: string | null;
@@ -51,6 +55,7 @@ export type ExportBook = {
   isbn10: string | null;
   format: string | null;
   publisher: string | null;
+  editionStatement: string | null;
   publishedDate: string | null;
   pageCount: number | null;
   durationMinutes: number | null;
@@ -159,7 +164,10 @@ export function buildBooks(tables: LibraryTables): ExportBook[] {
       return {
         id: work.id,
         title: work.title,
+        titleRomanized: work.title_romanized,
         subtitle: edition?.subtitle ?? work.subtitle,
+        originalTitle: work.original_title,
+        originalLanguage: work.original_language,
         authors: named("author"),
         translators: named("translator"),
         seriesName: work.series_name,
@@ -170,6 +178,7 @@ export function buildBooks(tables: LibraryTables): ExportBook[] {
         isbn10: edition?.isbn_10 ?? null,
         format: edition?.format ?? null,
         publisher: edition?.publisher ?? null,
+        editionStatement: edition?.edition_statement ?? null,
         publishedDate: edition?.published_date ?? null,
         pageCount: edition?.page_count ?? null,
         durationMinutes: edition?.duration_minutes ?? null,

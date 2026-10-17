@@ -148,6 +148,11 @@ function EditionCard({
         },
     { field: "publisher", label: tForm("publisher"), value: edition.publisher },
     {
+      field: "edition_statement",
+      label: tForm("editionStatement"),
+      value: edition.editionStatement,
+    },
+    {
       field: "published_date",
       label: tForm("published"),
       value: edition.publishedDate,

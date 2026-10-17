@@ -27,7 +27,10 @@ export function booksCsv(books: ExportBook[]): string {
   ];
   const header = [
     "Title",
+    "Title in English letters",
     "Subtitle",
+    "Original title",
+    "Original language",
     "Authors",
     "Translators",
     "Series",
@@ -36,6 +39,7 @@ export function booksCsv(books: ExportBook[]): string {
     "ISBN-10",
     "Format",
     "Publisher",
+    "Edition",
     "Published",
     "Pages",
     "Minutes",
@@ -61,7 +65,10 @@ export function booksCsv(books: ExportBook[]): string {
     const fields = new Map(book.fields);
     return [
       book.title,
+      book.titleRomanized,
       book.subtitle,
+      book.originalTitle,
+      book.originalLanguage,
       list(book.authors),
       list(book.translators),
       book.seriesName,
@@ -70,6 +77,7 @@ export function booksCsv(books: ExportBook[]): string {
       book.isbn10,
       book.format,
       book.publisher,
+      book.editionStatement,
       book.publishedDate,
       book.pageCount,
       book.durationMinutes,

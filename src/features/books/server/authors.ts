@@ -1,5 +1,7 @@
 import "server-only";
 
+import { uniqueNames } from "@/lib/text";
+
 import type { Supabase } from "./guard";
 
 /** The reader's author rows for these names: existing ones reused, the rest created. */
@@ -40,6 +42,26 @@ export async function creditedAuthorIds(
   return (data ?? []).map((credit) => credit.author_id);
 }
 
+/** Work credits for authors then translators, in the order given. */
+export function creditRows(
+  workId: string,
+  authors: string[],
+  translators: string[],
+  ids: Map<string, string>,
+) {
+  const rows = (names: string[], role: "author" | "translator", from: number) =>
+    names.map((name, i) => ({
+      work_id: workId,
+      author_id: ids.get(name.toLowerCase())!,
+      role,
+      position: from + i,
+    }));
+  return [
+    ...rows(authors, "author", 0),
+    ...rows(translators, "translator", authors.length),
+  ];
+}
+
 /**
  * Replace a work's author and translator credits (other roles are kept).
  * Returns false when a write failed.
@@ -48,10 +70,12 @@ export async function setCredits(
   supabase: Supabase,
   workId: string,
   authors: string[],
-  translator: string | null,
+  translators: string[],
 ): Promise<boolean> {
-  const names = [...authors, ...(translator ? [translator] : [])];
-  const resolved = await authorIds(supabase, names);
+  const resolved = await authorIds(
+    supabase,
+    uniqueNames([...authors, ...translators]),
+  );
   if (!resolved) return false;
 
   const { error: deleteError } = await supabase
@@ -61,24 +85,7 @@ export async function setCredits(
     .in("role", ["author", "translator"]);
   if (deleteError) return false;
 
-  const credits = [
-    ...authors.map((name, position) => ({
-      work_id: workId,
-      author_id: resolved.ids.get(name.toLowerCase())!,
-      role: "author" as const,
-      position,
-    })),
-    ...(translator
-      ? [
-          {
-            work_id: workId,
-            author_id: resolved.ids.get(translator.toLowerCase())!,
-            role: "translator" as const,
-            position: authors.length,
-          },
-        ]
-      : []),
-  ];
+  const credits = creditRows(workId, authors, translators, resolved.ids);
   if (credits.length === 0) return true;
   const { error } = await supabase.from("work_authors").insert(credits);
   return !error;

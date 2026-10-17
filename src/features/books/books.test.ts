@@ -112,6 +112,42 @@ describe("addBookSchema", () => {
     });
   });
 
+  test("keeps every detail of a book the catalogues lack", () => {
+    const values = addBookSchema.parse({
+      ...base,
+      titleRomanized: " Pather Panchali ",
+      translators: ["Ana Ruiz", " ana ruiz ", "T. W. Clark"],
+      originalTitle: "পথের পাঁচালী",
+      originalLanguage: "bn",
+      editionStatement: "৩য় মুদ্রণ",
+      publishedDate: "ফেব্রুয়ারি ২০২৩",
+      isbn: "৯৭৮-০-১৪-০২৬৮৮৬-৭",
+    });
+    expect(values).toMatchObject({
+      titleRomanized: "Pather Panchali",
+      translators: ["Ana Ruiz", "T. W. Clark"],
+      originalTitle: "পথের পাঁচালী",
+      originalLanguage: "bn",
+      editionStatement: "৩য় মুদ্রণ",
+      publishedDate: "ফেব্রুয়ারি 2023",
+      isbn: "9780140268867",
+    });
+    expect(addBookSchema.parse(base).translators).toEqual([]);
+  });
+
+  test("rejects an over-long edition statement and too many translators", () => {
+    expect(
+      addBookSchema.safeParse({ ...base, editionStatement: "x".repeat(201) })
+        .success,
+    ).toBe(false);
+    expect(
+      addBookSchema.safeParse({
+        ...base,
+        translators: Array.from({ length: 11 }, (_, i) => `T ${i}`),
+      }).success,
+    ).toBe(false);
+  });
+
   test("ISBNs are checked and stored as ISBN-13", () => {
     expect(addBookSchema.parse({ ...base, isbn: "0-14-026886-3" }).isbn).toBe(
       "9780140268867",
@@ -168,6 +204,19 @@ describe("lockedFields", () => {
     expect(lockedFields(values, null)).toEqual({
       work: ["title"],
       edition: ["page_count", "publisher"],
+    });
+  });
+
+  test("typed by hand: the Bengali-book details are locked too", () => {
+    const values = addBookSchema.parse({
+      ...base,
+      titleRomanized: "Pather Panchali",
+      originalTitle: "Pather Panchali",
+      editionStatement: "2nd printing",
+    });
+    expect(lockedFields(values, null)).toEqual({
+      work: ["original_title", "title", "title_romanized"],
+      edition: ["edition_statement"],
     });
   });
 

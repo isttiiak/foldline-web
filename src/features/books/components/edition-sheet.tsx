@@ -9,6 +9,7 @@ import { Field, fieldClass } from "@/components/form-field";
 import { Button } from "@/components/ui/button";
 import { CoverPicker } from "@/features/covers/cover-picker";
 import type { CoverDesign } from "@/features/covers/designs";
+import { parseCount } from "@/lib/text";
 import { cn } from "@/lib/utils";
 
 import { languageOptions, useLanguageName } from "../languages";
@@ -35,9 +36,11 @@ function text(form: FormData, name: string): string {
   return typeof value === "string" ? value : "";
 }
 
+/** A whole number in 0-9 or ০-৯; anything else typed is sent as -1 so it is flagged. */
 function count(form: FormData, name: string): number | null {
-  const value = Number(text(form, name));
-  return Number.isFinite(value) && value > 0 ? Math.round(value) : null;
+  const value = text(form, name);
+  if (!value.trim()) return null;
+  return parseCount(value) ?? -1;
 }
 
 /** Add another edition of a book, or edit one (`edition` given). */
@@ -116,6 +119,7 @@ function EditionForm({
       duration_minutes:
         format === "audiobook" ? count(form, "duration_minutes") : null,
       publisher: text(form, "publisher"),
+      edition_statement: text(form, "edition_statement"),
       published_date: text(form, "published_date"),
       language: text(form, "language"),
       bought_from: text(form, "bought_from"),
@@ -170,10 +174,8 @@ function EditionForm({
             <input
               id={`${id}-minutes`}
               name="duration_minutes"
-              type="number"
               inputMode="numeric"
-              min={1}
-              max={BOOK_LIMITS.count}
+              maxLength={12}
               defaultValue={edition?.durationMinutes ?? undefined}
               className={cn(fieldClass, "h-11")}
             />
@@ -188,10 +190,8 @@ function EditionForm({
             <input
               id={`${id}-pages`}
               name="page_count"
-              type="number"
               inputMode="numeric"
-              min={1}
-              max={BOOK_LIMITS.count}
+              maxLength={12}
               defaultValue={edition?.pageCount ?? undefined}
               className={cn(fieldClass, "h-11")}
             />
@@ -244,6 +244,20 @@ function EditionForm({
             name="publisher"
             maxLength={BOOK_LIMITS.publisher}
             defaultValue={edition?.publisher ?? ""}
+            className={cn(fieldClass, "h-11")}
+          />
+        </Field>
+        <Field
+          id={`${id}-edition`}
+          label={tForm("editionStatement")}
+          action={lock("edition_statement", tForm("editionStatement"))}
+        >
+          <input
+            id={`${id}-edition`}
+            name="edition_statement"
+            maxLength={BOOK_LIMITS.editionStatement}
+            defaultValue={edition?.editionStatement ?? ""}
+            placeholder={tForm("editionStatementPlaceholder")}
             className={cn(fieldClass, "h-11")}
           />
         </Field>

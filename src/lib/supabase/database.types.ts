@@ -172,6 +172,7 @@ export type Database = {
           cover_url: string | null;
           created_at: string;
           duration_minutes: number | null;
+          edition_statement: string | null;
           field_locks: string[];
           format: Database["public"]["Enums"]["edition_format"];
           id: string;
@@ -195,6 +196,7 @@ export type Database = {
           cover_url?: string | null;
           created_at?: string;
           duration_minutes?: number | null;
+          edition_statement?: string | null;
           field_locks?: string[];
           format?: Database["public"]["Enums"]["edition_format"];
           id?: string;
@@ -218,6 +220,7 @@ export type Database = {
           cover_url?: string | null;
           created_at?: string;
           duration_minutes?: number | null;
+          edition_statement?: string | null;
           field_locks?: string[];
           format?: Database["public"]["Enums"]["edition_format"];
           id?: string;
@@ -772,6 +775,7 @@ export type Database = {
           series_position: number | null;
           subtitle: string | null;
           title: string;
+          title_romanized: string | null;
           updated_at: string;
           user_id: string;
         };
@@ -787,6 +791,7 @@ export type Database = {
           series_position?: number | null;
           subtitle?: string | null;
           title: string;
+          title_romanized?: string | null;
           updated_at?: string;
           user_id?: string;
         };
@@ -802,6 +807,7 @@ export type Database = {
           series_position?: number | null;
           subtitle?: string | null;
           title?: string;
+          title_romanized?: string | null;
           updated_at?: string;
           user_id?: string;
         };

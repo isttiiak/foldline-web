@@ -43,6 +43,63 @@ test("a Bangla book typed by hand lands on the shelf", async ({ page }) => {
   await expect(card.getByText("Reading", { exact: true })).toBeVisible();
 });
 
+test("a translated Bangla book keeps every detail typed in", async ({
+  page,
+}) => {
+  const title = `দ্য আলকেমিস্ট ${Date.now()}`;
+  await openHandForm(page);
+
+  await page.getByLabel("Title", { exact: true }).fill(title);
+  await page
+    .getByLabel("Title in English letters", { exact: true })
+    .fill("The Alchemist (Bangla)");
+  const authors = page.getByLabel("Authors", { exact: true });
+  await authors.fill("Paulo Coelho");
+  await authors.press("Enter");
+  const translators = page.getByLabel("Translated by", { exact: true });
+  for (const name of ["অনুবাদক এক", "অনুবাদক দুই"]) {
+    await translators.fill(name);
+    await translators.press("Enter");
+  }
+  await page.getByLabel("Original title", { exact: true }).fill("O Alquimista");
+  await page
+    .getByLabel("Original language", { exact: true })
+    .selectOption("pt");
+  await page.getByLabel("Publisher", { exact: true }).fill("রোদেলা");
+  await page
+    .getByLabel("Edition or printing", { exact: true })
+    .fill("৩য় মুদ্রণ");
+  await page.getByLabel("Published", { exact: true }).fill("১৯৯৬");
+  await page.getByLabel("Pages", { exact: true }).fill("৩২০");
+  await page.getByLabel("Language", { exact: true }).selectOption("bn");
+  await page.getByRole("button", { name: "Add to my shelf" }).click();
+
+  await expect(
+    page.getByRole("heading", { name: `"${title}" is on your shelf` }),
+  ).toBeVisible(SAVE);
+  await page.goto("/app");
+  await page
+    .getByRole("list", { name: "Your books" })
+    .getByRole("link")
+    .filter({ hasText: title })
+    .click();
+  await expect(
+    page.getByRole("heading", { level: 1, name: title }),
+  ).toBeVisible(SAVE);
+  await expect(page.getByText("The Alchemist (Bangla)")).toBeVisible();
+  await expect(
+    page.getByText("Translated by অনুবাদক এক, অনুবাদক দুই"),
+  ).toBeVisible();
+  await expect(page.getByText("O Alquimista")).toBeVisible();
+  await expect(page.getByText("৩য় মুদ্রণ")).toBeVisible();
+  await expect(
+    page
+      .getByRole("list", { name: "Editions" })
+      .getByText("1996", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText("320 pages").first()).toBeVisible();
+});
+
 test("an own cover photo is stored and shown on the shelf", async ({
   page,
 }) => {

@@ -45,6 +45,8 @@ Tick items as they are completed. One item per Claude Code session.
 - [x] Metadata providers (Open Library, Google Books) + cache + field locks
 - [x] Private profile page: Google name/photo prefilled, own photo upload (private Storage, WebP), email (read-only), member since, timezone, short bio, reading preferences (formats, genres); editable any time, never public
 - [x] Add book: search, paste ISBN/URL, manual entry (no-ISBN books, cover photo upload)
+- [x] Richer by-hand form for books the catalogues lack (Bengali books part 1, v1.2.0): romanised
+      title, several translators, original title and language, edition/printing, Bengali digits
 - [x] Book detail page: editions, reads, progress logging in any unit
 - [x] Library views: by state, sort, filter, trigram search
 - [x] Command palette (⌘K): add, log progress, find

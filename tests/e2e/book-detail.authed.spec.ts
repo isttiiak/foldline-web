@@ -111,9 +111,12 @@ test("edit a book, log progress, finish, reread, and remove it", async ({
   const editions = page.getByRole("list", { name: "Editions" });
   await page.getByRole("button", { name: "Add", exact: true }).click();
   await pick(page, "Ebook");
+  await sheet.getByLabel("Edition or printing").fill("2nd printing");
+  await sheet.getByLabel("Pages", { exact: true }).fill("২০০");
   await sheet.getByRole("button", { name: "Add edition" }).click();
   await expect(sheet).toBeHidden(SAVE);
   await expect(editions.getByRole("listitem")).toHaveCount(2, SAVE);
+  await expect(editions.getByText("2nd printing")).toBeVisible();
   await page.getByRole("button", { name: "Remove the Ebook edition" }).click();
   await page.getByRole("button", { name: "Remove edition" }).click();
   await expect(editions.getByRole("listitem")).toHaveCount(1, SAVE);

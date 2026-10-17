@@ -18,6 +18,7 @@ import { type CoverDesign, randomDesign } from "@/features/covers/designs";
 import type { BookCandidate } from "@/features/metadata/types";
 import { localToday as today } from "@/lib/dates";
 import { resizeCover } from "@/lib/images";
+import { parseCount } from "@/lib/text";
 import { cn } from "@/lib/utils";
 
 import {
@@ -42,9 +43,11 @@ function text(form: FormData, name: string): string {
   return typeof value === "string" ? value : "";
 }
 
+/** A whole number in 0-9 or ০-৯; anything else typed is sent as -1 so it is flagged. */
 function count(form: FormData, name: string): number | null {
-  const value = Number(text(form, name));
-  return Number.isFinite(value) && value > 0 ? Math.round(value) : null;
+  const value = text(form, name);
+  if (!value.trim()) return null;
+  return parseCount(value) ?? -1;
 }
 
 const chip =
@@ -71,6 +74,8 @@ export function BookForm({
   const initial = formValuesFrom(candidate, isbn);
 
   const [authors, setAuthors] = useState<string[]>(initial.authors);
+  const [translators, setTranslators] = useState<string[]>(initial.translators);
+  const [translation, setTranslation] = useState(false);
   const [format, setFormat] = useState<EditionFormat>(initial.format);
   const [readState, setReadState] = useState<ReadState>("planned");
   const [date, setDate] = useState(today);
@@ -119,14 +124,18 @@ export function BookForm({
     const form = new FormData(event.currentTarget);
     const book: AddBookInput = {
       title: text(form, "title"),
+      titleRomanized: text(form, "titleRomanized"),
       subtitle: text(form, "subtitle"),
       authors,
-      translator: text(form, "translator"),
+      translators,
+      originalTitle: text(form, "originalTitle"),
+      originalLanguage: text(form, "originalLanguage"),
       format,
       pageCount: format === "audiobook" ? null : count(form, "pageCount"),
       durationMinutes:
         format === "audiobook" ? count(form, "durationMinutes") : null,
       publisher: text(form, "publisher"),
+      editionStatement: text(form, "editionStatement"),
       publishedDate: text(form, "publishedDate"),
       language: text(form, "language"),
       isbn: text(form, "isbn"),
@@ -261,6 +270,7 @@ export function BookForm({
           <Field
             id={`${id}-title`}
             label={t("title")}
+            hint={t("titleHint")}
             error={invalid("title") ? t("errors.title") : undefined}
           >
             <input
@@ -270,6 +280,21 @@ export function BookForm({
               maxLength={BOOK_LIMITS.title}
               defaultValue={initial.title}
               aria-invalid={invalid("title") || undefined}
+              aria-describedby={`${id}-title-hint`}
+              className={cn(fieldClass, "h-11")}
+            />
+          </Field>
+          <Field
+            id={`${id}-romanized`}
+            label={t("titleRomanized")}
+            hint={t("titleRomanizedHint")}
+          >
+            <input
+              id={`${id}-romanized`}
+              name="titleRomanized"
+              lang="en"
+              maxLength={BOOK_LIMITS.title}
+              aria-describedby={`${id}-romanized-hint`}
               className={cn(fieldClass, "h-11")}
             />
           </Field>
@@ -302,142 +327,218 @@ export function BookForm({
               chipClassName="bg-coral/15 text-coral hover:[&_button]:bg-coral/20"
             />
           </Field>
+          <Field
+            id={`${id}-translators`}
+            label={t("translators")}
+            error={invalid("translators") ? t("errors.translators") : undefined}
+          >
+            <TagInput
+              id={`${id}-translators`}
+              values={translators}
+              onChange={setTranslators}
+              max={BOOK_LIMITS.authors}
+              maxLength={BOOK_LIMITS.author}
+              placeholder={t("translatorPlaceholder")}
+              fullPlaceholder={t("authorsFull")}
+              removeLabel={(name) => t("removeTranslator", { name })}
+              invalid={invalid("translators")}
+              chipClassName="bg-teal/15 text-teal hover:[&_button]:bg-teal/20"
+            />
+          </Field>
 
-          <fieldset className="flex flex-col gap-2">
-            <legend className="mb-2 text-sm font-medium">{t("format")}</legend>
-            <div className="flex flex-wrap gap-2">
-              {EDITION_FORMATS.map((value) => (
-                <label key={value} className="cursor-pointer">
+          {translation || translators.length > 0 ? (
+            <fieldset className="flex flex-col gap-4 rounded-2xl border border-border/70 bg-background/40 p-4">
+              <legend className="px-1 text-sm font-medium">
+                {t("translation")}
+              </legend>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <Field id={`${id}-original-title`} label={t("originalTitle")}>
                   <input
-                    type="radio"
-                    name="format"
-                    value={value}
-                    checked={format === value}
-                    onChange={() => setFormat(value)}
-                    className="peer sr-only"
+                    id={`${id}-original-title`}
+                    name="originalTitle"
+                    maxLength={BOOK_LIMITS.title}
+                    className={cn(fieldClass, "h-11")}
                   />
-                  <span
-                    className={cn(
-                      chip,
-                      "peer-checked:border-teal/50 peer-checked:bg-teal/15 peer-checked:text-teal",
-                    )}
+                </Field>
+                <Field
+                  id={`${id}-original-language`}
+                  label={t("originalLanguage")}
+                >
+                  <select
+                    id={`${id}-original-language`}
+                    name="originalLanguage"
+                    defaultValue=""
+                    className={cn(fieldClass, "h-11 appearance-auto")}
                   >
-                    {tFormats(value)}
-                  </span>
-                </label>
-              ))}
+                    <option value="">{t("languageUnknown")}</option>
+                    {languageOptions(null).map((code) => (
+                      <option key={code} value={code}>
+                        {languageName(code)}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+              </div>
+            </fieldset>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setTranslation(true)}
+              className="flex w-fit press items-center gap-1.5 rounded-lg text-sm text-amber hover:underline focus-visible:ring-3 focus-visible:ring-ring/60 focus-visible:outline-none"
+            >
+              <Plus className="size-4" aria-hidden />
+              {t("addTranslation")}
+            </button>
+          )}
+
+          <fieldset className="flex flex-col gap-5">
+            <legend className="mb-2 text-sm font-medium">{t("edition")}</legend>
+            <div className="flex flex-col gap-2">
+              <p className="text-sm text-muted-foreground" id={`${id}-format`}>
+                {t("format")}
+              </p>
+              <div
+                role="radiogroup"
+                aria-labelledby={`${id}-format`}
+                className="flex flex-wrap gap-2"
+              >
+                {EDITION_FORMATS.map((value) => (
+                  <label key={value} className="cursor-pointer">
+                    <input
+                      type="radio"
+                      name="format"
+                      value={value}
+                      checked={format === value}
+                      onChange={() => setFormat(value)}
+                      className="peer sr-only"
+                    />
+                    <span
+                      className={cn(
+                        chip,
+                        "peer-checked:border-teal/50 peer-checked:bg-teal/15 peer-checked:text-teal",
+                      )}
+                    >
+                      {tFormats(value)}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              <Field id={`${id}-publisher`} label={t("publisher")}>
+                <input
+                  id={`${id}-publisher`}
+                  name="publisher"
+                  maxLength={BOOK_LIMITS.publisher}
+                  defaultValue={initial.publisher}
+                  className={cn(fieldClass, "h-11")}
+                />
+              </Field>
+              <Field id={`${id}-edition`} label={t("editionStatement")}>
+                <input
+                  id={`${id}-edition`}
+                  name="editionStatement"
+                  maxLength={BOOK_LIMITS.editionStatement}
+                  placeholder={t("editionStatementPlaceholder")}
+                  className={cn(fieldClass, "h-11")}
+                />
+              </Field>
+              <Field id={`${id}-published`} label={t("published")}>
+                <input
+                  id={`${id}-published`}
+                  name="publishedDate"
+                  maxLength={BOOK_LIMITS.published}
+                  defaultValue={initial.publishedDate}
+                  placeholder={t("publishedPlaceholder")}
+                  className={cn(fieldClass, "h-11")}
+                />
+              </Field>
+              {format === "audiobook" ? (
+                <Field
+                  id={`${id}-minutes`}
+                  label={t("minutes")}
+                  hint={t("countHint")}
+                  error={
+                    invalid("durationMinutes") ? t("errors.count") : undefined
+                  }
+                >
+                  <input
+                    id={`${id}-minutes`}
+                    name="durationMinutes"
+                    inputMode="numeric"
+                    maxLength={12}
+                    aria-invalid={invalid("durationMinutes") || undefined}
+                    aria-describedby={`${id}-minutes-hint`}
+                    className={cn(fieldClass, "h-11")}
+                  />
+                </Field>
+              ) : (
+                <Field
+                  id={`${id}-pages`}
+                  label={t("pages")}
+                  hint={t("countHint")}
+                  error={invalid("pageCount") ? t("errors.count") : undefined}
+                >
+                  <input
+                    id={`${id}-pages`}
+                    name="pageCount"
+                    inputMode="numeric"
+                    maxLength={12}
+                    defaultValue={initial.pageCount ?? undefined}
+                    aria-invalid={invalid("pageCount") || undefined}
+                    aria-describedby={`${id}-pages-hint`}
+                    className={cn(fieldClass, "h-11")}
+                  />
+                </Field>
+              )}
+              <Field id={`${id}-language`} label={t("language")}>
+                <select
+                  id={`${id}-language`}
+                  name="language"
+                  defaultValue={initial.language}
+                  className={cn(fieldClass, "h-11 appearance-auto")}
+                >
+                  <option value="">{t("languageUnknown")}</option>
+                  {languages.map((code) => (
+                    <option key={code} value={code}>
+                      {languageName(code)}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <Field
+                id={`${id}-isbn`}
+                label={t("isbn")}
+                hint={t("isbnHint")}
+                error={invalid("isbn") ? t("errors.isbn") : undefined}
+              >
+                <input
+                  id={`${id}-isbn`}
+                  name="isbn"
+                  inputMode="numeric"
+                  maxLength={40}
+                  defaultValue={initial.isbn}
+                  aria-invalid={invalid("isbn") || undefined}
+                  aria-describedby={`${id}-isbn-hint`}
+                  className={cn(fieldClass, "h-11")}
+                />
+              </Field>
+              <Field
+                id={`${id}-bought`}
+                label={t("boughtFrom")}
+                hint={t("boughtFromHint")}
+              >
+                <input
+                  id={`${id}-bought`}
+                  name="boughtFrom"
+                  maxLength={BOOK_LIMITS.boughtFrom}
+                  aria-describedby={`${id}-bought-hint`}
+                  className={cn(fieldClass, "h-11")}
+                />
+              </Field>
             </div>
           </fieldset>
-
-          <div className="grid gap-5 sm:grid-cols-2">
-            {format === "audiobook" ? (
-              <Field
-                id={`${id}-minutes`}
-                label={t("minutes")}
-                error={
-                  invalid("durationMinutes") ? t("errors.count") : undefined
-                }
-              >
-                <input
-                  id={`${id}-minutes`}
-                  name="durationMinutes"
-                  type="number"
-                  inputMode="numeric"
-                  min={1}
-                  max={BOOK_LIMITS.count}
-                  className={cn(fieldClass, "h-11")}
-                />
-              </Field>
-            ) : (
-              <Field
-                id={`${id}-pages`}
-                label={t("pages")}
-                error={invalid("pageCount") ? t("errors.count") : undefined}
-              >
-                <input
-                  id={`${id}-pages`}
-                  name="pageCount"
-                  type="number"
-                  inputMode="numeric"
-                  min={1}
-                  max={BOOK_LIMITS.count}
-                  defaultValue={initial.pageCount ?? undefined}
-                  className={cn(fieldClass, "h-11")}
-                />
-              </Field>
-            )}
-            <Field id={`${id}-language`} label={t("language")}>
-              <select
-                id={`${id}-language`}
-                name="language"
-                defaultValue={initial.language}
-                className={cn(fieldClass, "h-11 appearance-auto")}
-              >
-                <option value="">{t("languageUnknown")}</option>
-                {languages.map((code) => (
-                  <option key={code} value={code}>
-                    {languageName(code)}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <Field
-              id={`${id}-isbn`}
-              label={t("isbn")}
-              hint={t("isbnHint")}
-              error={invalid("isbn") ? t("errors.isbn") : undefined}
-            >
-              <input
-                id={`${id}-isbn`}
-                name="isbn"
-                inputMode="numeric"
-                maxLength={40}
-                defaultValue={initial.isbn}
-                aria-invalid={invalid("isbn") || undefined}
-                aria-describedby={`${id}-isbn-hint`}
-                className={cn(fieldClass, "h-11")}
-              />
-            </Field>
-            <Field id={`${id}-translator`} label={t("translator")}>
-              <input
-                id={`${id}-translator`}
-                name="translator"
-                maxLength={BOOK_LIMITS.author}
-                className={cn(fieldClass, "h-11")}
-              />
-            </Field>
-            <Field
-              id={`${id}-bought`}
-              label={t("boughtFrom")}
-              hint={t("boughtFromHint")}
-            >
-              <input
-                id={`${id}-bought`}
-                name="boughtFrom"
-                maxLength={BOOK_LIMITS.boughtFrom}
-                className={cn(fieldClass, "h-11")}
-              />
-            </Field>
-            <Field id={`${id}-publisher`} label={t("publisher")}>
-              <input
-                id={`${id}-publisher`}
-                name="publisher"
-                maxLength={BOOK_LIMITS.publisher}
-                defaultValue={initial.publisher}
-                className={cn(fieldClass, "h-11")}
-              />
-            </Field>
-            <Field id={`${id}-published`} label={t("published")}>
-              <input
-                id={`${id}-published`}
-                name="publishedDate"
-                maxLength={BOOK_LIMITS.published}
-                defaultValue={initial.publishedDate}
-                placeholder={t("publishedPlaceholder")}
-                className={cn(fieldClass, "h-11")}
-              />
-            </Field>
-          </div>
 
           {showMore ? (
             <Field id={`${id}-description`} label={t("description")}>

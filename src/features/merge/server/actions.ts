@@ -31,6 +31,7 @@ const pairSchema = z
 
 /** Work fields the kept book takes from the other when it has none. */
 const WORK_GAPS = [
+  "title_romanized",
   "subtitle",
   "description",
   "series_name",
@@ -46,6 +47,7 @@ const EDITION_GAPS = [
   "page_count",
   "duration_minutes",
   "publisher",
+  "edition_statement",
   "published_date",
   "language",
   "bought_from",

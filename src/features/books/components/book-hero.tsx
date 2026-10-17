@@ -123,20 +123,25 @@ export function BookHero({
             >
               {book.title}
             </h1>
+            {book.titleRomanized && (
+              <p lang="en" className="text-base text-muted-foreground italic">
+                {book.titleRomanized}
+              </p>
+            )}
             {book.subtitle && (
               <p className="text-lg text-muted-foreground">{book.subtitle}</p>
             )}
           </div>
-          {(book.authors.length > 0 || book.translator) && (
+          {(book.authors.length > 0 || book.translators.length > 0) && (
             <div className="flex flex-col gap-0.5">
               {book.authors.length > 0 && (
                 <p className="text-base">
                   {t("by", { authors: book.authors.join(", ") })}
                 </p>
               )}
-              {book.translator && (
+              {book.translators.length > 0 && (
                 <p className="text-sm text-muted-foreground">
-                  {t("translatedBy", { name: book.translator })}
+                  {t("translatedBy", { name: book.translators.join(", ") })}
                 </p>
               )}
             </div>

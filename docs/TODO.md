@@ -21,7 +21,7 @@ This queue overrides the `docs/ROADMAP.md` order. How to work:
        up `NEXT_PUBLIC_SITE_URL` handling, PWA manifest/scope, an optional soft "a Bustandeen
        service" footer line (ask first). Bustandeen (code at `~/projects/ihsan`) must never run
        anything on or set cookies for Foldline.
-2. [ ] Bengali books, part 1: richer add-by-hand form for books the catalogues lack. Capture as
+2. [x] Bengali books, part 1 (done 2026-10-17, v1.2.0, migration 0012): richer add-by-hand form for books the catalogues lack. Capture as
        much as possible: title in Bangla script, romanised title, original title, subtitle,
        authors and translators, publisher, edition/printing, year (accept Bangla numerals), pages,
        ISBN (optional), language, cover photo. Check which fields exist on works/editions first; a
@@ -223,7 +223,14 @@ sentence, and the smoke test in `docs/SETUP.md` section 7. The owner did the das
 the smoke test passed (the in-app browser pane trips on Google's own `SetSID` step, so test sign-in in a
 real private window). The live site uses Supabase project `ugfyxuhuxyzxxeckqgcx`.
 
-Next: queue item 2, Bengali books part 1 (richer add-by-hand form).
+Done on 2026-10-17 (v1.2.0): queue item 2, Bengali books part 1. The by-hand form on `/app/add` now takes a
+romanised title, several translators (TagInput), the original title and language (shown once a translator is
+added, or via "It's a translation"), edition/printing, and Bengali digits in pages, minutes, year and ISBN
+(stored as 0-9). Migration `0012_bengali_book_details.sql` adds `works.title_romanized` and
+`editions.edition_statement`; the work and edition sheets edit them, the hero shows the romanised title,
+merge fills them, and the CSV/Markdown exports include them. Applied to dev by the owner.
+
+Next: queue item 3, Bengali books part 2 (Bengali-aware search). Also search `title_romanized` there.
 
 Next: the first unchecked item in "Priority queue" at the top of this file. After 1.0, a breaking change
 to exported data, the API or tokens needs a major version.

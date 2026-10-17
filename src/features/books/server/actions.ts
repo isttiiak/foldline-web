@@ -12,6 +12,7 @@ import {
   rateLimit,
 } from "@/features/rate-limit/server/rate-limit";
 import { getSessionUser } from "@/lib/auth";
+import { uniqueNames } from "@/lib/text";
 import { createClient } from "@/lib/supabase/server";
 
 import { COVER_DESIGN_LOCK, randomDesign } from "@/features/covers/designs";
@@ -24,7 +25,7 @@ import {
   type AddBookValues,
   readDates,
 } from "../schemas";
-import { authorIds } from "./authors";
+import { authorIds, creditRows } from "./authors";
 import { coverFile, uploadCover } from "./covers";
 import type { Supabase } from "./guard";
 
@@ -53,7 +54,10 @@ async function insertBook(
     .from("works")
     .insert({
       title: values.title,
+      title_romanized: values.titleRomanized,
       subtitle: values.subtitle,
+      original_title: values.originalTitle,
+      original_language: values.originalLanguage,
       description: values.description,
       field_locks: locks.work,
     })
@@ -68,31 +72,18 @@ async function insertBook(
     createdAuthors,
   });
 
-  const names = [
-    ...values.authors,
-    ...(values.translator ? [values.translator] : []),
-  ];
-  const authors = await authorIds(supabase, names);
+  const authors = await authorIds(
+    supabase,
+    uniqueNames([...values.authors, ...values.translators]),
+  );
   if (!authors) return fail(false);
 
-  const credits = [
-    ...values.authors.map((name, position) => ({
-      work_id: work.id,
-      author_id: authors.ids.get(name.toLowerCase())!,
-      role: "author" as const,
-      position,
-    })),
-    ...(values.translator
-      ? [
-          {
-            work_id: work.id,
-            author_id: authors.ids.get(values.translator.toLowerCase())!,
-            role: "translator" as const,
-            position: values.authors.length,
-          },
-        ]
-      : []),
-  ];
+  const credits = creditRows(
+    work.id,
+    values.authors,
+    values.translators,
+    authors.ids,
+  );
   if (credits.length > 0) {
     const { error } = await supabase.from("work_authors").insert(credits);
     if (error) return fail(false, authors.created);
@@ -107,6 +98,7 @@ async function insertBook(
       isbn_13: values.isbn,
       isbn_10: sameBook ? candidate.isbn10 : null,
       publisher: values.publisher,
+      edition_statement: values.editionStatement,
       published_date: values.publishedDate,
       page_count: values.format === "audiobook" ? null : values.pageCount,
       duration_minutes:

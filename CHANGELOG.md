@@ -118,6 +118,26 @@ A new home address: Foldline moves to `foldline.bustandeen.com`.
 
 None.
 
+## v1.2.0 (2026-10-17)
+
+Books the catalogues don't know, written down properly.
+
+### Added
+
+- Adding a book by hand now takes the title in English letters (for a Bangla title), several
+  translators, the original title and language of a translation, and the edition or printing as the
+  book prints it.
+- Pages, minutes, the year and the ISBN accept Bangla digits (৩২০, ১৯৯৬). They are kept as 0-9.
+- The book page shows the title in English letters under the title and every translator. The book and
+  edition sheets edit the new details, and merging two books fills them in.
+- The CSV and Markdown exports include the title in English letters, the original title and language,
+  and the edition.
+
+### Database migrations
+
+- `0012_bengali_book_details.sql`: two optional columns, `works.title_romanized` and
+  `editions.edition_statement`. Run it on dev and prod before using this version.
+
 ## v0.10.0 (2026-10-15)
 
 A calm reading rhythm, and your library arranged your way.

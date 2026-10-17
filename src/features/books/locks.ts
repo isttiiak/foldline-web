@@ -10,11 +10,15 @@ function pairs(values: AddBookValues, candidate: BookCandidate | null) {
   return {
     work: {
       title: [values.title, candidate?.title ?? null],
+      title_romanized: [values.titleRomanized, null],
       subtitle: [values.subtitle, candidate?.subtitle ?? null],
+      original_title: [values.originalTitle, null],
+      original_language: [values.originalLanguage, null],
       description: [values.description, candidate?.description ?? null],
     } satisfies Record<string, [Comparable, Comparable]>,
     edition: {
       publisher: [values.publisher, candidate?.publisher ?? null],
+      edition_statement: [values.editionStatement, null],
       published_date: [values.publishedDate, candidate?.publishedDate ?? null],
       page_count: [values.pageCount, candidate?.pageCount ?? null],
       language: [values.language, candidate?.language ?? null],

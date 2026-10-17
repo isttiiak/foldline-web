@@ -37,7 +37,10 @@ function frontMatter(book: ExportBook): string {
   const read = book.current;
   const entries: [string, string | number | string[] | null | undefined][] = [
     ["title", book.title],
+    ["title_romanized", book.titleRomanized],
     ["subtitle", book.subtitle],
+    ["original_title", book.originalTitle],
+    ["original_language", book.originalLanguage],
     ["authors", book.authors],
     ["translators", book.translators],
     ["series", book.seriesName],
@@ -46,6 +49,7 @@ function frontMatter(book: ExportBook): string {
     ["isbn10", book.isbn10],
     ["format", book.format],
     ["publisher", book.publisher],
+    ["edition", book.editionStatement],
     ["published", book.publishedDate],
     ["pages", book.pageCount],
     ["minutes", book.durationMinutes],

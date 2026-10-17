@@ -4,7 +4,7 @@ import { COVER_DESIGNS } from "@/features/covers/designs";
 import { toIsbn13 } from "@/features/metadata/isbn";
 import type { BookCandidate } from "@/features/metadata/types";
 import { Constants } from "@/lib/supabase/database.types";
-import { uniqueNames } from "@/lib/text";
+import { toAsciiDigits, uniqueNames } from "@/lib/text";
 
 export const EDITION_FORMATS = Constants.public.Enums.edition_format;
 export const READ_STATES = Constants.public.Enums.read_state;
@@ -17,6 +17,7 @@ export const BOOK_LIMITS = {
   authors: 10,
   publisher: 500,
   published: 50,
+  editionStatement: 200,
   boughtFrom: 500,
   description: 20000,
   series: 500,
@@ -34,6 +35,11 @@ const optionalText = (max: number) =>
     .max(max)
     .optional()
     .transform((value) => value || null);
+
+/** A publication date or year as typed; Bengali digits are stored as 0-9. */
+const publishedText = optionalText(BOOK_LIMITS.published).transform((value) =>
+  value ? toAsciiDigits(value) : null,
+);
 
 const optionalCount = z
   .number()
@@ -98,17 +104,30 @@ const authorsInput = z
   .transform(uniqueNames)
   .pipe(z.array(z.string()).max(BOOK_LIMITS.authors));
 
+/** Translators: same rules as authors; leaving them out means none. */
+const translatorsInput = authorsInput
+  .optional()
+  .transform((value) => value ?? []);
+
 /** The book as the form sends it (JSON in the `book` field of the FormData). */
 export const addBookSchema = z.object({
+  /** The title as printed, in any script (Bangla included). */
   title: z.string().trim().min(1).max(BOOK_LIMITS.title),
+  /** The title in Latin letters, for a title in another script. */
+  titleRomanized: optionalText(BOOK_LIMITS.title),
   subtitle: optionalText(BOOK_LIMITS.title),
   authors: authorsInput,
-  translator: optionalText(BOOK_LIMITS.author),
+  translators: translatorsInput,
+  /** For a translation: the title and language it was translated from. */
+  originalTitle: optionalText(BOOK_LIMITS.title),
+  originalLanguage: optionalText(35),
   format: z.enum(EDITION_FORMATS),
   pageCount: optionalCount,
   durationMinutes: optionalCount,
   publisher: optionalText(BOOK_LIMITS.publisher),
-  publishedDate: optionalText(BOOK_LIMITS.published),
+  /** Edition or printing as printed, e.g. "3rd printing, 2023". */
+  editionStatement: optionalText(BOOK_LIMITS.editionStatement),
+  publishedDate: publishedText,
   language: optionalText(35),
   isbn: isbnInput,
   /** Where the reader got this copy: a shop link or an address. */
@@ -166,13 +185,17 @@ export function formValuesFrom(
 ) {
   return {
     title: candidate?.title ?? "",
+    titleRomanized: "",
     subtitle: candidate?.subtitle ?? "",
     authors: candidate?.authors ?? [],
-    translator: "",
+    translators: [] as string[],
+    originalTitle: "",
+    originalLanguage: "",
     format: "paperback" as EditionFormat,
     pageCount: candidate?.pageCount ?? null,
     durationMinutes: null as number | null,
     publisher: candidate?.publisher ?? "",
+    editionStatement: "",
     publishedDate: candidate?.publishedDate ?? "",
     language: candidate?.language ?? "",
     isbn: candidate?.isbn13 ?? candidate?.isbn10 ?? typedIsbn,
@@ -186,6 +209,7 @@ export function formValuesFrom(
 /** Work columns a reader can edit (and so lock against enrichment). */
 export const WORK_FIELDS = [
   "title",
+  "title_romanized",
   "subtitle",
   "description",
   "series_name",
@@ -202,6 +226,7 @@ export const EDITION_FIELDS = [
   "page_count",
   "duration_minutes",
   "publisher",
+  "edition_statement",
   "published_date",
   "language",
   "bought_from",
@@ -213,6 +238,7 @@ export type EditionField = (typeof EDITION_FIELDS)[number];
 export const workEditSchema = z.object({
   workId: z.uuid(),
   title: z.string().trim().min(1).max(BOOK_LIMITS.title),
+  title_romanized: optionalText(BOOK_LIMITS.title),
   subtitle: optionalText(BOOK_LIMITS.title),
   description: optionalText(BOOK_LIMITS.description),
   series_name: optionalText(BOOK_LIMITS.series),
@@ -226,7 +252,7 @@ export const workEditSchema = z.object({
   original_title: optionalText(BOOK_LIMITS.title),
   original_language: optionalText(35),
   authors: authorsInput,
-  translator: optionalText(BOOK_LIMITS.author),
+  translators: translatorsInput,
   /** Locked fields the reader asked to let the catalogues update again. */
   unlock: z.array(z.enum(WORK_FIELDS)).max(WORK_FIELDS.length).default([]),
 });
@@ -239,7 +265,8 @@ const editionFields = {
   page_count: optionalCount,
   duration_minutes: optionalCount,
   publisher: optionalText(BOOK_LIMITS.publisher),
-  published_date: optionalText(BOOK_LIMITS.published),
+  edition_statement: optionalText(BOOK_LIMITS.editionStatement),
+  published_date: publishedText,
   language: optionalText(35),
   bought_from: optionalText(BOOK_LIMITS.boughtFrom),
   title: optionalText(BOOK_LIMITS.title),
@@ -279,6 +306,7 @@ export function editionColumns<T extends EditionColumns>(values: T) {
     page_count: audio ? null : values.page_count,
     duration_minutes: audio ? values.duration_minutes : null,
     publisher: values.publisher,
+    edition_statement: values.edition_statement,
     published_date: values.published_date,
     language: values.language,
     bought_from: values.bought_from,
