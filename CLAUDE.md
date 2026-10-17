@@ -64,6 +64,8 @@ move fast; do not rely on memory for Next.js, Supabase, Tailwind v4 or Serwist A
 10. Manual edits win: fields listed in `editions.field_locks` / `works.field_locks` are
     never overwritten by enrichment.
 11. Never use the em dash character anywhere (UI copy, docs, comments, commits). Use `:`, `,` or `-`.
+12. Zero cost: no paid services or APIs, and no hosted "free tier" AI APIs. Prefer in-browser or
+    free-tier solutions that keep data private. If something seems to need money, stop and ask.
 
 ## Workflow
 

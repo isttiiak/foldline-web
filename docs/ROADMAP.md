@@ -71,31 +71,53 @@ Tick items as they are completed. One item per Claude Code session.
 - [x] Offline progress-logging queue (IndexedDB) with background sync
 - [x] Web Share Target (share a book link into the app)
 
-## Phase 6: Automation
+Build order after v1.0.0 (owner, 2026-10-17): Phase 7, then Phase 8, then Phase 6, then Phase 9.
 
-- [ ] KOReader sync server endpoints + document-hash → edition linking UI
-- [ ] Kindle `My Clippings.txt` import (locale-aware, revision merging, hash dedupe)
-- [ ] Rules engine (automation_rules + pg_cron nightly evaluator)
-- [ ] Personal API tokens + webhooks
+**Zero cost (owner, 2026-10-17):** Foldline is free to build and free for all. No paid services
+or APIs. Prefer work that runs in the browser or fits a free tier and keeps data private. No
+hosted "free tier" AI APIs (e.g. Groq): they rate-limit, and some train on what you send.
 
 ## Phase 7: Reflection
 
-- [ ] Highlights & notes hub
-- [ ] Pull-based resurfacing page (opt-in)
+- [ ] Highlights & notes hub (`highlights` table; add by hand on the book page; `/app/highlights`
+      with search and filters; in every export)
+- [ ] Kindle `My Clippings.txt` import (locale-aware, revision merging, hash dedupe). Moved here from
+      Phase 6 so the hub does not fill only by typing
+- [ ] Pull-based resurfacing page (opt-in, opened by the reader, never a notification)
 - [ ] Private year-end letter (Markdown export)
 
-## Phase 8: Sharing & AI (opt-in, later)
+## Phase 8: Sharing & AI (opt-in)
 
+- [ ] ISBN barcode scan (`BarcodeDetector` with a free polyfill)
+- [ ] Scan a book: photograph its information (copyright) page; in-browser OCR (e.g. Tesseract.js,
+      with a Bangla model) fills in title, authors, publisher, ISBN and year. Many local editions have
+      no barcode and are missing from Open Library and Google Books. Deferred from Phase 2 (owner,
+      2026-10-01); no paid vision API
+- [ ] Opt-in shared catalogue for books the providers lack (mainly Bengali): a reader may share only
+      a hand-added book's bibliographic details (never reading data), so the next reader finds it by
+      ISBN. Off by default, explained in plain words
 - [ ] Opt-in share cards (finished book, year summary) as unlisted links the user can revoke
-- [ ] AI features (opt-in, explain what data they use): e.g. smart summaries, recommendations from your own library
-- [ ] Scan a book: photograph its information (copyright) page and let an opt-in, free vision model fill in title, authors, publisher, ISBN and year (many local editions have no barcode). Deferred from Phase 2 (owner, 2026-10-01)
-- [ ] ISBN barcode scan (`barcode-detector` polyfill), alongside the photo scan
+- [ ] AI features (opt-in, explain what data they use), on-device only (browser built-in AI or a small
+      in-browser model): e.g. smart summaries. Recommendations from your own library can start without AI
 
-## Phase 9: Growth & operations
+## Phase 6: Automation
 
-- [ ] Custom SMTP (e.g. Resend) + editable email templates, then email sign-up/login (`AUTH_METHODS.magicLink` in `src/features/auth/config.ts`)
+- [ ] Rules engine (automation_rules + pg_cron nightly evaluator)
+- [ ] Personal API tokens + webhooks
+- [ ] KOReader sync server endpoints + document-hash to edition linking UI. Deferred by the owner
+      (2026-10-17): not planned for now
+
+## Phase 9: Growth & operations (free only)
+
+- [ ] Move to `foldline.bustandeen.com` (owner's existing domain, free; steps in `docs/SETUP.md`
+      section 7). Do it early: installs, links and Google sign-in are tied to the address. Foldline
+      keeps its own Supabase project and accounts; "a Bustandeen service" at most as a footer line
 - [ ] Bangla translation: `messages/bn.json`, locale switcher, Bangla-capable font stack
-- [ ] Move Supabase to Pro when usage needs it; remove keep-alive
-- [ ] Donation link
+- [ ] Custom SMTP on a free plan (e.g. Resend, with the verified bustandeen.com domain) + editable
+      email templates, then email sign-up/login (`AUTH_METHODS.magicLink` in
+      `src/features/auth/config.ts`). Needs the subdomain move first
+- [ ] Donation link (free: GitHub Sponsors or Ko-fi), optional and never a nag
 - [x] Decide license: AGPL-3.0-or-later (owner, 2026-10-17)
-- [ ] Register foldline domain + GitHub org; trademark check
+- Dropped for now (zero cost): Supabase Pro (stay on free, keep the keep-alive workflow; watch the
+  free limits: 500 MB database, 1 GB storage, 50k monthly active users), buying a foldline domain,
+  paid trademark registration (a free name search is fine). A GitHub org is free if ever wanted

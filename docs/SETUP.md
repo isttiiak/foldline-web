@@ -152,6 +152,32 @@ Then run both workflows once from the **Actions** tab to confirm they pass. (Kee
 only covers prod; the dev project may pause after a week idle. Resume it from the
 dashboard when needed.)
 
+## 7. Move to `foldline.bustandeen.com` (Phase 9)
+
+Foldline keeps its own Vercel project, Supabase projects and accounts; only the address
+changes. Do the steps in this order, then smoke test as in section 3, step 8.
+
+1. **Vercel → Project → Settings → Domains → Add** `foldline.bustandeen.com`, set it as the
+   production domain. Vercel shows a CNAME record (usually `cname.vercel-dns.com`).
+2. **DNS** for bustandeen.com (wherever the domain is managed): add a `CNAME` record, name
+   `foldline`, value from step 1. Wait until Vercel shows the domain as valid.
+3. **Keep the old address working**: in Vercel Domains, set `myfoldline.vercel.app` to redirect
+   (308) to `https://foldline.bustandeen.com`, so old links and bookmarks still land.
+4. **Vercel → Environment Variables**: add `NEXT_PUBLIC_SITE_URL` =
+   `https://foldline.bustandeen.com` (Production), then redeploy. `siteUrl()` in
+   `src/lib/site.ts` reads it for canonical links, the sitemap and link previews.
+5. **Supabase (prod) → Authentication → URL Configuration**: Site URL
+   `https://foldline.bustandeen.com`; add `https://foldline.bustandeen.com/**` to Redirect URLs
+   (keep the old entry until the move is checked, then remove it).
+6. **Google Auth Platform → Branding**: home page, privacy and terms links on the new address;
+   add `bustandeen.com` to Authorized domains (verify it in Google Search Console if asked).
+   The OAuth redirect URI still points at Supabase, so Credentials need no change.
+7. **Privacy**: nothing from bustandeen.com may run on or reach Foldline. Analytics on the main
+   site must keep its cookies on its own host (Ihsan's GA4 pins `cookie_domain` to the exact
+   hostname, which is right); never set a cookie for `.bustandeen.com`.
+8. Installed copies of the app (PWA) belong to the old address: readers reinstall from the new
+   one. Their data is safe on the server; only the offline queue on that device is left behind.
+
 ## Optional: Docker
 
 With Docker Desktop you can run Supabase on your PC (`pnpm supabase start`) and run the

@@ -22,6 +22,7 @@ session: tick what is done, add what is next.
 - [x] `0004_profile_details.sql` and `supabase/dev-seeds/sample_library.sql` run on dev
       (2026-10-01): profile e2e passes, izhaaannn account has 12 sample books
 - [x] `0005_book_covers.sql` run on dev (2026-10-01): cover upload e2e passes
+- [ ] Optional, any time: move to `foldline.bustandeen.com` (`docs/SETUP.md` section 7; earlier is easier)
 - [ ] Optional: create GitHub Releases for older tags (notes are in `CHANGELOG.md`); `v0.1.0` and
       `v0.9.0` have one
 - [x] Claude settings: GitHub and routine git commands allowed in `.claude/settings.json` (2026-10-15)
@@ -160,7 +161,13 @@ Done on 2026-10-17 (v1.0.0): license decided by the owner, GNU AGPL-3.0-or-later
 `license`, README section, "Source code" link in the public footer and at the bottom of Settings via
 `SOURCE_URL` in `src/lib/site.ts`). Data model unchanged since v0.11.0. v1.0.0 released.
 
-Next: Phase 6 "Automation", starting with KOReader sync (`docs/ROADMAP.md`). After 1.0, a breaking change
+Done on 2026-10-17: roadmap reordered by the owner. Build order is now Phase 7 (Reflection), Phase 8
+(Sharing & AI), Phase 6 (Automation), Phase 9. Zero cost rule (CLAUDE.md hard rule 12). Kindle import moved
+into Phase 7, KOReader sync deferred, AI on-device only (no Groq). Phase 8 gains the copyright-page OCR and an
+opt-in shared catalogue for Bengali books the providers lack. Phase 9 plans the move to
+`foldline.bustandeen.com` (steps in `docs/SETUP.md` section 7), which then makes free email sign-in possible.
+
+Next: Phase 7 "Highlights & notes hub" (`docs/ROADMAP.md`). After 1.0, a breaking change
 to exported data, the API or tokens needs a major version.
 
 Later (owner deferred, needs more effort): **Bengali-aware search**. Design agreed 2026-10-03:
